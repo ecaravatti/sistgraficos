@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="sistGraficos" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="tp1" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Console Application" 0x0103
 
-CFG=sistGraficos - Win32 Debug
+CFG=tp1 - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "sistGraficos.mak".
+!MESSAGE NMAKE /f "tp1.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "sistGraficos.mak" CFG="sistGraficos - Win32 Debug"
+!MESSAGE NMAKE /f "tp1.mak" CFG="tp1 - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "sistGraficos - Win32 Release" (based on "Win32 (x86) Console Application")
-!MESSAGE "sistGraficos - Win32 Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "tp1 - Win32 Release" (based on "Win32 (x86) Console Application")
+!MESSAGE "tp1 - Win32 Debug" (based on "Win32 (x86) Console Application")
 !MESSAGE 
 
 # Begin Project
@@ -28,7 +28,7 @@ CFG=sistGraficos - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "sistGraficos - Win32 Release"
+!IF  "$(CFG)" == "tp1 - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -51,7 +51,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 
-!ELSEIF  "$(CFG)" == "sistGraficos - Win32 Debug"
+!ELSEIF  "$(CFG)" == "tp1 - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -78,22 +78,22 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "sistGraficos - Win32 Release"
-# Name "sistGraficos - Win32 Debug"
+# Name "tp1 - Win32 Release"
+# Name "tp1 - Win32 Debug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\main.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Punto.cpp
+SOURCE=.\Pipeline2D.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\Segmento.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Vertice.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -101,11 +101,15 @@ SOURCE=.\Segmento.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\Punto.h
+SOURCE=.\Pipeline2D.hpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\Segmento.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Vertice.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
