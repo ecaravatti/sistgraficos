@@ -9,7 +9,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include <glut.h>
+#include <gl/glut.h>
 
 class Vertice  
 {

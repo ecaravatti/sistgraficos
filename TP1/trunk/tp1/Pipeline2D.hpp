@@ -6,6 +6,8 @@
 /// \author 66.71 Sistemas Graficos 2do Cuatrimestre de 2007
 #pragma once
 
+#include "Matriz3t.h"
+
 enum PRIMITIVA_2D
 {
 	PRIM2D_POLIGONAL,
@@ -42,7 +44,7 @@ private:
 	COLOR colorLinea;
 	COLOR colorRelleno;
 	COLOR colorPunto;
-
+	Matriz3t mTransformacion; //matriz de transformacion
 public:
 	/// \brief Constructor 
 	CPipeline2D ();
