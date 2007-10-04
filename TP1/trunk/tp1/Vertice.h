@@ -34,6 +34,11 @@ public:
 	// Otros métodos
 	dibujar();
 
+	/// coorX: coordenada del Vertice a dibujar
+	/// coorY: coordenada del Vertice a dibujar
+	/// Dibuja el vertice de coordenadas coorX, coorY
+	static dibujar(int coorX, int cooY);
+
 };
 
 #endif // !defined(AFX_VERTICE_H__C7EF80BF_9F41_4534_AF14_7C2567C11D83__INCLUDED_)

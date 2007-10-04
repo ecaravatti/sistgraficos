@@ -7,6 +7,7 @@
 #include <GL\glut.h> 
 #include <stdlib.h>
 #include "Segmento.h"
+#include "Circulo.h"
 
 char caption[]="Sistema Gráficos - 66.71 - 2007c1";
 
@@ -38,7 +39,8 @@ void display()
    	glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 	///
-
+	
+	
 	//Vertical
 	Segmento seg1(new Vertice(200,0), new Vertice(200, 400));
 	//Horizontal
@@ -49,19 +51,26 @@ void display()
 	Segmento seg4(new Vertice(200,200), new Vertice(400,400));
 	//pendiente abs(m) > 1 (2.5)
 	Segmento seg5(new Vertice(200,200), new Vertice(280,400));
+	//Circulo
+	Circulo cir1(new Vertice(200,200), 50);
+	// 
+	Circulo cir2(new Vertice(250,200), 50);
+
 	glBegin(GL_POINTS);
 		seg1.dibujarBresenham();
 		seg2.dibujarBresenham();
 		seg3.dibujarBresenham();
 		seg4.dibujarBresenham();
 		seg5.dibujarBresenham();
+		glColor3f(1,0,0);
+		cir1.dibujarBresenham();
+		cir2.dibujarBresenham();
 	glEnd();
-
-
 
 	///
   	glutSwapBuffers();
 	///
+
 }
 
 

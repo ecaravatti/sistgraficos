@@ -55,7 +55,9 @@ void Vertice::set(int coorX, int coorY)
 	this->y = coorY;
 }
 
-
+Vertice::dibujar(int coorX, int coorY){
+	glVertex2i(coorX,coorY);	
+}
 
 //////////////////////////////////////////////////////////////////////
 // Otros métodos
