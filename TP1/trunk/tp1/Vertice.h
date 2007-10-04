@@ -27,8 +27,9 @@ public:
 	// Getters y setters
 	int getX();
 	int getY();
-	setX(int coordX);
-	setY(int coordY);
+	void setX(int coordX);
+	void setY(int coordY);
+	void set(int coorX, int coorY);
 
 	// Otros métodos
 	dibujar();

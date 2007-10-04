@@ -39,14 +39,20 @@ int Vertice::getY()
 	return y;
 }
 
-Vertice::setX(int coordX)
+void Vertice::setX(int coordX)
 {
 	x = coordX;
 }
 
-Vertice::setY(int coordY)
+void Vertice::setY(int coordY)
 {
 	y = coordY;
+}
+
+void Vertice::set(int coorX, int coorY)
+{
+	this->x = coorX;
+	this->y = coorY;
 }
 
 

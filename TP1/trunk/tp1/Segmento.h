@@ -20,15 +20,19 @@ private:
 
 public:
 	Segmento();
-	Segmento(Vertice &v1,Vertice &v2);
+	Segmento(Vertice* v1,Vertice* v2);
 	virtual ~Segmento();
 
 	//getters y setters
-	Vertice getPtoFin();
-	Vertice getPtoInicio();
-	setPtoFin(Vertice v);
-	setPtoInicio(Vertice v);
+	Vertice* getPtoFin();
+	Vertice* getPtoInicio();
+	void setPtoFin(Vertice v);
+	void setPtoInicio(Vertice v);
 
+	void dibujarBresenham();
+
+private:
+	void dibujar_Mod_Menor_1(Vertice* ini, Vertice* fin, bool rot);
 };
 
 #endif // !defined(AFX_SEGMENTO_H__3DBB0562_71F0_4699_92EC_BA17FC6F82EC__INCLUDED_)
