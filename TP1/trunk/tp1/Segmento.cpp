@@ -11,7 +11,6 @@
 
 Segmento::Segmento()
 {
-
 }
 
 Segmento::Segmento(Vertice* v1,Vertice* v2)
@@ -55,8 +54,9 @@ void Segmento::setPtoInicio(Vertice v)
 //
 //////////////////////////////////////////////////////////////////////
 // Dibuja rectas con abs(m) < 1
-void Segmento:: dibujar_Mod_Menor_1(Vertice* vInicial, Vertice* vFinal, bool rot){
-  int x, y, dx, dy, xend, p, iy, iyx;
+void Segmento:: dibujar_Mod_Menor_1(Vertice* vInicial, Vertice* vFinal, 
+									bool cEje, int inc){
+  int x, y, xend, p, iy, iyx, dx, dy;
   Vertice v;
 
   dx = abs(vInicial->getX() - vFinal->getX());
@@ -77,16 +77,20 @@ void Segmento:: dibujar_Mod_Menor_1(Vertice* vInicial, Vertice* vFinal, bool rot
   iy = 2*dy;
   iyx = 2*(dy-dx);
 
+	
+	
   while (x <= xend){
-	if (!rot) v.set(x,y);
-	else v.set(y,x);
 
+	if (!cEje) v.set(x,y);
+	else v.set(y,x);
+	
 	v.dibujar();
+
 	x = x + 1;
 	if (p < 0)
 		p = p + iy;
 	else {
-		y = y + 1;
+		y = y + inc;
 		p = p + iyx;
 	}
   }
@@ -94,23 +98,26 @@ void Segmento:: dibujar_Mod_Menor_1(Vertice* vInicial, Vertice* vFinal, bool rot
 
 void Segmento:: dibujarBresenham()
 {
-  int dx, dy, inc, ini, fin;
+  int dx, dy, cont, ini, fin, inc = 1;
   Vertice v1, v2;
   float m = 0;
 
-	dx = abs(this->getPtoFin()->getX() - this->getPtoInicio()->getX());
-	dy = abs(this->getPtoFin()->getY() - this->getPtoInicio()->getY());
+	dx = (this->getPtoFin()->getX() - this->getPtoInicio()->getX());
+	dy = (this->getPtoFin()->getY() - this->getPtoInicio()->getY());
 
   if (dx != 0){
 	m = dy/dx;
+
+	if (m < 0) inc = -1;
 	
 	if (abs(m) <= 1) 
-		dibujar_Mod_Menor_1(this->getPtoInicio(), this->getPtoFin(), false );
+		dibujar_Mod_Menor_1(this->getPtoInicio(), this->getPtoFin(), false,
+							inc);
 	else{
 		//cambio ejes
 		v1.set(this->getPtoInicio()->getY(), this->getPtoInicio()->getX());
 		v2.set(this->getPtoFin()->getY(), this->getPtoFin()->getX());
-		dibujar_Mod_Menor_1(&v1, &v2, true);
+		dibujar_Mod_Menor_1(&v1, &v2, true, inc);
 	}
   }
   else if ( dx == 0)
@@ -124,8 +131,8 @@ void Segmento:: dibujarBresenham()
 			ini = this->getPtoInicio()->getY();
 			fin = this->getPtoFin()->getY();
 	  }
-	  for (inc = ini; inc < fin; inc++){
-			v1.set(this->getPtoInicio()->getX(),inc);
+	  for (cont = ini; cont < fin; cont++){
+			v1.set(this->getPtoInicio()->getX(),cont);
 			v1.dibujar();
 	  }
   }

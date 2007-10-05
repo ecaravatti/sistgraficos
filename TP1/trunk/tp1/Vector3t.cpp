@@ -20,9 +20,9 @@ Vector3t::Vector3t(const Vector3t &otro){
 			this->vector[i] = otro.vector[i];
 }
 
-Vector3t::Vector3t(float x, float y){
-	this->vector[0] = x;
-	this->vector[1] = y;
+Vector3t::Vector3t(const Vertice &vert){
+	this->vector[0] = (double)vert.getX();
+	this->vector[1] = vert.getY();
 	this->vector[2] = 1.0;
 }
 

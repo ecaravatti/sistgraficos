@@ -46,7 +46,7 @@ public:
 	void multiplicar(const Matriz3t &m);
 	
 	// rtdo = this * vector
-	void multiplicar(const Vector3t &vector, Vector3t rtdo);
+	void multiplicar(const Vector3t& vector, Vector3t& rtdo);
 
 };
 

@@ -91,7 +91,7 @@ void Matriz3t:: multiplicar(const Matriz3t &m){
 				this->matriz[i][j] += aux.matriz[i][k]*m.matriz[k][j]; 	
 }
 
-void  Matriz3t::multiplicar(const Vector3t& vector, Vector3t rtdo){
+void  Matriz3t::multiplicar(const Vector3t &vector, Vector3t& rtdo){
 			
 	for (int i = 0; i < this->getDimension(); i++ )
 		for (int j = 0; j < this->getDimension(); j++)	

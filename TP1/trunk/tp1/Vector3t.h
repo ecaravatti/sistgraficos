@@ -11,6 +11,8 @@
 
 #define size_v3t 3
 
+#include "Vertice.h"
+
 class Vector3t  
 {
 private:
@@ -19,13 +21,11 @@ private:
 public:
 	Vector3t();
 	
-	// x: coordenada x
-	// y: coordenada y
-	// Construye el vector con coordenadas (x, y, 1)
-	Vector3t(float x, float y);
+	// Construye el vector con coordenadas (vert->getX, vert->getY, 1)
+	Vector3t(const Vertice& vert);
 	
 	// Constructor copia
-	Vector3t(const Vector3t &otro);
+	Vector3t(const Vector3t& otro);
 
 	virtual ~Vector3t();
 

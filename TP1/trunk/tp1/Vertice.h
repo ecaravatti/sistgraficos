@@ -22,11 +22,12 @@ public:
 	// Constructores y destructores
 	Vertice();
 	Vertice(int coordX, int coordY);
+	
 	virtual ~Vertice();
 
 	// Getters y setters
-	int getX();
-	int getY();
+	int getX() const;
+	int getY() const;
 	void setX(int coordX);
 	void setY(int coordY);
 	void set(int coorX, int coorY);

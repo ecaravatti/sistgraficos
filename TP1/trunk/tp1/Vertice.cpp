@@ -29,12 +29,12 @@ Vertice::~Vertice()
 // Getters y Setters
 //////////////////////////////////////////////////////////////////////
 
-int Vertice::getX()
+int Vertice::getX() const
 {
 	return x;
 }
 
-int Vertice::getY()
+int Vertice::getY() const
 {
 	return y;
 }

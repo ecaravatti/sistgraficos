@@ -32,7 +32,8 @@ public:
 	void dibujarBresenham();
 
 private:
-	void dibujar_Mod_Menor_1(Vertice* ini, Vertice* fin, bool rot);
+	void Segmento:: dibujar_Mod_Menor_1(Vertice* vInicial, Vertice* vFinal, 
+										bool cEje, int inc);
 };
 
 #endif // !defined(AFX_SEGMENTO_H__3DBB0562_71F0_4699_92EC_BA17FC6F82EC__INCLUDED_)

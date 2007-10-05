@@ -101,6 +101,10 @@ SOURCE=.\Pipeline2D.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Poligono.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Segmento.cpp
 # End Source File
 # Begin Source File
@@ -126,6 +130,10 @@ SOURCE=.\Matriz3t.h
 # Begin Source File
 
 SOURCE=.\Pipeline2D.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Poligono.h
 # End Source File
 # Begin Source File
 
