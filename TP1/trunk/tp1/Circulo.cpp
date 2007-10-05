@@ -19,20 +19,16 @@ Circulo::~Circulo()
 	delete this->vert0;
 }
 
-void Circulo::dibujarBresenham(){
-	int x = 0, y = this->radio, e = 1 - this->radio;
+void Circulo:: dibujarContorno(){
+	this->dibujarBresenham(this->radio);
+}
 
-	this->dibujarPtos(x, y);
+void Circulo:: dibujarRelleno(){
 
-	while ( x < y ){
-		x++;
-		if (e < 0) e += 2 * x + 1;
-		else{
-			y--;
-			e += 2 * (x - y) + 1;
-		}
-		this->dibujarPtos(x, y);
-	}
+	for (int i = 0; i <= this->radio; i++)
+		this->dibujarBresenham(i);
+
+
 }
 
 void Circulo:: dibujarPtos(int x, int y){
@@ -46,4 +42,20 @@ void Circulo:: dibujarPtos(int x, int y){
 	Vertice::dibujar( x0 - y, y0 + x);
 	Vertice::dibujar( x0 + y, y0 - x);
 	Vertice::dibujar( x0 - y, y0 - x);
+}
+
+void Circulo::dibujarBresenham(int r){
+	int x = 0, y = r, e = 1 - r;
+
+	this->dibujarPtos(x, y);
+
+	while ( x < y ){
+		x++;
+		if (e < 0) e += 2 * x + 1;
+		else{
+			y--;
+			e += 2 * (x - y) + 1;
+		}
+		this->dibujarPtos(x, y);
+	}
 }

@@ -16,12 +16,13 @@ class Poligono
 {
 private:
 	struct Arista{
-		int ymax, xmin, ymin;
-		float m;
+		int ymax, ymin;
+		float m, xmin;
 	};	
 	Vertice* pVertice;
 	int cantVertices;
 	Arista** vecAristas;
+	int cantAristas;
 	
 	//std:: list<Vertice*> lvertices;
 	//std:: list laristas;
@@ -31,6 +32,8 @@ public:
 	virtual ~Poligono();
 
 	void dibujarScanLine();
+
+	void dibujarContorno();
 
 private:
 

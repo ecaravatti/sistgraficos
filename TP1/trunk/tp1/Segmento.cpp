@@ -106,7 +106,7 @@ void Segmento:: dibujarBresenham()
 	dy = (this->getPtoFin()->getY() - this->getPtoInicio()->getY());
 
   if (dx != 0){
-	m = dy/dx;
+	m = (float)dy/(float)dx;
 
 	if (m < 0) inc = -1;
 	

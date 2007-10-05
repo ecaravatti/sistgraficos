@@ -5,7 +5,6 @@
 #include "Poligono.h"
 #include "Segmento.h"
 
-#include <iostream>
 //////////////////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////////////////
@@ -29,6 +28,7 @@ Poligono::Poligono(Vertice* pVertice, int cantVert)
 	this->pVertice = pVertice;
 	this->cantVertices = cantVert;
 	this->vecAristas = NULL;
+	this->cantAristas = 0;
 }
 
 Poligono::~Poligono()
@@ -52,7 +52,7 @@ void Poligono:: dibujarScanLine()
 		fin = false;
 		ymin = this->vecAristas[posMin]->ymin;
 		buscarAdyacente(&aristasActivas, posMin );
-		while ( i < this->cantVertices && !fin){
+		while ( i < this->cantAristas && !fin){
 			if (this->vecAristas[i]->ymin == ymin) {
 				buscarAdyacente(&aristasActivas, i);
 				i++;
@@ -61,7 +61,7 @@ void Poligono:: dibujarScanLine()
 		}
 		posMin = i;
 
-		if (posMin < this->cantVertices)
+		if (posMin < this->cantAristas)
 				ymaxscan = this->vecAristas[posMin]->ymin;
 		else ymaxscan = ymax;
 
@@ -75,6 +75,23 @@ void Poligono:: dibujarScanLine()
 	
 }
 
+void Poligono:: dibujarContorno(){
+	Segmento *s;
+	Vertice *v;
+
+	for (int i = 0; i < this->cantVertices; i++){
+		if (i < this->cantVertices - 1)
+			v = &this->pVertice[i+1];
+		else
+			v = &this->pVertice[0];
+		s = new Segmento(new Vertice(this->pVertice[i]), new Vertice(*v));
+		s->dibujarBresenham();
+		delete s;
+	}
+
+}
+/*--------------------------------------------------------------------*/
+
 void Poligono:: rellenar(std:: list<int>* aristasActivas, int yscan){
 	Vertice *v1, *v2;
 	Segmento *s;
@@ -83,8 +100,8 @@ void Poligono:: rellenar(std:: list<int>* aristasActivas, int yscan){
 	while (it != aristasActivas->end()){
 		v1 = new Vertice( this->vecAristas[*it]->xmin, yscan );
 		this->vecAristas[*it]->xmin += this->vecAristas[*it]->m;
-		v2 = new Vertice( this->vecAristas[*it]->xmin, yscan); 
 		it++;
+		v2 = new Vertice( this->vecAristas[*it]->xmin, yscan); 
 		this->vecAristas[*it]->xmin += this->vecAristas[*it]->m;
 		s = new Segmento(v1, v2);
 		s->dibujarBresenham();
@@ -112,7 +129,7 @@ void Poligono:: eliminarAristaActivas(std:: list<int>* aristasActivas, int yscan
 	std:: list<int>::iterator it = aristasActivas->begin();
 	
 	while (it != aristasActivas->end()){
-		if (this->vecAristas[*it]->ymax < yscan ) 
+		if (this->vecAristas[*it]->ymax <= yscan ) 
 						it = aristasActivas->erase(it);
 		else it++;
 	}
@@ -130,7 +147,6 @@ void Poligono:: construirVectorAristas(int& ymax)
 	ymax = 0;
 
 	for (int i = 0; i < this->cantVertices ; i++){
-		arista = new Poligono::Arista;
 		x0 = this->pVertice[i].getX();
 		y0 = this->pVertice[i].getY();
 		if (i < this->cantVertices - 1){
@@ -141,18 +157,32 @@ void Poligono:: construirVectorAristas(int& ymax)
 			x1 = this->pVertice[0].getX();
 			y1 = this->pVertice[0].getY();
 		}
+
+	if (y0 != y1){ //la arista no es una linea horizontal
+		arista = new Poligono::Arista;
 		dy = y1 - y0;
 		dx = x1 - x0;
 		if (dy != 0 && dx != 0)
 				arista->m = 1/(dy/dx);
 		else arista->m = 0;
-		arista->xmin = min( x0, x1 );
+	
 		arista->ymax = max( y0, y1 );
-		arista->ymin = min( y0, y1 );
+		if (y0 < y1){
+			arista->ymin = y0;
+			arista->xmin = x0;
+		}
+		else{
+			arista->ymin = y1;
+			arista->xmin = x1;
+		}
+
+		
+		
 		ymax = max(ymax, y0);
 		ymax = max(ymax, y1);
 
 		j = 0;
+		cond = true;
 		while ( j < cant && cond){
 			if (this->vecAristas[j]->ymin > arista->ymin) cond = false;
 			else j++;
@@ -161,20 +191,22 @@ void Poligono:: construirVectorAristas(int& ymax)
 		if (!cond)
 			for (int k = cant; k > j; k--)
 				this->vecAristas[k] = this->vecAristas[k-1];
-		else if (j!=0) j -= 1;
+		//else if (j!=0) j -= 1;
 
 			this->vecAristas[j] = arista;
 
 		cant++;
 
 	}
-
+	}
+	this->cantAristas = cant;	
 }
 
 void Poligono:: destuirVecAristas(){
+	if (this->vecAristas != NULL){
+		for (int i=0; i < this->cantAristas; i++)
+			delete this->vecAristas[i];
 
-	for (int i=0; i < this->cantVertices; i++)
-		delete this->vecAristas[i];
-
-	delete [] vecAristas;
+		delete [] vecAristas;
+	}
 }
