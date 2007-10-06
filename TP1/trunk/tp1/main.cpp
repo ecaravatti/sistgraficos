@@ -191,19 +191,34 @@ void display()
 		cir2.dibujarContorno();
 		cir1.dibujarRelleno();
 	*/
+
 	CPipeline2D pipeline;
 	pipeline.ColorLinea(100,200,40);
 	pipeline.ColorPunto(255,0,0);
 	pipeline.ColorRelleno(130,0,160);
-	pipeline.Primitiva2D(PRIM2D_POLIGONO_RELLENO);
-	pipeline.Dibujar(pVertice3, 16);
-	pipeline.Primitiva2D(PRIM2D_POLIGONO);
-	pipeline.Dibujar(pVertice4, 16);
+
 	pipeline.Primitiva2D(PRIM2D_PUNTO);
 	pipeline.Dibujar(pVertice8, 10);
 	pipeline.Dibujar(pVertice9, 10);
 	
-	
+	pipeline.Primitiva2D(PRIM2D_POLIGONO);
+	pipeline.Dibujar(pVertice3, 16);
+	pipeline.Rotacion(100,225.0,90);
+	pipeline.Dibujar(pVertice3, 16);
+	pipeline.CargarIdentidad();
+	pipeline.Rotacion(100,225.0,180);
+	pipeline.Dibujar(pVertice3, 16);
+	pipeline.CargarIdentidad();
+	pipeline.Rotacion(100,225.0,270);
+	pipeline.Dibujar(pVertice3, 16);
+
+	delete[] pVertice8;
+	delete[] pVertice9;
+	delete[] pVertice;
+	delete[] pVertice2;
+	delete[] pVertice3;
+	delete[] pVertice4;
+
 	//glEnd();
 	
 	///

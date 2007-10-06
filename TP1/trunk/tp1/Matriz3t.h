@@ -10,7 +10,6 @@
 #endif // _MSC_VER > 1000
 
 #include "Vector3t.h"
-
 #define size_m3t 3
 
 class Matriz3t  

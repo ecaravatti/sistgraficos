@@ -22,7 +22,7 @@ Vector3t::Vector3t(const Vector3t &otro){
 
 Vector3t::Vector3t(const Vertice &vert){
 	this->vector[0] = (double)vert.getX();
-	this->vector[1] = vert.getY();
+	this->vector[1] = (double)vert.getY();
 	this->vector[2] = 1.0;
 }
 

@@ -92,10 +92,10 @@ void Matriz3t:: multiplicar(const Matriz3t &m){
 }
 
 void  Matriz3t::multiplicar(const Vector3t &vector, Vector3t& rtdo){
-			
+	rtdo.set(0,0.0);
+	rtdo.set(1,0.0);
+	rtdo.set(2,0.0);
 	for (int i = 0; i < this->getDimension(); i++ )
 		for (int j = 0; j < this->getDimension(); j++)	
 			rtdo.set(i, rtdo.get(i) + this->matriz[i][j] * vector.get(j) );
-	
-
 }

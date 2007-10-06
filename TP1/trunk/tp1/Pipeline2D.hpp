@@ -137,5 +137,9 @@ public:
 
 	/// \brief Borra la pantalla.
 	void ClearScreen();
+
+private: 
+	void AplicarTransf(const Vertice* p_vertice,Vertice* transf,
+						unsigned int nro_vertices);
 };
 

@@ -19,6 +19,7 @@ CPipeline2D::CPipeline2D()
 	this->colorRelleno.r=255;
 	this->colorRelleno.g=255;
 	this->colorRelleno.b=255;
+	this->CargarIdentidad();
 }
 
 CPipeline2D::~CPipeline2D()
@@ -71,8 +72,10 @@ void CPipeline2D::Rotacion (float rx, float ry, float alfa){
 	mrot.cargarMatrizRotacion(alfa);
 	mrot.multiplicar(mtras);
 	mtras.cargarMatrizTraslacion(rx, ry);
-	mrot.multiplicar(mtras);
-	this->mTransformacion.multiplicar( mrot );
+	//mrot.multiplicar(mtras);
+	mtras.multiplicar(mrot);
+	//this->mTransformacion.multiplicar( mrot );
+	this->mTransformacion.multiplicar( mtras );
 }
 
 void CPipeline2D:: Escalado (float ex, float ey){
@@ -84,14 +87,15 @@ void CPipeline2D:: Escalado (float ex, float ey){
 }
 
 void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
-
+	Vertice* p_verticeTransf = new Vertice[nro_vertices];
+	this->AplicarTransf(p_vertice,p_verticeTransf,nro_vertices);
 	switch (primitiva){
 
 		case PRIM2D_POLIGONO:{
 			glBegin(GL_POINTS);
 
 			glColor3ub(colorLinea.r,colorLinea.g,colorLinea.b);
-			Poligono poligono(p_vertice,nro_vertices);
+			Poligono poligono(p_verticeTransf,nro_vertices);
 			poligono.dibujarContorno();
 			
 			glEnd();
@@ -101,7 +105,7 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 		case PRIM2D_POLIGONO_RELLENO:{
 			glBegin(GL_POINTS);
 
-			Poligono poligono(p_vertice,nro_vertices);
+			Poligono poligono(p_verticeTransf,nro_vertices);
 			glColor3ub(colorLinea.r,colorLinea.g,colorLinea.b);
 			poligono.dibujarContorno();
 			glColor3ub(colorRelleno.r,colorRelleno.g,colorRelleno.b);
@@ -114,7 +118,7 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 			glBegin(GL_POINTS);
 			glColor3ub(colorPunto.r,colorPunto.g,colorPunto.b);
 			for (int i=0; i<nro_vertices; i++)
-				p_vertice[i].dibujar();
+				p_verticeTransf[i].dibujar();
 
 			glEnd();
 			break;
@@ -126,7 +130,7 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 
 			glColor3ub(colorLinea.r,colorLinea.g,colorLinea.b);
 			while (nro_vertices>=2){
-				Segmento segmento(&p_vertice[i],&p_vertice[i+1]);
+				Segmento segmento(&p_verticeTransf[i],&p_verticeTransf[i+1]);
 				segmento.dibujarBresenham();
 				i+=2;
 				nro_vertices-=2;
@@ -138,3 +142,15 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 	}
 }
 	//Y el circulo?? 
+
+void CPipeline2D::AplicarTransf(const Vertice* p_vertice,Vertice* transf,
+								unsigned int nro_vertices){
+	Vector3t vectorResultado;
+	Vector3t* vectorOriginal;
+	for (int i=0; i<nro_vertices; i++){
+		vectorOriginal=new Vector3t(p_vertice[i]);
+		this->mTransformacion.multiplicar(*vectorOriginal,vectorResultado);
+		transf[i].set((int)vectorResultado.get(0),(int)vectorResultado.get(1));
+		delete vectorOriginal;
+	}
+}
