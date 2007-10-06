@@ -33,7 +33,7 @@ Poligono::Poligono(Vertice* pVertice, int cantVert)
 
 Poligono::~Poligono()
 {
-	delete [] pVertice;
+	//delete [] pVertice;
 	this->destuirVecAristas();
 }
 

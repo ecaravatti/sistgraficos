@@ -7,6 +7,9 @@
 #pragma once
 
 #include "Matriz3t.h"
+#include "Poligono.h"
+#include "Vertice.h"
+#include "Segmento.h"
 
 enum PRIMITIVA_2D
 {

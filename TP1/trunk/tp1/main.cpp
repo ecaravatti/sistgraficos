@@ -9,6 +9,7 @@
 #include "Segmento.h"
 #include "Circulo.h"
 #include "Poligono.h"
+#include "Pipeline2D.hpp"
 
 #include <iostream>
 
@@ -68,6 +69,7 @@ void display()
 	//Circulo
 	Circulo cir1(new Vertice(200,200), 50); 
 	Circulo cir2(new Vertice(250,200), 50);
+	
 
 
 	/// Poligonos rellenos
@@ -126,10 +128,37 @@ void display()
 	pVertice4[14].set(275,75);
 	pVertice4[15].set(250,50);
 	Poligono p4(pVertice4, 16);
-	
+
+	//Linea punteada inferior (10 puntos)
+	Vertice* pVertice8 = new Vertice[10];
+	pVertice8[0].set(175,100);
+	pVertice8[1].set(180,100);
+	pVertice8[2].set(185,100);
+	pVertice8[3].set(190,100);
+	pVertice8[4].set(195,100);
+	pVertice8[5].set(200,100);
+	pVertice8[6].set(205,100);
+	pVertice8[7].set(210,100);
+	pVertice8[8].set(215,100);
+	pVertice8[9].set(220,100);
+	pVertice8[10].set(225,100);
+
+	//Linea punteada superior(10 puntos)
+	Vertice* pVertice9 = new Vertice[10];
+	pVertice9[0].set(175,225);
+	pVertice9[1].set(180,225);
+	pVertice9[2].set(185,225);
+	pVertice9[3].set(190,225);
+	pVertice9[4].set(195,225);
+	pVertice9[5].set(200,225);
+	pVertice9[6].set(205,225);
+	pVertice9[7].set(210,225);
+	pVertice9[8].set(215,225);
+	pVertice9[9].set(220,225);
+	pVertice9[10].set(225,225);
 
 //----------------------------------------------------------------------
-	glBegin(GL_POINTS);
+	//glBegin(GL_POINTS);
 	//-------------------Para dibujar segmentos 
 	/*
 		seg1.dibujarBresenham();
@@ -153,8 +182,8 @@ void display()
 
 	//---------------------Para dibujar poligono relleno 16 vertices
 	
-		p3.dibujarScanLine();
-		p4.dibujarContorno();
+		//p3.dibujarScanLine();
+		//p4.dibujarContorno();
 	
 	//---------------------Para dibujar circulos
 	/*
@@ -162,8 +191,20 @@ void display()
 		cir2.dibujarContorno();
 		cir1.dibujarRelleno();
 	*/
-
-	glEnd();
+	CPipeline2D pipeline;
+	pipeline.ColorLinea(100,200,40);
+	pipeline.ColorPunto(255,0,0);
+	pipeline.ColorRelleno(130,0,160);
+	pipeline.Primitiva2D(PRIM2D_POLIGONO_RELLENO);
+	pipeline.Dibujar(pVertice3, 16);
+	pipeline.Primitiva2D(PRIM2D_POLIGONO);
+	pipeline.Dibujar(pVertice4, 16);
+	pipeline.Primitiva2D(PRIM2D_PUNTO);
+	pipeline.Dibujar(pVertice8, 10);
+	pipeline.Dibujar(pVertice9, 10);
+	
+	
+	//glEnd();
 	
 	///
   	glutSwapBuffers();

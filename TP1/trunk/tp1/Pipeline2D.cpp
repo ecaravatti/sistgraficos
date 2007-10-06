@@ -10,7 +10,15 @@
 
 CPipeline2D::CPipeline2D()
 {
-
+	this->colorLinea.r=255;
+	this->colorLinea.g=255;
+	this->colorLinea.b=255;
+	this->colorPunto.r=255;
+	this->colorPunto.g=255;
+	this->colorPunto.b=255;
+	this->colorRelleno.r=255;
+	this->colorRelleno.g=255;
+	this->colorRelleno.b=255;
 }
 
 CPipeline2D::~CPipeline2D()
@@ -74,3 +82,59 @@ void CPipeline2D:: Escalado (float ex, float ey){
 	this->mTransformacion.multiplicar( mesc );
 
 }
+
+void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
+
+	switch (primitiva){
+
+		case PRIM2D_POLIGONO:{
+			glBegin(GL_POINTS);
+
+			glColor3ub(colorLinea.r,colorLinea.g,colorLinea.b);
+			Poligono poligono(p_vertice,nro_vertices);
+			poligono.dibujarContorno();
+			
+			glEnd();
+			break;
+			}
+
+		case PRIM2D_POLIGONO_RELLENO:{
+			glBegin(GL_POINTS);
+
+			Poligono poligono(p_vertice,nro_vertices);
+			glColor3ub(colorLinea.r,colorLinea.g,colorLinea.b);
+			poligono.dibujarContorno();
+			glColor3ub(colorRelleno.r,colorRelleno.g,colorRelleno.b);
+			poligono.dibujarScanLine();
+
+			glEnd();
+			break;
+			}
+		case PRIM2D_PUNTO:{
+			glBegin(GL_POINTS);
+			glColor3ub(colorPunto.r,colorPunto.g,colorPunto.b);
+			for (int i=0; i<nro_vertices; i++)
+				p_vertice[i].dibujar();
+
+			glEnd();
+			break;
+			}
+		
+		case PRIM2D_SEGMENTO:{
+			int i=0;
+			glBegin(GL_POINTS);
+
+			glColor3ub(colorLinea.r,colorLinea.g,colorLinea.b);
+			while (nro_vertices>=2){
+				Segmento segmento(&p_vertice[i],&p_vertice[i+1]);
+				segmento.dibujarBresenham();
+				i+=2;
+				nro_vertices-=2;
+			}
+
+			glEnd();
+			break;
+			}
+	}
+}
+	//Y el circulo?? 
