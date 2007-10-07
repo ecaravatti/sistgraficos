@@ -17,7 +17,7 @@ class Poligono
 private:
 	struct Arista{
 		int ymax, ymin;
-		float m, xmin;
+		float m, xmin, x0;
 	};	
 	Vertice* pVertice;
 	int cantVertices;
@@ -25,7 +25,6 @@ private:
 	int cantAristas;
 	
 	//std:: list<Vertice*> lvertices;
-	//std:: list laristas;
 public:
 	Poligono(Vertice* pVertice, int cantVert);
 	
@@ -39,13 +38,13 @@ private:
 
 	void construirVectorAristas(int &ymax);
 
-	void buscarAdyacente(std:: list<int>* aristasActivas, 
-								int nroArista);
-
 	void eliminarAristaActivas(std:: list<int>* aristasActivas, 
-								int yscan);
+								int yscan, int &ymaxscan);
 
 	void rellenar(std:: list<int>* aristasActivas, int yscan);
+
+	void agregarArista(std:: list<int>* aristasActivas,
+							  int nroArista, int &ymacscan);
 
 	void destuirVecAristas();
 };

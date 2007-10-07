@@ -28,11 +28,12 @@ public:
 	Vertice* getPtoInicio();
 	void setPtoFin(Vertice v);
 	void setPtoInicio(Vertice v);
-
+	
+	// Dibuja el segmento con el algoritmo de Bresenham
 	void dibujarBresenham();
 
 private:
-	void Segmento:: dibujar_Mod_Menor_1(Vertice* vInicial, Vertice* vFinal, 
+	void dibujar_Mod_Menor_1(Vertice* vInicial, Vertice* vFinal, 
 										bool cEje, int inc);
 };
 

@@ -5,14 +5,13 @@
 #include "Poligono.h"
 #include "Segmento.h"
 
-
 //////////////////////////////////////////////////////////////////////
 // Construcción/Destrucción
 //////////////////////////////////////////////////////////////////////
 
-Poligono::Poligono(Vertice* pVertice, int cantVert)
+Poligono::Poligono(Vertice* _pVertice, int cantVert)
 {
-	this->pVertice = pVertice;
+	this->pVertice = _pVertice;
 	this->cantVertices = cantVert;
 	this->vecAristas = NULL;
 	this->cantAristas = 0;
@@ -20,7 +19,6 @@ Poligono::Poligono(Vertice* pVertice, int cantVert)
 
 Poligono::~Poligono()
 {
-	//delete [] pVertice;
 	this->destuirVecAristas();
 }
 
@@ -40,42 +38,55 @@ int max(int n1, int n2){
 	else return n2;
 }
 
+
 // Algoritmo de ScanLine para rellenar polígonos.
 void Poligono:: dibujarScanLine()
 {
-	int ymax, ymin, yscan = 0, i, posMin = 0, ymaxscan;
+	int ymax, ymin, yscan, i, posMin = 0, ymaxscan;
 	bool fin;
 	std:: list<int> aristasActivas;
 	std::list<int>::iterator it;
 	construirVectorAristas(ymax);
-	
-	while (yscan < ymax){
-		this->eliminarAristaActivas(&aristasActivas, yscan);
+	bool busMin = true;
 
+	while (yscan < ymax){
+		ymaxscan = ymax;
+		this->eliminarAristaActivas(&aristasActivas, yscan, ymaxscan);
+
+	if (busMin){	
 		i = posMin + 1;
 		fin = false;
 		ymin = this->vecAristas[posMin]->ymin;
-		buscarAdyacente(&aristasActivas, posMin );
+		this->agregarArista(&aristasActivas, posMin, ymaxscan);
+
 		while ( i < this->cantAristas && !fin){
 			if (this->vecAristas[i]->ymin == ymin) {
-				buscarAdyacente(&aristasActivas, i);
+				this->agregarArista(&aristasActivas, i, ymaxscan);
 				i++;
 			}
 			else fin = true;
 		}
 		posMin = i;
+	}
 
-		if (posMin < this->cantAristas)
-				ymaxscan = this->vecAristas[posMin]->ymin;
-		else ymaxscan = ymax;
+	if (posMin < this->cantAristas){
+		if (ymaxscan < this->vecAristas[posMin]->ymin)
+			busMin = false;
+		else{
+			busMin = true;
+			ymaxscan = this->vecAristas[posMin]->ymin; //el sig minimo
+		}
+	}
+	else busMin = false;
 
 		yscan = ymin;
 		while (yscan < ymaxscan){
 			this->rellenar(&aristasActivas, yscan);
 			yscan++;
 		}
-
+	ymin = ymaxscan;
 	}
+	
 	
 }
 
@@ -105,11 +116,11 @@ void Poligono:: rellenar(std:: list<int>* aristasActivas, int yscan){
 
 	std:: list<int>::iterator it = aristasActivas->begin();
 	while (it != aristasActivas->end()){
-		v1 = new Vertice( this->vecAristas[*it]->xmin, yscan );
-		this->vecAristas[*it]->xmin += this->vecAristas[*it]->m;
+		v1 = new Vertice( this->vecAristas[*it]->x0, yscan );
+		this->vecAristas[*it]->x0 += this->vecAristas[*it]->m;
 		it++;
-		v2 = new Vertice( this->vecAristas[*it]->xmin, yscan); 
-		this->vecAristas[*it]->xmin += this->vecAristas[*it]->m;
+		v2 = new Vertice( this->vecAristas[*it]->x0, yscan); 
+		this->vecAristas[*it]->x0 += this->vecAristas[*it]->m;
 		s = new Segmento(v1, v2);
 		s->dibujarBresenham();
 		delete s;
@@ -118,30 +129,40 @@ void Poligono:: rellenar(std:: list<int>* aristasActivas, int yscan){
 
 }
 
-void Poligono:: buscarAdyacente(std:: list<int>* aristasActivas, 
-								int nroArista){
+//Agrega las aristas a la lista de aristas activas ordenadas por xmin
+void Poligono:: agregarArista(std:: list<int>* aristasActivas,
+							  int nroArista, int &ymaxscan){
 	bool enc = false;
-	std:: list<int>::iterator it = aristasActivas->begin();
+	std:: list<int>::iterator it= aristasActivas->begin();
 	while (it != aristasActivas->end() && !enc){
-		if (this->vecAristas[nroArista]->xmin == this->vecAristas[*it]->xmin)
-			enc = true;
+		if (this->vecAristas[*it]->xmin > this->vecAristas[nroArista]->xmin) enc = true;
 		else it++;
 	}
+
+	if (enc && it != aristasActivas->end()) 
+			aristasActivas->insert(it, nroArista);
+	else aristasActivas->push_back(nroArista);
 	
-	if (enc) aristasActivas->insert(it, nroArista);
-	else aristasActivas->push_front(nroArista);
+	if (vecAristas[nroArista]->ymax < ymaxscan) ymaxscan = vecAristas[nroArista]->ymax;
+
 }
 
-void Poligono:: eliminarAristaActivas(std:: list<int>* aristasActivas, int yscan){
+//Elimina de las aristas activas las que ya fueron scaneadas
+void Poligono:: eliminarAristaActivas(std:: list<int>* aristasActivas, int yscan, int &ymaxscan){
 	std:: list<int>::iterator it = aristasActivas->begin();
 	
 	while (it != aristasActivas->end()){
 		if (this->vecAristas[*it]->ymax <= yscan ) 
 						it = aristasActivas->erase(it);
-		else it++;
+		else{
+			if (this->vecAristas[*it]->ymax < ymaxscan) 
+				ymaxscan = this->vecAristas[*it]->ymax;
+			it++;
+		}
 	}
 }
 
+//Construye el vector con todas las aristas
 void Poligono:: construirVectorAristas(int& ymax)
 {
 	int j;
@@ -167,23 +188,25 @@ void Poligono:: construirVectorAristas(int& ymax)
 
 	if (y0 != y1){ //la arista no es una linea horizontal
 		arista = new Poligono::Arista;
+		
 		dy = y1 - y0;
 		dx = x1 - x0;
-		if (dy != 0 && dx != 0)
-				arista->m = 1/(dy/dx);
-		else arista->m = 0;
-	
+
 		arista->ymax = max( y0, y1 );
 		if (y0 < y1){
-			arista->ymin = y0;
-			arista->xmin = x0;
+			arista->ymin = y0;	
+			arista->x0 = x0;
 		}
 		else{
 			arista->ymin = y1;
-			arista->xmin = x1;
+			arista->x0 = x1;
 		}
 
-		
+		arista->xmin = min(x0, x1);
+
+		if (dy != 0 && dx != 0)
+				arista->m = 1/(dy/dx);
+		else arista->m = 0;
 		
 		ymax = max(ymax, y0);
 		ymax = max(ymax, y1);
@@ -198,14 +221,14 @@ void Poligono:: construirVectorAristas(int& ymax)
 		if (!cond)
 			for (int k = cant; k > j; k--)
 				this->vecAristas[k] = this->vecAristas[k-1];
-		//else if (j!=0) j -= 1;
 
-			this->vecAristas[j] = arista;
+		this->vecAristas[j] = arista;
 
 		cant++;
 
 	}
 	}
+
 	this->cantAristas = cant;	
 }
 

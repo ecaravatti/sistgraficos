@@ -15,8 +15,6 @@
 
 char caption[]="Sistema Gráficos - 66.71 - 2007c1";
 
-
-
 void reshape(int w, int h)
 {
    glViewport (0, 0, (GLsizei) w, (GLsizei) h);
@@ -24,8 +22,6 @@ void reshape(int w, int h)
    glLoadIdentity();
    gluOrtho2D(0.0, (GLdouble)w, (GLdouble)h, 0.0);
 }
-
-
 
 
 void init(void) 
@@ -48,7 +44,7 @@ void display()
 	/// Segmentos
 	
 	//Vertical
-	//Segmento seg1(new Vertice(200,0), new Vertice(200, 400));
+	Segmento seg1(new Vertice(200,0), new Vertice(200, 400));
 	//Horizontal
 	Segmento seg2(new Vertice(0,200), new Vertice(400,200));
 	//pendiente abs(m) < 1
@@ -157,8 +153,41 @@ void display()
 	pVertice9[9].set(220,225);
 	pVertice9[10].set(225,225);
 
+	Vertice* pVertice10 = new Vertice[8];
+	pVertice10[0].set(25,25);
+	pVertice10[1].set(125,25);
+	pVertice10[2].set(62,75);
+	pVertice10[3].set(62,100);
+	pVertice10[4].set(125,150);
+	pVertice10[5].set(25,150);
+	pVertice10[6].set(62,100);
+	pVertice10[7].set(62,75);
+	Poligono p10(pVertice10, 8);
+
+	Vertice* pVertice11 = new Vertice[4];
+	pVertice11[0].set(200,200);
+	pVertice11[1].set(150,250);
+	pVertice11[2].set(200,300);
+	pVertice11[3].set(250,275);
+	Poligono p11(pVertice11, 4);
+
+	Vertice* pVertice12 = new Vertice[12];
+	pVertice12[0].set(70,40);
+	pVertice12[1].set(100,100);
+	pVertice12[2].set(150,70);
+	pVertice12[3].set(170,140);
+	pVertice12[4].set(190,110);
+	pVertice12[5].set(210,150);
+	pVertice12[6].set(180,240);
+	pVertice12[7].set(170,180);
+	pVertice12[8].set(160,200);
+	pVertice12[9].set(90,200);
+	pVertice12[10].set(80,250);
+	pVertice12[11].set(50,120);
+	Poligono p12(pVertice12, 12);
+	
 //----------------------------------------------------------------------
-	//glBegin(GL_POINTS);
+	glBegin(GL_POINTS);
 	//-------------------Para dibujar segmentos 
 	/*
 		seg1.dibujarBresenham();
@@ -172,18 +201,26 @@ void display()
 		seg8.dibujarBresenham();
 		seg9.dibujarBresenham();
 		seg10.dibujarBresenham();
-	*/
 	
-	//--------------------Para dibujar poligono relleno
-	/*
-		p.dibujarScanLine();
-		p2.dibujarScanLine();
 	*/
-
+	//--------------------Para dibujar poligono relleno
+	
+		//p.dibujarScanLine();
+		//p.dibujarContorno();
+		//p2.dibujarScanLine();
+	
+		
 	//---------------------Para dibujar poligono relleno 16 vertices
 	
 		//p3.dibujarScanLine();
 		//p4.dibujarContorno();
+		//p10.dibujarContorno();
+		//p10.dibujarScanLine();
+		//p11.dibujarScanLine();
+		//p11.dibujarContorno();
+		//p11.dibujarScanLine();
+		p12.dibujarContorno();
+		p12.dibujarScanLine();
 	
 	//---------------------Para dibujar circulos
 	/*
@@ -191,7 +228,8 @@ void display()
 		cir2.dibujarContorno();
 		cir1.dibujarRelleno();
 	*/
-
+	glEnd();
+	/*
 	CPipeline2D pipeline;
 	pipeline.ColorLinea(100,200,40);
 	pipeline.ColorPunto(255,0,0);
@@ -227,8 +265,7 @@ void display()
 	delete[] pVertice2;
 	delete[] pVertice3;
 	delete[] pVertice4;
-
-	//glEnd();
+	*/
 	
 	///
   	glutSwapBuffers();
@@ -256,7 +293,7 @@ int main(int argc, char** argv)
 {
    glutInit(&argc, argv);
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
-   glutInitWindowSize (500, 400); 
+   glutInitWindowSize (800, 800); 
    glutInitWindowPosition (100, 100);
    glutCreateWindow (caption);
    init ();

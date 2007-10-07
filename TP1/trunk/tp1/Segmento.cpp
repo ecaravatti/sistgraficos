@@ -78,14 +78,14 @@ void Segmento:: dibujar_Mod_Menor_1(Vertice* vInicial, Vertice* vFinal,
   iyx = 2*(dy-dx);
 
 	
-	
   while (x <= xend){
 
+	
 	if (!cEje) v.set(x,y);
 	else v.set(y,x);
 	
 	v.dibujar();
-
+	
 	x = x + 1;
 	if (p < 0)
 		p = p + iy;
@@ -111,7 +111,7 @@ void Segmento:: dibujarBresenham()
 
 	if (m < 0) inc = -1;
 	
-	if (abs(m) <= 1) 
+	if ((m <= 1 && m >= 0) || (m >= -1 && m <= 0)) 
 		dibujar_Mod_Menor_1(this->getPtoInicio(), this->getPtoFin(), false,
 							inc);
 	else{
