@@ -174,6 +174,33 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 }
 //TODO: el circulo relleno, bajo que "case" se haria???
 
+// Define el Viewport
+// Este metodo permite definir la posición en la pantalla y las dimensiones
+// del viewport donde será renderizada la escena.
+// x0 Coordenada x del extremo inferior izquierdo del viewport expresado en pixels.
+// y0 Coordenada y del extremo inferior izquierdo del viewport expresado en pixels.  
+// ancho Ancho del viewport expresado en pixels.
+// alto Alto del viewport expresado en pixels.
+void CPipeline2D::Viewport (int x0, int y0, int ancho, int alto)
+{
+	setPtoMinViewport(Vertice(x0,y0));
+	setAnchoViewport(ancho);
+	setAltoViewport(alto);
+}
+
+// Define la ventana de mundo
+// Este metodo permite definir la posición en la pantalla y las dimensiones
+// del viewport donde será renderizada la escena.
+// param x0 Coordenada x del extremo inferior izquierdo del viewport expresado en pixels.
+// y0 Coordenada y del extremo inferior izquierdo del viewport expresado en pixels.  
+// ancho Ancho del viewport expresado en pixels.
+// alto Alto del viewport expresado en pixels.
+void CPipeline2D::VentanaMundo (float u0, float v0, float ancho, float alto)
+{
+	setPtoMinMundo(Vertice(u0,v0));
+	setAnchoMundo(ancho);
+	setAltoMundo(alto);
+}
 
 void CPipeline2D::AplicarTransf(const Vertice* p_vertice,Vertice* transf,
 								unsigned int nro_vertices){
@@ -185,4 +212,68 @@ void CPipeline2D::AplicarTransf(const Vertice* p_vertice,Vertice* transf,
 		transf[i].set((int)vectorResultado.get(0),(int)vectorResultado.get(1));
 		delete vectorOriginal;
 	}
+}
+
+//////////////////////////////////////////////////////////////////////
+// Getters y setters
+//////////////////////////////////////////////////////////////////////
+
+CPipeline2D::setPtoMinMundo(Vertice v)
+{
+	ptoMinMundo = v;
+}
+
+Vertice CPipeline2D::getPtoMinMundo() const
+{
+	return ptoMinMundo;
+}
+
+CPipeline2D::setPtoMinViewport(Vertice v)
+{
+	ptoMinViewport = v;
+}
+
+Vertice CPipeline2D::getPtoMinViewport() const
+{
+	return ptoMinViewport;
+}
+
+CPipeline2D::setAnchoMundo(float ancho)
+{
+	anchoMundo = ancho;
+}
+
+float CPipeline2D::getAnchoMundo() const
+{
+	return anchoMundo;
+}
+
+CPipeline2D::setAltoMundo(float alto)
+{
+	altoMundo = alto;
+}
+
+float CPipeline2D::getAltoMundo() const
+{
+	return altoMundo;
+}
+
+CPipeline2D::setAnchoViewport(int ancho)
+{
+	anchoViewport = ancho;
+}
+
+int CPipeline2D::getAnchoViewport() const
+{
+	return anchoViewport;
+}
+
+CPipeline2D::setAltoViewport(int alto)
+{
+	altoViewport = alto;
+}
+
+int CPipeline2D::getAltoViewport() const
+{
+	return altoViewport;
 }

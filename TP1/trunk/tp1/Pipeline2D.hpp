@@ -47,7 +47,14 @@ private:
 	COLOR colorLinea;
 	COLOR colorRelleno;
 	COLOR colorPunto;
-	Matriz3t mTransformacion; //matriz de transformacion
+	Matriz3t mTransformacion; // Matriz de transformacion
+	Vertice ptoMinMundo;	  // Punto inferior izquierdo de las coordenadas del mundo.
+	Vertice ptoMinViewport;	  // Punto inferior izquierdo de las coordenadas del viewport.
+	float anchoMundo;		  // Ancho de la ventana del mundo.
+	float altoMundo;		  // Alto de la ventana del mundo.
+	int anchoViewport;		  // Ancho de la ventana del viewport.
+	int altoViewport;		  // Alto de la ventana del viewport.
+
 public:
 	/// \brief Constructor 
 	CPipeline2D ();
@@ -137,6 +144,20 @@ public:
 
 	/// \brief Borra la pantalla.
 	void ClearScreen();
+
+	setPtoMinMundo(Vertice v);
+	Vertice getPtoMinMundo() const;
+	setPtoMinViewport(Vertice v);
+	Vertice getPtoMinViewport() const;
+	setAnchoMundo(float ancho);
+	float getAnchoMundo() const;
+	setAltoMundo(float alto);
+	float getAltoMundo() const;
+	setAnchoViewport(int ancho);
+	int getAnchoViewport() const;
+	setAltoViewport(int alto);
+	int getAltoViewport() const;
+
 
 private: 
 	void AplicarTransf(const Vertice* p_vertice,Vertice* transf,
