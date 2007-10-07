@@ -8,7 +8,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-Circulo::Circulo(Vertice* v0, int r)
+Circulo::Circulo(Vertice* v0, int r) 
 {
 	this->vert0 = v0;
 	this->radio = r;
@@ -16,7 +16,7 @@ Circulo::Circulo(Vertice* v0, int r)
 
 Circulo::~Circulo()
 {
-	delete this->vert0;
+//	delete this->vert0;
 }
 
 void Circulo:: dibujarContorno(){

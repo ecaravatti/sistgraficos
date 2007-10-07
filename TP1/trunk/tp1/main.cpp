@@ -212,6 +212,11 @@ void display()
 	pipeline.Rotacion(100,225.0,270);
 	pipeline.Dibujar(pVertice3, 16);
 
+	pipeline.ColorLinea(30,70,190);
+	pipeline.Traslacion(-100,300);
+	pipeline.Primitiva2D(PRIM2D_CIRCULO);
+	pipeline.Dibujar(pVertice,3);
+
 	delete[] pVertice8;
 	delete[] pVertice9;
 	delete[] pVertice;

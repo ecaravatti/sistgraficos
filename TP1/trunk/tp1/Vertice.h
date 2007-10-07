@@ -34,6 +34,7 @@ public:
 
 	// Otros métodos
 	dibujar();
+	int distancia(Vertice v);
 
 	/// coorX: coordenada del Vertice a dibujar
 	/// coorY: coordenada del Vertice a dibujar

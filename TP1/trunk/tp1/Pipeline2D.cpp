@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Pipeline2D.hpp"
+#include "Circulo.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -32,6 +33,7 @@ void CPipeline2D::Primitiva2D(enum PRIMITIVA_2D prim2d)
 	primitiva = prim2d;
 }
 
+// Establece el color con que se dibujan las lineas.
 void CPipeline2D::ColorLinea (int r, int g, int b)
 {
 	colorLinea.r = r;
@@ -39,6 +41,7 @@ void CPipeline2D::ColorLinea (int r, int g, int b)
 	colorLinea.b = b;
 }
 
+// Establece el color con que se dibujan los rellenos.
 void CPipeline2D::ColorRelleno (int r, int g, int b)
 {
 	colorRelleno.r = r;
@@ -46,6 +49,7 @@ void CPipeline2D::ColorRelleno (int r, int g, int b)
 	colorRelleno.b = b;
 }
 
+// Establece el color con que se dibujan los puntos.
 void CPipeline2D::ColorPunto (int r, int g, int b)
 {
 	colorPunto.r = r;
@@ -53,11 +57,12 @@ void CPipeline2D::ColorPunto (int r, int g, int b)
 	colorPunto.b = b;
 }
 
+// Inicializa la matriz de transformaciones con la matriz Identidad.
 void CPipeline2D::CargarIdentidad(){
 	this->mTransformacion.cargarId();
 }
 
-
+// Método utilizado para aplicar una translación.
 void CPipeline2D::Traslacion (float tx, float ty){
 	Matriz3t mtras;
 	
@@ -65,6 +70,7 @@ void CPipeline2D::Traslacion (float tx, float ty){
 	this->mTransformacion.multiplicar( mtras );
 }
 
+// Método utilizado para aplicar una rotación.
 void CPipeline2D::Rotacion (float rx, float ry, float alfa){
 	Matriz3t mrot, mtras;
 
@@ -78,6 +84,7 @@ void CPipeline2D::Rotacion (float rx, float ry, float alfa){
 	this->mTransformacion.multiplicar( mtras );
 }
 
+// Método aplicado para aplicar una escala determinada.
 void CPipeline2D:: Escalado (float ex, float ey){
 	Matriz3t mesc;
 	
@@ -86,6 +93,8 @@ void CPipeline2D:: Escalado (float ex, float ey){
 
 }
 
+// Este método procesa la lista de vértices por el pipeline, y los dibuja dependiendo de
+// como estén seteados los diferentes estados del mismo.
 void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 	Vertice* p_verticeTransf = new Vertice[nro_vertices];
 	this->AplicarTransf(p_vertice,p_verticeTransf,nro_vertices);
@@ -139,9 +148,25 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 			glEnd();
 			break;
 			}
+		case PRIM2D_CIRCULO:{
+
+			int i = 0;
+			glBegin(GL_POINTS);
+			glColor3ub(colorLinea.r,colorLinea.g,colorLinea.b);
+			int nro = nro_vertices;
+			while (nro>=2){
+				Circulo circulo(&p_verticeTransf[i],p_verticeTransf[i].distancia(p_verticeTransf[i+1]));
+				circulo.dibujarContorno();
+				i+=2;
+				nro-=2;
+			}
+			
+			glEnd();
+			break;
+			}
 	}
 }
-	//Y el circulo?? 
+//TODO: el circulo relleno, bajo que "case" se haria???
 
 void CPipeline2D::AplicarTransf(const Vertice* p_vertice,Vertice* transf,
 								unsigned int nro_vertices){

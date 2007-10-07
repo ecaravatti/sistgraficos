@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Vertice.h"
+#include <math.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -66,4 +67,13 @@ Vertice::dibujar()
 {
 	glVertex2i(x,y);
 }
+
+int Vertice::distancia(Vertice v)
+{
+	float difx = abs(getX()-v.getX());
+	float dify = abs(getY()-v.getY());
+	return (int)(sqrt(difx*difx + dify*dify));
+
+}
+
 
