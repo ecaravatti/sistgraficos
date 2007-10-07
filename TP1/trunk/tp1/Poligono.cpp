@@ -1,26 +1,13 @@
-// Poligono.cpp: implementation of the Poligono class.
+// Poligono.cpp: implementación de la clase Poligono.
 //
 //////////////////////////////////////////////////////////////////////
 
 #include "Poligono.h"
 #include "Segmento.h"
 
-//////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////
-int min(int n1, int n2){
-	if (n1 < n2) return n1;
-	else return n2;
-}
-
-int max(int n1, int n2){
-	if (n1 > n2) return n1;
-	else return n2;
-}
-
 
 //////////////////////////////////////////////////////////////////////
-// Construction/Destruction
+// Construcción/Destrucción
 //////////////////////////////////////////////////////////////////////
 
 Poligono::Poligono(Vertice* pVertice, int cantVert)
@@ -37,6 +24,23 @@ Poligono::~Poligono()
 	this->destuirVecAristas();
 }
 
+//////////////////////////////////////////////////////////////////////
+// Otros métodos.
+//////////////////////////////////////////////////////////////////////
+
+// Devuelve el mínimo entre los números n1 y n2.
+int min(int n1, int n2){
+	if (n1 < n2) return n1;
+	else return n2;
+}
+
+// Devuelve el máximo entre los números n1 y n2.
+int max(int n1, int n2){
+	if (n1 > n2) return n1;
+	else return n2;
+}
+
+// Algoritmo de ScanLine para rellenar polígonos.
 void Poligono:: dibujarScanLine()
 {
 	int ymax, ymin, yscan = 0, i, posMin = 0, ymaxscan;
@@ -75,6 +79,7 @@ void Poligono:: dibujarScanLine()
 	
 }
 
+// Dibuja el contorno del polígono.
 void Poligono:: dibujarContorno(){
 	Segmento *s;
 	Vertice *v;
@@ -92,6 +97,8 @@ void Poligono:: dibujarContorno(){
 }
 /*--------------------------------------------------------------------*/
 
+// Este método dibuja segmentos entre los vértices que se le pasan en la 
+// lista de aristas activas.
 void Poligono:: rellenar(std:: list<int>* aristasActivas, int yscan){
 	Vertice *v1, *v2;
 	Segmento *s;

@@ -1,11 +1,11 @@
-// Matriz3t.cpp: implementation of the Matriz3t class.
+// Matriz3t.cpp: Implementación de la clase Matriz3t.
 //
 //////////////////////////////////////////////////////////////////////
 
 #include "Matriz3t.h"
 #include <cmath>
 //////////////////////////////////////////////////////////////////////
-// Construction/Destruction
+// Construcción/Destrucción
 //////////////////////////////////////////////////////////////////////
 
 #define PI 3.14159265
@@ -24,11 +24,13 @@ Matriz3t::~Matriz3t()
 {
 }
 
+// Devuelve la dimensión de la matriz. En este caso, 3.
 int Matriz3t::getDimension() const
 {
 	return size_m3t;
 }
 
+// Inicializa la matrix con ceros.
 void Matriz3t::inicializar()
 {
 	for ( int i = 0; i < this->getDimension(); i++ )
@@ -36,12 +38,14 @@ void Matriz3t::inicializar()
 			this->matriz[i][j] = 0.0;			
 }
 
+// Pone le numero "valor" en la posición (i,j).
 void Matriz3t:: set(int i, int j, double valor){
 	if ( i < this->getDimension() && j < this->getDimension() &&
 		 i >= 0 && j >= 0)
 			this->matriz[i][j] = valor;
 }
 
+// Devuelve el valor de la posición (i,j).
 double Matriz3t:: get(int i, int j) const{
 	if ( i < this->getDimension() && j < this->getDimension() &&
 		 i >= 0 && j >= 0)
@@ -49,6 +53,7 @@ double Matriz3t:: get(int i, int j) const{
 	return this->matriz[0][0];
 }
 
+// Carga la matriz Identidad.
 void Matriz3t:: cargarId(){
 
 	for (int i = 0; i < this->getDimension(); i++)
@@ -81,6 +86,7 @@ void Matriz3t:: cargarMatrizEscalamiento(float ex, float ey){
 	this->matriz[1][1] = ey;
 }
 
+// multiplica por la matriz m.
 void Matriz3t:: multiplicar(const Matriz3t &m){
 	Matriz3t aux(*this);	
 	this->inicializar();

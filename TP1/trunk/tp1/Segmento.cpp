@@ -1,4 +1,4 @@
-// Segmento.cpp: implementation of the Segmento class.
+// Segmento.cpp: implementación de la clase Segmento.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <cmath>
 //////////////////////////////////////////////////////////////////////
-// Construction/Destruction
+// Construcción/Destrucción
 //////////////////////////////////////////////////////////////////////
 
 Segmento::Segmento()
@@ -29,7 +29,6 @@ Segmento::~Segmento()
 // Getters y setters
 //////////////////////////////////////////////////////////////////////
 
-
 Vertice* Segmento::getPtoFin()
 {
 	return (ptoFin);
@@ -51,8 +50,9 @@ void Segmento::setPtoInicio(Vertice v)
 }
 
 //////////////////////////////////////////////////////////////////////
-//
+// Otros métodos
 //////////////////////////////////////////////////////////////////////
+
 // Dibuja rectas con abs(m) < 1
 void Segmento:: dibujar_Mod_Menor_1(Vertice* vInicial, Vertice* vFinal, 
 									bool cEje, int inc){
@@ -96,6 +96,7 @@ void Segmento:: dibujar_Mod_Menor_1(Vertice* vInicial, Vertice* vFinal,
   }
 }
 
+// Dibuja el segmento utilizando el algortimo de Bresenham.
 void Segmento:: dibujarBresenham()
 {
   int dx, dy, cont, ini, fin, inc = 1;

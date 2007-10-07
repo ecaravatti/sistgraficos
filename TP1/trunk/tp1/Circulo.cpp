@@ -1,11 +1,11 @@
-// Circulo.cpp: implementation of the Circulo class.
+// Circulo.cpp: implementación de la clase Circulo.
 //
 //////////////////////////////////////////////////////////////////////
 
 #include "Circulo.h"
 
 //////////////////////////////////////////////////////////////////////
-// Construction/Destruction
+// Construcción/Destrucción
 //////////////////////////////////////////////////////////////////////
 
 Circulo::Circulo(Vertice* v0, int r) 
@@ -18,17 +18,22 @@ Circulo::~Circulo()
 {
 }
 
+//////////////////////////////////////////////////////////////////////
+// Otros métodos.
+//////////////////////////////////////////////////////////////////////
+
+// Dibuja el contorno del circulo.
 void Circulo:: dibujarContorno(){
 	this->dibujarBresenham(this->radio);
 }
 
+// Dibuja el circulo relleno.
 void Circulo:: dibujarRelleno(){
 
 	for (int i = 0; i <= this->radio; i++)
 		this->dibujarBresenham(i);
-
-
 }
+
 
 void Circulo:: dibujarPtos(int x, int y){
 	int x0 = this->vert0->getX(), y0 = this->vert0->getY();
@@ -43,6 +48,7 @@ void Circulo:: dibujarPtos(int x, int y){
 	Vertice::dibujar( x0 - y, y0 - x);
 }
 
+// Metodo privado utilizado para dibujar el circulo.
 void Circulo::dibujarBresenham(int r){
 	int x = 0, y = r, e = 1 - r;
 

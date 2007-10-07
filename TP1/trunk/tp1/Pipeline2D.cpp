@@ -6,7 +6,7 @@
 #include "Circulo.h"
 
 //////////////////////////////////////////////////////////////////////
-// Construction/Destruction
+// Construcción/Destrucción
 //////////////////////////////////////////////////////////////////////
 
 CPipeline2D::CPipeline2D()
@@ -28,6 +28,12 @@ CPipeline2D::~CPipeline2D()
 
 }
 
+//////////////////////////////////////////////////////////////////////
+// Otros métodos
+//////////////////////////////////////////////////////////////////////
+
+// Indica la forma en que se interpretarán los vertices que entren al
+// pipeline. Es decir, si serán puntos sueltos, lineas, poligonos, etc.
 void CPipeline2D::Primitiva2D(enum PRIMITIVA_2D prim2d)
 {
 	primitiva = prim2d;
@@ -84,7 +90,7 @@ void CPipeline2D::Rotacion (float rx, float ry, float alfa){
 	this->mTransformacion.multiplicar( mtras );
 }
 
-// Método aplicado para aplicar una escala determinada.
+// Método utilizado para aplicar una escala determinada.
 void CPipeline2D:: Escalado (float ex, float ey){
 	Matriz3t mesc;
 	
@@ -167,6 +173,7 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 	}
 }
 //TODO: el circulo relleno, bajo que "case" se haria???
+
 
 void CPipeline2D::AplicarTransf(const Vertice* p_vertice,Vertice* transf,
 								unsigned int nro_vertices){

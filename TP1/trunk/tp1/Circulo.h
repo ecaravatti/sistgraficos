@@ -29,7 +29,7 @@ public:
 private:
 	void dibujarPtos(int x, int y);
 
-	void Circulo::dibujarBresenham(int radio);
+	void dibujarBresenham(int radio);
 };
 
 #endif // !defined(AFX_CIRCULO_H__169A5A3F_329F_4F61_90AC_24F7F674CE0A__INCLUDED_)
