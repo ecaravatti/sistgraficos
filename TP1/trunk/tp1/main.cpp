@@ -212,9 +212,13 @@ void display()
 	pipeline.Rotacion(100,225.0,270);
 	pipeline.Dibujar(pVertice3, 16);
 
+	// Para dibujar circulos
 	pipeline.ColorLinea(30,70,190);
 	pipeline.Traslacion(-100,300);
 	pipeline.Primitiva2D(PRIM2D_CIRCULO);
+	pipeline.Dibujar(pVertice,3);
+	pipeline.Escalado(2,1);
+	pipeline.ColorLinea(100,0,100);
 	pipeline.Dibujar(pVertice,3);
 
 	delete[] pVertice8;

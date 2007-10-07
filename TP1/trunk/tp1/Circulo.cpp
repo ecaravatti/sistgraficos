@@ -16,7 +16,6 @@ Circulo::Circulo(Vertice* v0, int r)
 
 Circulo::~Circulo()
 {
-//	delete this->vert0;
 }
 
 void Circulo:: dibujarContorno(){
