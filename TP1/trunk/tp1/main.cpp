@@ -186,42 +186,64 @@ void display()
 	pVertice12[11].set(50,120);
 	Poligono p12(pVertice12, 12);
 	
+	Segmento s1(new Vertice(0,100), new Vertice(400,100));
+	Segmento s2(new Vertice(0,300), new Vertice(400,300));
 //----------------------------------------------------------------------
 	glBegin(GL_POINTS);
 	//-------------------Para dibujar segmentos 
-	/*
+	
+		seg1.clipping(150, 250, 100, 300);
 		seg1.dibujarBresenham();
+		s1.dibujarBresenham();
+		s2.dibujarBresenham();
+	
+
+	/*
+		seg2.clipping(50,150,100,400);
 		seg2.dibujarBresenham();
-		seg3.dibujarBresenham();
-		seg4.dibujarBresenham();
-		seg5.dibujarBresenham();
-		
-		seg6.dibujarBresenham();
-		seg7.dibujarBresenham();
-		seg8.dibujarBresenham();
-		seg9.dibujarBresenham();
-		seg10.dibujarBresenham();
-	
 	*/
-	//--------------------Para dibujar poligono relleno
-	
-		//p.dibujarScanLine();
-		//p.dibujarContorno();
-		//p2.dibujarScanLine();
-	
+	/*	
+		seg3.clipping(250,350,200,300);
+		seg3.dibujarBresenham();
+	*/
+		//seg4.dibujarBresenham();
+		//seg5.dibujarBresenham();
 		
+		//seg6.dibujarBresenham();
+		//seg7.dibujarBresenham();
+		//seg8.dibujarBresenham();
+		//seg9.dibujarBresenham();
+		//seg10.dibujarBresenham();
+	
+	
+	//--------------------Para dibujar poligono relleno
+		
+	/*
+		p.dibujarScanLine();
+		p.dibujarContorno();
+		
+
+		p2.dibujarScanLine();
+	
+	*/	
 	//---------------------Para dibujar poligono relleno 16 vertices
 	
-		//p3.dibujarScanLine();
+	
+		//p3.dibujarScanLine();	
 		//p4.dibujarContorno();
+
 		//p10.dibujarContorno();
 		//p10.dibujarScanLine();
+		
 		//p11.dibujarScanLine();
 		//p11.dibujarContorno();
 		//p11.dibujarScanLine();
-		p12.dibujarContorno();
-		p12.dibujarScanLine();
+
+		//p12.dibujarContorno();
+		//p12.dibujarScanLine();
+		
 	
+
 	//---------------------Para dibujar circulos
 	/*
 		cir1.dibujarContorno();

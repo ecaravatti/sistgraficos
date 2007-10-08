@@ -139,3 +139,66 @@ void Segmento:: dibujarBresenham()
   }
   
 }
+
+bool Segmento:: evaluarPQ(float p, float q, float &u1, float &u2){
+	float r ;
+	bool ret = true;
+	if (p < 0.0) {
+		r = q/p;
+		if (r > u2)
+			ret = false;
+		else if (r > u1 )
+			u1 = r;
+	}
+	else if (p > 0.00){
+			r = q/p ;
+		if ( r < u1 )
+			ret = false;
+		else if (r < u2)
+			u2 = r;
+	}
+	else if (q < 0.0) //p == 0 paralela y q < 0 la linea esta fuera de la ventana
+			ret = false;
+
+	return  ret;
+}
+
+bool Segmento:: clipping(int wxmin, int wxmax, int wymin, int wymax){
+	
+	float u1 = 0.0, u2 = 1.0, dx = this->ptoFin->getX() - this->ptoInicio->getX(),
+		  dy = this->ptoFin->getY() - this->ptoInicio->getY(), p, q;
+	
+	//cargo p1 q1 (vent lado izq)
+	p = -dx;
+	q = this->ptoInicio->getX() - wxmin;
+	if ( evaluarPQ(p, q, u1, u2) ){
+		//cargo p2 q2 (vent lado der)
+		p = dx;
+		q = wxmax - this->ptoInicio->getX();
+		if ( evaluarPQ(p, q, u1, u2) ){
+			//cargo p3 q3 (vent lim inf)
+			p = -dy;
+			q = this->ptoInicio->getY() - wymin;
+			if ( evaluarPQ(p, q, u1, u2) ){
+				// cargo p4 q4 (vent lim sup)
+				p = dy;
+				q = wymax - this->ptoInicio->getY();
+				if ( evaluarPQ(p, q, u1, u2) ){
+					if (u2 < 1.0){
+					//actualizo punto final del segmento
+						this->ptoFin->setX( floor (this->ptoInicio->getX() + u2 * dx + 0.5));
+						this->ptoFin->setY( floor (this->ptoInicio->getY() + u2 * dy + 0.5));
+					}
+					if (u1 > 0.0){
+					//actualizo punto inicial del segmento
+						this->ptoInicio->setX( floor(this->ptoInicio->getX() + u1 * dx + 0.5));
+						this->ptoInicio->setY( floor(this->ptoInicio->getY() + u1 * dy + 0.5));
+					}
+				return true;
+				}
+			}
+		}
+
+	}
+	return false;
+}

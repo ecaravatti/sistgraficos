@@ -5,21 +5,24 @@
 #include "Poligono.h"
 #include "Segmento.h"
 
+
 //////////////////////////////////////////////////////////////////////
 // Construcción/Destrucción
 //////////////////////////////////////////////////////////////////////
 
 Poligono::Poligono(Vertice* _pVertice, int cantVert)
 {
-	this->pVertice = _pVertice;
 	this->cantVertices = cantVert;
 	this->vecAristas = NULL;
 	this->cantAristas = 0;
+	this->lVertices = new std::list<Vertice*>;
+	cargarLVertices( _pVertice );
 }
 
 Poligono::~Poligono()
 {
-	this->destuirVecAristas();
+	this->destruirVecAristas();
+	this->destruirLVertices(this->lVertices);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -93,21 +96,33 @@ void Poligono:: dibujarScanLine()
 // Dibuja el contorno del polígono.
 void Poligono:: dibujarContorno(){
 	Segmento *s;
-	Vertice *v;
+	Vertice *v1, *v2;
+	int i;
 
-	for (int i = 0; i < this->cantVertices; i++){
-		if (i < this->cantVertices - 1)
-			v = &this->pVertice[i+1];
+	std::list<Vertice*>::iterator it = this->lVertices->begin() ;
+	i = 0;
+	while ( it != this->lVertices->end() ){
+		v1 = *it;
+		if (i < this->cantVertices - 1){
+			v2= *(++it);
+			s = new Segmento(new Vertice(*v1), new Vertice(*v2));
+			s->dibujarBresenham();
+			delete s;
+		}
 		else
-			v = &this->pVertice[0];
-		s = new Segmento(new Vertice(this->pVertice[i]), new Vertice(*v));
-		s->dibujarBresenham();
-		delete s;
+			it++;
+		i++;
 	}
 
-}
-/*--------------------------------------------------------------------*/
+	v1 = this->lVertices->back();
+	v2 = this->lVertices->front();
+	s = new Segmento(new Vertice(*v1), new Vertice(*v2));
+	s->dibujarBresenham();
+	delete s;
 
+}
+
+/*--------------------------------------------------------------------*/
 // Este método dibuja segmentos entre los vértices que se le pasan en la 
 // lista de aristas activas.
 void Poligono:: rellenar(std:: list<int>* aristasActivas, int yscan){
@@ -173,18 +188,21 @@ void Poligono:: construirVectorAristas(int& ymax)
 	int x0, x1, y0, y1;
 	float dy, dx;
 	ymax = 0;
+	std:: list<Vertice*>::iterator it= this->lVertices->begin();
+	Vertice *v0, *v1;
 
 	for (int i = 0; i < this->cantVertices ; i++){
-		x0 = this->pVertice[i].getX();
-		y0 = this->pVertice[i].getY();
-		if (i < this->cantVertices - 1){
-			x1 = this->pVertice[i+1].getX();
-			y1 = this->pVertice[i+1].getY();
-		}
-		else{
-			x1 = this->pVertice[0].getX();
-			y1 = this->pVertice[0].getY();
-		}
+		v0 = (*it);
+		x0 = v0->getX();
+		y0 = v0->getY();
+
+		if (i < this->cantVertices - 1)
+			v1 = *(++it);
+		else
+			v1 = this->lVertices->front();
+		
+		x1 = v1->getX();
+		y1 = v1->getY();
 
 	if (y0 != y1){ //la arista no es una linea horizontal
 		arista = new Poligono::Arista;
@@ -232,7 +250,7 @@ void Poligono:: construirVectorAristas(int& ymax)
 	this->cantAristas = cant;	
 }
 
-void Poligono:: destuirVecAristas(){
+void Poligono:: destruirVecAristas(){
 	if (this->vecAristas != NULL){
 		for (int i=0; i < this->cantAristas; i++)
 			delete this->vecAristas[i];
@@ -240,3 +258,19 @@ void Poligono:: destuirVecAristas(){
 		delete [] vecAristas;
 	}
 }
+
+void Poligono:: cargarLVertices(Vertice* pVertice){
+	
+	for (int i = 0; i < this->cantVertices; i++)
+		this->lVertices->push_back( new Vertice(pVertice[i]) );
+}
+
+void Poligono:: destruirLVertices(std:: list<Vertice*>* l){
+	
+	std::list<Vertice*>::iterator it= l->begin();
+	for (; it != this->lVertices->end(); it++)
+		delete (*it);
+
+	delete l;
+}
+
