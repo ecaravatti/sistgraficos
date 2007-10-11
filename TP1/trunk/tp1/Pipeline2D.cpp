@@ -109,7 +109,7 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 	minViewport.setX(ptoMinViewport.getX());
 	minViewport.setY(ptoMinViewport.getY());
 	maxViewport.setX(ptoMinViewport.getX()+anchoViewport);
-	maxViewport.setY(ptoMinViewport.getY()-altoViewport);
+	maxViewport.setY(ptoMinViewport.getY()+altoViewport);
 	
 	switch (primitiva){
 
@@ -118,7 +118,7 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 
 			glColor3ub(colorLinea.r,colorLinea.g,colorLinea.b);
 			Poligono poligono(p_verticeTransf,nro_vertices);
-			//poligono.clipping(&minViewport,&maxViewport);
+			poligono.clipping(&minViewport,&maxViewport);
 			poligono.dibujarContorno();
 			
 			glEnd();
@@ -129,7 +129,7 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 			glBegin(GL_POINTS);
 
 			Poligono poligono(p_verticeTransf,nro_vertices);
-			//poligono.clipping(&minViewport,&maxViewport);
+			poligono.clipping(&minViewport,&maxViewport);
 			glColor3ub(colorLinea.r,colorLinea.g,colorLinea.b);
 			poligono.dibujarContorno();
 			glColor3ub(colorRelleno.r,colorRelleno.g,colorRelleno.b);

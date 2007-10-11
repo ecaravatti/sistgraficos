@@ -11,18 +11,21 @@
 Vertice::Vertice(const Vertice &vertice){
 	this->x=vertice.getX();
 	this->y=vertice.getY();
+	this->clip = true;
 }
 
 Vertice::Vertice(int coordX, int coordY)
 {
 	x = coordX;
 	y = coordY;
+	this->clip = true;
 }
 
 Vertice::Vertice()
 {
 	x = 0;
 	y = 0;
+	this->clip = true;
 }
 
 Vertice::~Vertice()
@@ -81,6 +84,11 @@ int Vertice::distancia(Vertice v)
 	float difx = abs(getX()-v.getX());
 	float dify = abs(getY()-v.getY());
 	return (int)(sqrt(difx*difx + dify*dify));
+
+}
+
+void Vertice:: clipping(Vertice* viewPmin,Vertice* viewPmax){
+
 
 }
 

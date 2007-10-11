@@ -191,13 +191,13 @@ void display()
 	pVertice20[1].set(300,100);
 	pVertice20[2].set(300,300);
 	pVertice20[3].set(100,300);
-
+	Poligono p20(pVertice20, 4);
 
 
 	Segmento s1(new Vertice(0,100), new Vertice(400,100));
 	Segmento s2(new Vertice(0,300), new Vertice(400,300));
 //----------------------------------------------------------------------
-	//glBegin(GL_POINTS);
+//glBegin(GL_POINTS);
 	//-------------------Para dibujar segmentos 
 	
 	/*	seg1.clipping(150, 250, 100, 300);
@@ -258,10 +258,45 @@ void display()
 		cir2.dibujarContorno();
 		cir1.dibujarRelleno();
 	*/
-	//glEnd();
+
+	/*
+	p.clipping(new Vertice(100,100), new Vertice(150,150));
+	p.dibujarScanLine();
+	p.dibujarContorno();
+	p.dibujarScanLine();
+	*/
+	
+	/*
+	p.dibujarContorno();
+	p.clipping(new Vertice(150,100), new Vertice(200,150));
+	p.dibujarContorno();
+	p.dibujarScanLine();
+	*/
+	
+	/*
+	p12.dibujarContorno();
+	p12.clipping(new Vertice(0, 0), new Vertice(80,100));
+	p12.dibujarScanLine();
+	*/
+	
+	/*
+	p11.dibujarContorno();
+	p11.clipping(new Vertice(200,200), new Vertice(225,250));
+	p11.dibujarScanLine();
+	p11.dibujarContorno();
+	*/
+	
+	//p20.dibujarContorno();
+	//p20.clipping(new Vertice(100,200), new Vertice(300,530));	
+	//p20.dibujarContorno();
+
+	//pipeline.Viewport(100,300,200,230);
+	
+
+//glEnd();
 	
 	CPipeline2D pipeline;
-	pipeline.Viewport(100,300,200,230);
+	pipeline.Viewport(100,200,200,230);
 	pipeline.ColorLinea(100,200,40);
 	pipeline.ColorPunto(255,0,0);
 	pipeline.ColorRelleno(130,0,160);
@@ -271,12 +306,13 @@ void display()
 	pipeline.Dibujar(pVertice9, 10);
 	pipeline.Primitiva2D(PRIM2D_POLIGONO);
 
-	pipeline.Dibujar(pVertice20,4);
-
-	/*pipeline.Rotacion(100,225.0,90);
+	//pipeline.Dibujar(pVertice20,4);
 	
-	//pipeline.Dibujar(pVertice3, 16);
-	pipeline.CargarIdentidad();
+
+	pipeline.Rotacion(100,225.0,90);
+	
+	pipeline.Dibujar(pVertice3, 16);
+	/*pipeline.CargarIdentidad();
 	pipeline.Rotacion(100,225.0,180);
 	
 	
@@ -285,8 +321,8 @@ void display()
 	pipeline.Rotacion(100,225.0,270);
 	
 	
-	pipeline.Dibujar(pVertice3, 16);
-
+	pipeline.Dibujar(pVertice3, 16);*/
+/*
 	// Para dibujar circulos
 	pipeline.ColorLinea(30,70,190);
 	pipeline.Traslacion(-100,300);

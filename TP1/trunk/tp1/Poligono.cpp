@@ -275,47 +275,76 @@ void Poligono:: destruirLVertices(std:: list<Vertice*>* l){
 }
 /**********************************************************************************/
 void Poligono::clipping(Vertice* viewPmin,Vertice* viewPmax){
-	actualizarLista(Left,viewPmin,viewPmax); //Recorta el lado izquierdo
-	actualizarLista(Right,viewPmin,viewPmax); //Recorta el lado derecho
-	actualizarLista(Top,viewPmin,viewPmax);	//Recorta el lado superior 
-	actualizarLista(Bottom,viewPmin,viewPmax); //Recorta el lado inferior
+	actualizarLista(/*listaNueva,*/ Left,viewPmin,viewPmax); //Recorta el lado izquierdo
+	actualizarLista(/*listaNueva,*/ Right,viewPmin,viewPmax); //Recorta el lado derecho
+	actualizarLista(/*listaNueva,*/ Top,viewPmin,viewPmax);	//Recorta el lado superior 
+	actualizarLista(/*listaNueva,*/ Bottom,viewPmin,viewPmax); //Recorta el lado inferior
+	
+	this->cantVertices = this->lVertices->size();
 }
-void Poligono::actualizarLista(enum Borde borde,Vertice *viewPmin,Vertice *viewPmax){
-	Vertice *vertice;
-	std::list<Vertice*>::iterator it,it2,comp;
+void Poligono::actualizarLista(/*std:: list<Vertice*>* listaNueva,*/ enum Borde borde,Vertice *viewPmin,Vertice *viewPmax){
+	Vertice *vertice, *v2, *vIni;
+	std::list<Vertice*>::iterator it,it2;
 	std::list<Vertice*>* listaNueva=new std::list<Vertice*>;
+	
 	it=lVertices->begin();
 	it2=lVertices->begin();
-	comp=lVertices->end();
-	comp--;
-	it2++;
+
 	for (unsigned int i=0;i<lVertices->size();i++){
-		if (!adentro(*it,borde,viewPmin,viewPmax) && adentro(*it2,borde,viewPmin,viewPmax)){
-			vertice=intersecar(*it,*it2,borde,viewPmin,viewPmax);
-			listaNueva->push_back(vertice);
-			listaNueva->push_back(new Vertice(**it2));
+		if (i < lVertices->size() - 1){
+			it2++;
+			v2 = *it2;	
+		}
+		else
+			v2 = this->lVertices->front();
+
+
+		if (!adentro(*it,borde,viewPmin,viewPmax) && adentro(v2,borde,viewPmin,viewPmax)){
+			vertice=intersecar(*it,v2,borde,viewPmin,viewPmax);
+			this->agregarVertice(listaNueva, vertice);
+			this->agregarVertice(listaNueva, new Vertice(*v2));
+		
 		}
 		
 		if(adentro(*it,borde,viewPmin,viewPmax)){
-			if (adentro(*it2,borde,viewPmin,viewPmax))
-				listaNueva->push_back(new Vertice(**it2));
+
+			this->agregarVertice(listaNueva, new Vertice(**it));
+		
+			if (adentro(v2,borde,viewPmin,viewPmax) )
+				this->agregarVertice(listaNueva, new Vertice(*v2));
 			
-			if (!adentro(*it2,borde,viewPmin,viewPmax)){
-				vertice=intersecar(*it,*it2,borde,viewPmin,viewPmax);
-				listaNueva->push_back(vertice);
+			if (!adentro(v2,borde,viewPmin,viewPmax) ){
+				vertice=intersecar(*it,v2,borde,viewPmin,viewPmax);
+				this->agregarVertice(listaNueva, vertice);
 			}
 		}
-
 		it++;
-		if (it2==(--lVertices->end())){ 
-			it2=lVertices->begin();}
-		else it2++;
+	}
+	
+	vIni = listaNueva->front();
+	v2 = listaNueva->back();
+	if (vIni->getX() == v2->getX() && vIni->getY() == v2->getY() ){
+		delete v2;
+		listaNueva->pop_back();
 	}
 	this->destruirLVertices(this->lVertices);
 	this->lVertices=listaNueva;
 	
 }
+
+//Agrega el vertice a la lista, siempre y cuando, el ultimo en la lista
+//no sea el que se igual al que se quiere agregar
+void Poligono:: agregarVertice(std:: list<Vertice*>* lVertices, Vertice* nuevo){
+	Vertice* ult;
 	
+	if (!lVertices->empty()){
+		ult = lVertices->back();
+		if (ult->getX() != nuevo->getX() || ult->getY() != nuevo->getY())
+			lVertices->push_back(nuevo);
+	}
+	else lVertices->push_back(nuevo);
+
+}
 
 bool Poligono::adentro(Vertice *v, enum Borde borde,Vertice *viewPmin,Vertice *viewPmax){
 	switch (borde){
@@ -326,10 +355,10 @@ bool Poligono::adentro(Vertice *v, enum Borde borde,Vertice *viewPmin,Vertice *v
 			if (v->getX()>viewPmax->getX()) return false;
 			break;
 	case Bottom:
-			if (v->getY()>viewPmin->getY()) return false;
+			if (v->getY()<viewPmin->getY()) return false;
 			break;
 	case Top:
-			if (v->getY()<viewPmax->getY()) return false;
+			if (v->getY()>viewPmax->getY()) return false;
 			break;
 	}
 	return true;
@@ -340,7 +369,7 @@ Vertice* Poligono::intersecar(Vertice *v1,Vertice *v2,enum Borde borde,Vertice *
 	float m;
 	
 	if (v1->getX()!=v2->getX())
-		m=(v1->getY() - v2->getY()) / (v1->getX() - v2->getX());
+		m=(float)(v1->getY() - v2->getY()) / (v1->getX() - v2->getX());
 	
 	switch (borde){
 	case Left: 

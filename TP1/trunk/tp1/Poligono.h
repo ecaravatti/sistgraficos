@@ -50,9 +50,13 @@ private:
 	//A partir de los vertices construye el vector de las aristas
 	void construirVectorAristas(int &ymax);
 
+	//Elimina aristas de la lista de aristas activas, cuando
+	//la linea de scan las supera
 	void eliminarAristaActivas(std:: list<int>* aristasActivas, 
 								int yscan, int &ymaxscan);
 
+	//Dibuja la linea horizontal de acuerdo a las aristas activas
+	//(scanline)
 	void rellenar(std:: list<int>* aristasActivas, int yscan);
 
 	//Para rellenar agrega una arista a la lista de aristas activas
@@ -69,7 +73,12 @@ private:
 	
 	Vertice* intersecar(Vertice *v1,Vertice *v2,enum Borde borde,Vertice *viewPmin,Vertice *viewPmax);
 	
-	void actualizarLista(enum Borde borde,Vertice *viewPmin,Vertice *viewPmax);
+	void actualizarLista(/*std:: list<Vertice*>* nueva,*/ enum Borde borde,Vertice *viewPmin,Vertice *viewPmax);
+
+	// Agrega el vertice a la lista, siempre y cuando, el ultimo en la lista
+	// no sea el que se igual al que se quiere agregar
+	void agregarVertice(std:: list<Vertice*>* lVertices, Vertice* vnuevo);
+
 	
 };
 

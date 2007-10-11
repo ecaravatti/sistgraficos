@@ -17,6 +17,7 @@ class Vertice
 private:
 	int x;
 	int y;
+	bool clip;
 
 public:
 	// Constructores y destructores
@@ -36,6 +37,7 @@ public:
 	// Otros métodos
 	dibujar();
 	int distancia(Vertice v);
+	void clipping(Vertice* viewPmin,Vertice* viewPmax);
 
 	/// coorX: coordenada del Vertice a dibujar
 	/// coorY: coordenada del Vertice a dibujar
