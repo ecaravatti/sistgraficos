@@ -4,7 +4,6 @@
 
 #include "Pipeline2D.hpp"
 #include "Circulo.h"
-
 //////////////////////////////////////////////////////////////////////
 // Construcción/Destrucción
 //////////////////////////////////////////////////////////////////////
@@ -105,12 +104,10 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 	Vertice* p_verticeTransf = new Vertice[nro_vertices];
 	this->AplicarTransf(p_vertice,p_verticeTransf,nro_vertices);
 	Vertice maxViewport,minViewport;
-
 	minViewport.setX(ptoMinViewport.getX());
 	minViewport.setY(ptoMinViewport.getY());
 	maxViewport.setX(ptoMinViewport.getX()+anchoViewport);
 	maxViewport.setY(ptoMinViewport.getY()+altoViewport);
-	
 	switch (primitiva){
 
 		case PRIM2D_POLIGONO:{
@@ -120,6 +117,7 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 			Poligono poligono(p_verticeTransf,nro_vertices);
 			poligono.clipping(&minViewport,&maxViewport);
 			poligono.dibujarContorno();
+
 			
 			glEnd();
 			break;
@@ -142,9 +140,13 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 			glBegin(GL_POINTS);
 
 			glColor3ub(colorPunto.r,colorPunto.g,colorPunto.b);
-			for (int i=0; i<nro_vertices; i++)
+			for (int i=0; i<nro_vertices; i++){
+				if (p_verticeTransf[i].getX()<maxViewport.getX() &&
+					p_verticeTransf[i].getX()>minViewport.getX() &&
+					p_verticeTransf[i].getY()>minViewport.getY() &&
+					p_verticeTransf[i].getY()<maxViewport.getY())
 				p_verticeTransf[i].dibujar();
-
+			}
 			glEnd();
 			break;
 			}

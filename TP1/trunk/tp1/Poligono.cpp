@@ -320,12 +320,13 @@ void Poligono::actualizarLista(/*std:: list<Vertice*>* listaNueva,*/ enum Borde 
 		}
 		it++;
 	}
-	
-	vIni = listaNueva->front();
-	v2 = listaNueva->back();
-	if (vIni->getX() == v2->getX() && vIni->getY() == v2->getY() ){
-		delete v2;
-		listaNueva->pop_back();
+	if (!listaNueva->empty()){
+		vIni = listaNueva->front();
+		v2 = listaNueva->back();
+		if (vIni->getX() == v2->getX() && vIni->getY() == v2->getY() ){
+			delete v2;
+			listaNueva->pop_back();
+		}
 	}
 	this->destruirLVertices(this->lVertices);
 	this->lVertices=listaNueva;

@@ -74,7 +74,7 @@ void display()
 	pVertice[0].set(100,150);
 	pVertice[1].set(150,150);
 	pVertice[2].set(170,100);
-	Poligono p(pVertice, 3);
+	//Poligono p(pVertice, 3);
 	
 	//Poligono 2 5 vertices
 	Vertice* pVertice2 = new Vertice[5];
@@ -83,7 +83,7 @@ void display()
 	pVertice2[2].set(300,175);
 	pVertice2[3].set(225,225);
 	pVertice2[4].set(150,175);
-	Poligono p2(pVertice2, 5);
+	//Poligono p2(pVertice2, 5);
 
 	//Poligono 3 16 vertices relleno
 	Vertice* pVertice3 = new Vertice[16];
@@ -123,7 +123,7 @@ void display()
 	pVertice4[13].set(225,100);
 	pVertice4[14].set(275,75);
 	pVertice4[15].set(250,50);
-	Poligono p4(pVertice4, 16);
+	//Poligono p4(pVertice4, 16);
 
 	//Linea punteada inferior (10 puntos)
 	Vertice* pVertice8 = new Vertice[10];
@@ -141,17 +141,17 @@ void display()
 
 	//Linea punteada superior(10 puntos)
 	Vertice* pVertice9 = new Vertice[10];
-	pVertice9[0].set(175,225);
-	pVertice9[1].set(180,225);
-	pVertice9[2].set(185,225);
-	pVertice9[3].set(190,225);
-	pVertice9[4].set(195,225);
-	pVertice9[5].set(200,225);
-	pVertice9[6].set(205,225);
-	pVertice9[7].set(210,225);
-	pVertice9[8].set(215,225);
-	pVertice9[9].set(220,225);
-	pVertice9[10].set(225,225);
+	pVertice9[0].set(175,190);
+	pVertice9[1].set(180,190);
+	pVertice9[2].set(185,190);
+	pVertice9[3].set(190,190);
+	pVertice9[4].set(195,190);
+	pVertice9[5].set(200,190);
+	pVertice9[6].set(205,190);
+	pVertice9[7].set(210,190);
+	pVertice9[8].set(215,190);
+	pVertice9[9].set(220,190);
+	pVertice9[10].set(225,190);
 
 	Vertice* pVertice10 = new Vertice[8];
 	pVertice10[0].set(25,25);
@@ -162,14 +162,14 @@ void display()
 	pVertice10[5].set(25,150);
 	pVertice10[6].set(62,100);
 	pVertice10[7].set(62,75);
-	Poligono p10(pVertice10, 8);
+	//Poligono p10(pVertice10, 8);
 
 	Vertice* pVertice11 = new Vertice[4];
 	pVertice11[0].set(200,200);
 	pVertice11[1].set(150,250);
 	pVertice11[2].set(200,300);
 	pVertice11[3].set(250,275);
-	Poligono p11(pVertice11, 4);
+	//Poligono p11(pVertice11, 4);
 
 	Vertice* pVertice12 = new Vertice[12];
 	pVertice12[0].set(70,40);
@@ -184,14 +184,14 @@ void display()
 	pVertice12[9].set(90,200);
 	pVertice12[10].set(80,250);
 	pVertice12[11].set(50,120);
-	Poligono p12(pVertice12, 12);
+	//Poligono p12(pVertice12, 12);
 
 	Vertice* pVertice20=new Vertice[4];
 	pVertice20[0].set(100,100);
 	pVertice20[1].set(300,100);
 	pVertice20[2].set(300,300);
 	pVertice20[3].set(100,300);
-	Poligono p20(pVertice20, 4);
+	//Poligono p20(pVertice20, 4);
 
 
 	Segmento s1(new Vertice(0,100), new Vertice(400,100));
@@ -296,7 +296,7 @@ void display()
 //glEnd();
 	
 	CPipeline2D pipeline;
-	pipeline.Viewport(100,200,200,230);
+	pipeline.Viewport(100,100,200,230);
 	pipeline.ColorLinea(100,200,40);
 	pipeline.ColorPunto(255,0,0);
 	pipeline.ColorRelleno(130,0,160);
@@ -307,12 +307,12 @@ void display()
 	pipeline.Primitiva2D(PRIM2D_POLIGONO);
 
 	//pipeline.Dibujar(pVertice20,4);
-	
+	pipeline.Dibujar(pVertice3, 16);
 
 	pipeline.Rotacion(100,225.0,90);
 	
 	pipeline.Dibujar(pVertice3, 16);
-	/*pipeline.CargarIdentidad();
+	pipeline.CargarIdentidad();
 	pipeline.Rotacion(100,225.0,180);
 	
 	
@@ -321,8 +321,8 @@ void display()
 	pipeline.Rotacion(100,225.0,270);
 	
 	
-	pipeline.Dibujar(pVertice3, 16);*/
-/*
+	pipeline.Dibujar(pVertice3, 16);
+
 	// Para dibujar circulos
 	pipeline.ColorLinea(30,70,190);
 	pipeline.Traslacion(-100,300);
@@ -331,15 +331,15 @@ void display()
 	pipeline.Escalado(2,1);
 	pipeline.ColorLinea(100,0,100);
 	pipeline.Dibujar(pVertice,3);
-
+/*
 	delete[] pVertice8;
 	delete[] pVertice9;
 	delete[] pVertice;
 	delete[] pVertice2;
 	delete[] pVertice3;
 	delete[] pVertice4;
+*/	
 	
-	*/
 	///
   	glutSwapBuffers();
 	///
