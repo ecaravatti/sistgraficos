@@ -12,6 +12,13 @@
 #include "Vertice.h"
 #include <list>
 
+enum Borde{
+	Left,
+	Right,
+	Top,
+	Bottom
+};
+
 class Poligono  
 {
 private:
@@ -32,6 +39,8 @@ public:
 	void dibujarScanLine();
 
 	void dibujarContorno();
+
+	void clipping(Vertice* viewPmin,Vertice* viewPmax);
 	
 private:
 
@@ -55,6 +64,13 @@ private:
 	
 	// Destruye la lista de vertices
 	void destruirLVertices(std:: list<Vertice*>* l);
+
+	bool adentro(Vertice *v, enum Borde borde,Vertice *viewPmin,Vertice *viewPmax);
+	
+	Vertice* intersecar(Vertice *v1,Vertice *v2,enum Borde borde,Vertice *viewPmin,Vertice *viewPmax);
+	
+	void actualizarLista(enum Borde borde,Vertice *viewPmin,Vertice *viewPmax);
+	
 };
 
 #endif // !defined(AFX_POLIGONO_H__3C0B5C85_762C_425A_9ED3_11E7A7B5F983__INCLUDED_)

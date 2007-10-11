@@ -4,7 +4,7 @@
 
 #include "Poligono.h"
 #include "Segmento.h"
-
+#include <math.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construcción/Destrucción
@@ -98,7 +98,7 @@ void Poligono:: dibujarContorno(){
 	Segmento *s;
 	Vertice *v1, *v2;
 	int i;
-
+	if (!this->lVertices->empty()){
 	std::list<Vertice*>::iterator it = this->lVertices->begin() ;
 	i = 0;
 	while ( it != this->lVertices->end() ){
@@ -113,12 +113,12 @@ void Poligono:: dibujarContorno(){
 			it++;
 		i++;
 	}
-
 	v1 = this->lVertices->back();
 	v2 = this->lVertices->front();
 	s = new Segmento(new Vertice(*v1), new Vertice(*v2));
 	s->dibujarBresenham();
 	delete s;
+	}
 
 }
 
@@ -273,4 +273,96 @@ void Poligono:: destruirLVertices(std:: list<Vertice*>* l){
 
 	delete l;
 }
+/**********************************************************************************/
+void Poligono::clipping(Vertice* viewPmin,Vertice* viewPmax){
+	actualizarLista(Left,viewPmin,viewPmax); //Recorta el lado izquierdo
+	actualizarLista(Right,viewPmin,viewPmax); //Recorta el lado derecho
+	actualizarLista(Top,viewPmin,viewPmax);	//Recorta el lado superior 
+	actualizarLista(Bottom,viewPmin,viewPmax); //Recorta el lado inferior
+}
+void Poligono::actualizarLista(enum Borde borde,Vertice *viewPmin,Vertice *viewPmax){
+	Vertice *vertice;
+	std::list<Vertice*>::iterator it,it2,comp;
+	std::list<Vertice*>* listaNueva=new std::list<Vertice*>;
+	it=lVertices->begin();
+	it2=lVertices->begin();
+	comp=lVertices->end();
+	comp--;
+	it2++;
+	for (unsigned int i=0;i<lVertices->size();i++){
+		if (!adentro(*it,borde,viewPmin,viewPmax) && adentro(*it2,borde,viewPmin,viewPmax)){
+			vertice=intersecar(*it,*it2,borde,viewPmin,viewPmax);
+			listaNueva->push_back(vertice);
+			listaNueva->push_back(new Vertice(**it2));
+		}
+		
+		if(adentro(*it,borde,viewPmin,viewPmax)){
+			if (adentro(*it2,borde,viewPmin,viewPmax))
+				listaNueva->push_back(new Vertice(**it2));
+			
+			if (!adentro(*it2,borde,viewPmin,viewPmax)){
+				vertice=intersecar(*it,*it2,borde,viewPmin,viewPmax);
+				listaNueva->push_back(vertice);
+			}
+		}
 
+		it++;
+		if (it2==(--lVertices->end())){ 
+			it2=lVertices->begin();}
+		else it2++;
+	}
+	this->destruirLVertices(this->lVertices);
+	this->lVertices=listaNueva;
+	
+}
+	
+
+bool Poligono::adentro(Vertice *v, enum Borde borde,Vertice *viewPmin,Vertice *viewPmax){
+	switch (borde){
+	case Left: 
+			if(v->getX()<viewPmin->getX()) return false;
+			break;
+	case Right: 
+			if (v->getX()>viewPmax->getX()) return false;
+			break;
+	case Bottom:
+			if (v->getY()>viewPmin->getY()) return false;
+			break;
+	case Top:
+			if (v->getY()<viewPmax->getY()) return false;
+			break;
+	}
+	return true;
+}
+
+Vertice* Poligono::intersecar(Vertice *v1,Vertice *v2,enum Borde borde,Vertice *viewPmin,Vertice *viewPmax){
+	Vertice* interseccion=new Vertice();
+	float m;
+	
+	if (v1->getX()!=v2->getX())
+		m=(v1->getY() - v2->getY()) / (v1->getX() - v2->getX());
+	
+	switch (borde){
+	case Left: 
+			interseccion->setX(viewPmin->getX());
+			interseccion->setY((int)floor(v2->getY()+(viewPmin->getX()-v2->getX())*m));
+			break;
+	case Right:
+			interseccion->setX(viewPmax->getX());
+			interseccion->setY((int)floor(v2->getY()+(viewPmax->getX()-v2->getX())*m));
+			break;
+	case Bottom:
+			interseccion->setY(viewPmin->getY());
+			if (v1->getX()!=v2->getX())
+				interseccion->setX((int)floor(v2->getX()+(viewPmin->getY()-v2->getY())/m));
+			else interseccion->setX(v2->getX());
+			break;
+	case Top:
+			interseccion->setY(viewPmax->getY());
+			if (v1->getX()!=v2->getX())
+				interseccion->setX((int)floor(v2->getX()+(viewPmax->getY()-v2->getY())/m));
+			else interseccion->setX(v2->getX());
+			break;
+	}
+	return (interseccion);
+}

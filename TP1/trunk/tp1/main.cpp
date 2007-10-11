@@ -103,7 +103,7 @@ void display()
 	pVertice3[13].set(25,100);
 	pVertice3[14].set(75,75);
 	pVertice3[15].set(50,50);
-	Poligono p3(pVertice3, 16);
+	//Poligono p3(pVertice3, 16);
 
 	//Poligono 3 16 vertices contorno
 	Vertice* pVertice4 = new Vertice[16];
@@ -185,18 +185,26 @@ void display()
 	pVertice12[10].set(80,250);
 	pVertice12[11].set(50,120);
 	Poligono p12(pVertice12, 12);
-	
+
+	Vertice* pVertice20=new Vertice[4];
+	pVertice20[0].set(100,100);
+	pVertice20[1].set(300,100);
+	pVertice20[2].set(300,300);
+	pVertice20[3].set(100,300);
+
+
+
 	Segmento s1(new Vertice(0,100), new Vertice(400,100));
 	Segmento s2(new Vertice(0,300), new Vertice(400,300));
 //----------------------------------------------------------------------
-	glBegin(GL_POINTS);
+	//glBegin(GL_POINTS);
 	//-------------------Para dibujar segmentos 
 	
-		seg1.clipping(150, 250, 100, 300);
+	/*	seg1.clipping(150, 250, 100, 300);
 		seg1.dibujarBresenham();
 		s1.dibujarBresenham();
 		s2.dibujarBresenham();
-	
+		*/	
 
 	/*
 		seg2.clipping(50,150,100,400);
@@ -250,9 +258,10 @@ void display()
 		cir2.dibujarContorno();
 		cir1.dibujarRelleno();
 	*/
-	glEnd();
-	/*
+	//glEnd();
+	
 	CPipeline2D pipeline;
+	pipeline.Viewport(100,300,200,230);
 	pipeline.ColorLinea(100,200,40);
 	pipeline.ColorPunto(255,0,0);
 	pipeline.ColorRelleno(130,0,160);
@@ -260,16 +269,22 @@ void display()
 	pipeline.Primitiva2D(PRIM2D_PUNTO);
 	pipeline.Dibujar(pVertice8, 10);
 	pipeline.Dibujar(pVertice9, 10);
-	
 	pipeline.Primitiva2D(PRIM2D_POLIGONO);
-	pipeline.Dibujar(pVertice3, 16);
-	pipeline.Rotacion(100,225.0,90);
-	pipeline.Dibujar(pVertice3, 16);
+
+	pipeline.Dibujar(pVertice20,4);
+
+	/*pipeline.Rotacion(100,225.0,90);
+	
+	//pipeline.Dibujar(pVertice3, 16);
 	pipeline.CargarIdentidad();
 	pipeline.Rotacion(100,225.0,180);
+	
+	
 	pipeline.Dibujar(pVertice3, 16);
 	pipeline.CargarIdentidad();
 	pipeline.Rotacion(100,225.0,270);
+	
+	
 	pipeline.Dibujar(pVertice3, 16);
 
 	// Para dibujar circulos
@@ -287,8 +302,8 @@ void display()
 	delete[] pVertice2;
 	delete[] pVertice3;
 	delete[] pVertice4;
-	*/
 	
+	*/
 	///
   	glutSwapBuffers();
 	///
@@ -315,7 +330,7 @@ int main(int argc, char** argv)
 {
    glutInit(&argc, argv);
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
-   glutInitWindowSize (800, 800); 
+   glutInitWindowSize (800,800); 
    glutInitWindowPosition (100, 100);
    glutCreateWindow (caption);
    init ();

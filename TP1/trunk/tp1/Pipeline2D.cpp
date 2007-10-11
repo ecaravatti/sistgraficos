@@ -104,6 +104,13 @@ void CPipeline2D:: Escalado (float ex, float ey){
 void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 	Vertice* p_verticeTransf = new Vertice[nro_vertices];
 	this->AplicarTransf(p_vertice,p_verticeTransf,nro_vertices);
+	Vertice maxViewport,minViewport;
+
+	minViewport.setX(ptoMinViewport.getX());
+	minViewport.setY(ptoMinViewport.getY());
+	maxViewport.setX(ptoMinViewport.getX()+anchoViewport);
+	maxViewport.setY(ptoMinViewport.getY()-altoViewport);
+	
 	switch (primitiva){
 
 		case PRIM2D_POLIGONO:{
@@ -111,6 +118,7 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 
 			glColor3ub(colorLinea.r,colorLinea.g,colorLinea.b);
 			Poligono poligono(p_verticeTransf,nro_vertices);
+			//poligono.clipping(&minViewport,&maxViewport);
 			poligono.dibujarContorno();
 			
 			glEnd();
@@ -121,6 +129,7 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 			glBegin(GL_POINTS);
 
 			Poligono poligono(p_verticeTransf,nro_vertices);
+			//poligono.clipping(&minViewport,&maxViewport);
 			glColor3ub(colorLinea.r,colorLinea.g,colorLinea.b);
 			poligono.dibujarContorno();
 			glColor3ub(colorRelleno.r,colorRelleno.g,colorRelleno.b);
@@ -131,6 +140,7 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 			}
 		case PRIM2D_PUNTO:{
 			glBegin(GL_POINTS);
+
 			glColor3ub(colorPunto.r,colorPunto.g,colorPunto.b);
 			for (int i=0; i<nro_vertices; i++)
 				p_verticeTransf[i].dibujar();

@@ -21,6 +21,7 @@ private:
 public:
 	// Constructores y destructores
 	Vertice();
+	Vertice(const Vertice &vertice);
 	Vertice(int coordX, int coordY);
 	
 	virtual ~Vertice();
