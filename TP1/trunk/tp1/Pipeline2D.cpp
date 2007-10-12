@@ -24,10 +24,6 @@ CPipeline2D::CPipeline2D()
 	this->CargarIdentidad();
 }
 
-CPipeline2D::~CPipeline2D()
-{
-
-}
 
 //////////////////////////////////////////////////////////////////////
 // Otros métodos
@@ -216,7 +212,7 @@ void CPipeline2D::Viewport (int x0, int y0, int ancho, int alto)
 // y0 Coordenada y del extremo inferior izquierdo del viewport expresado en pixels.  
 // ancho Ancho del viewport expresado en pixels.
 // alto Alto del viewport expresado en pixels.
-void CPipeline2D::VentanaMundo (float u0, float v0, float ancho, float alto)
+ void CPipeline2D::VentanaMundo (float u0, float v0, float ancho, float alto)
 {
 	setPtoMinMundo(Vertice(u0,v0));
 	setAnchoMundo(ancho);
@@ -234,6 +230,26 @@ void CPipeline2D::AplicarTransf(Matriz3t& m, const Vertice* p_vertice,Vertice* t
 		delete vectorOriginal;
 	}
 }
+
+// Pone la pantalla en negro
+void CPipeline2D::ClearScreen()
+{	
+	ColorLinea(0,0,0);
+	ColorRelleno(0,0,0);
+	Primitiva2D(PRIM2D_POLIGONO_RELLENO);
+	Vertice* v = new Vertice[4];
+	v[0].set(getPtoMinMundo().getX(),getPtoMinMundo().getY());
+	v[1].set(getPtoMinMundo().getX() + anchoMundo,getPtoMinMundo().getY());
+	v[2].set(getPtoMinMundo().getX() + anchoMundo,getPtoMinMundo().getY() + altoMundo);
+	v[3].set(getPtoMinMundo().getX(), getPtoMinMundo().getY() + altoMundo);
+
+	CargarIdentidad();
+	Dibujar(v,4);
+
+	delete[] v;
+}
+
+
 
 //////////////////////////////////////////////////////////////////////
 // Getters y setters
@@ -307,4 +323,20 @@ void CPipeline2D:: calcularMVista()
 	esc.multiplicar(aux);
 	this->mVista.cargarMatrizTraslacion(this->ptoMinViewport.getX(), this->ptoMinViewport.getY());
 	this->mVista.multiplicar(esc);
+}
+
+bool CPipeline2D::instanceFlag = false;
+
+CPipeline2D* CPipeline2D::pipe = NULL;
+
+CPipeline2D* CPipeline2D::getInstancia()
+{
+	if(!instanceFlag)
+	{
+		pipe = new CPipeline2D();
+		instanceFlag = true;
+		return pipe;
+	}
+	else
+		return pipe;
 }

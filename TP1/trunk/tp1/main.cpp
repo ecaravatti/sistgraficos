@@ -10,6 +10,7 @@
 #include "Circulo.h"
 #include "Poligono.h"
 #include "Pipeline2D.hpp"
+#include <windows.h>
 
 #include <iostream>
 
@@ -24,8 +25,19 @@ void reshape(int w, int h)
 }
 
 
-void init(void) 
+void init(int argc, char** argv) 
 {
+	CPipeline2D* pipeline = CPipeline2D::getInstancia();
+
+	if (argc != 9)
+	{
+		printf("%s\n","La cantidad de parametros de entrada es incorrecta. Se tomarán los tamaños de viewport y ventana de mundo por defecto.");
+	}
+	else
+	{
+		pipeline->Viewport(atoi(argv[1]),atoi(argv[2]),atoi(argv[3]),atoi(argv[4]));
+		pipeline->VentanaMundo(atof(argv[5]),atof(argv[6]),atof(argv[7]),atof(argv[8]));
+	}
 	/// Incluir aquí todo lo que deba inicializare antes
 	/// de entrar en el loop de OpenGL
 }
@@ -166,105 +178,8 @@ void display()
 	Segmento s1(new Vertice(0,100), new Vertice(400,100));
 	Segmento s2(new Vertice(0,300), new Vertice(400,300));
 //----------------------------------------------------------------------
-//glBegin(GL_POINTS);
-	//-------------------Para dibujar segmentos 
-	
-	//	seg1.clipping(150, 250, 100, 300);
-		//seg1.dibujarBresenham();
-		//s1.dibujarBresenham();
-		//s2.dibujarBresenham();
+
 		
-
-	
-	//	seg2.clipping(50,150,100,400);
-		//seg2.dibujarBresenham();
-	
-	/*	
-		seg3.clipping(250,350,200,300);
-		seg3.dibujarBresenham();
-	*/
-		//seg4.dibujarBresenham();
-		//seg5.dibujarBresenham();
-		
-		//seg6.dibujarBresenham();
-		//seg7.dibujarBresenham();
-		//seg8.dibujarBresenham();
-		//seg9.dibujarBresenham();
-		//seg10.dibujarBresenham();
-	
-	
-	//--------------------Para dibujar poligono relleno
-		
-	/*
-		p.dibujarScanLine();
-		p.dibujarContorno();
-		
-
-		p2.dibujarScanLine();
-	
-	*/	
-	//---------------------Para dibujar poligono relleno 16 vertices
-	
-	
-		//p3.dibujarScanLine();	
-		//p4.dibujarContorno();
-
-		//p10.dibujarContorno();
-		//p10.dibujarScanLine();
-		
-		//p11.dibujarScanLine();
-		//p11.dibujarContorno();
-		//p11.dibujarScanLine();
-
-		//p12.dibujarContorno();
-		//p12.dibujarScanLine();
-		
-	
-
-	//---------------------Para dibujar circulos
-	/*
-		cir1.dibujarContorno();
-		cir2.dibujarContorno();
-		cir1.dibujarRelleno();
-	*/
-
-	/*
-	p.clipping(new Vertice(100,100), new Vertice(150,150));
-	p.dibujarScanLine();
-	p.dibujarContorno();
-	p.dibujarScanLine();
-	*/
-	
-	/*
-	p.dibujarContorno();
-	p.clipping(new Vertice(150,100), new Vertice(200,150));
-	p.dibujarContorno();
-	p.dibujarScanLine();
-	*/
-	
-	
-	//p12.dibujarContorno();
-	/*p12.clipping(new Vertice(0, 0), new Vertice(80,100));
-	p12.dibujarScanLine();
-	*/
-	
-	/*
-	p11.dibujarContorno();
-	p11.clipping(new Vertice(200,200), new Vertice(225,250));
-	p11.dibujarScanLine();
-	p11.dibujarContorno();
-	*/
-	
-	//p20.dibujarContorno();
-	//p20.clipping(new Vertice(100,200), new Vertice(300,530));	
-	//p20.dibujarContorno();
-
-	//pipeline.Viewport(100,300,200,230);
-	
-
-//glEnd();
-
-//Linea punteada inferior (10 puntos)
 	Vertice* pVertice8 = new Vertice[11];
 	pVertice8[0].set(0,50);
 	pVertice8[1].set(5,50);
@@ -298,103 +213,97 @@ void display()
 	pVertice3[15].set(50,50);
 	Poligono p3(pVertice3, 16);
 
-/*
-	CPipeline2D pipeline;
-	pipeline.VentanaMundo(0,0,200,200);
-	pipeline.Viewport(100,200,200,200);
 
-	pipeline.Viewport(100,100,200,230);
 
-	pipeline.ColorLinea(100,200,40);
-	pipeline.ColorPunto(255,0,0);
-	pipeline.ColorRelleno(130,0,160);
 
-	pipeline.Primitiva2D(PRIM2D_PUNTO);
-	pipeline.Dibujar(pVertice8, 11);
-	pipeline.Dibujar(pVertice9, 10);
+
+	CPipeline2D* pipeline = CPipeline2D::getInstancia();
+	pipeline->CargarIdentidad();
+	pipeline->ColorRelleno(100,100,0);
+
+	Vertice* v = new Vertice[4];
+
+
+	for(int x = -100; x<800;x+=75)
+	{
+		for(int y=-100; y<700;y+=225)
+		{
+			//Dibuja un pino
+			pipeline->CargarIdentidad();
+			pipeline->Traslacion(x,y);
 	
-	pipeline.Primitiva2D(PRIM2D_POLIGONO);
-	pipeline.Dibujar(pVertice20,4);
-
-*/
-
-	//pipeline.Primitiva2D(PRIM2D_PUNTO);
-	//pipeline.Dibujar(new Vertice(200,250),1);
-
-	//pipeline.Dibujar(pVertice20,4);
-	//pipeline.Dibujar(pVertice3, 16);
-
-
-	//pipeline.Rotacion(100,225.0,90);
+			// coordenadas del tronco
+			v[0].set(90,300-50);
+			v[1].set(110,300-50);
+			v[2].set(110,400-50);
+			v[3].set(90,400-50);
 	
-	//pipeline.Dibujar(pVertice3, 16);
-	/*pipeline.CargarIdentidad();
-	pipeline.Rotacion(100,225.0,180);
+			pipeline->Primitiva2D(PRIM2D_POLIGONO_RELLENO);
 	
-	
-	pipeline.Dibujar(pVertice3, 16);
-	pipeline.CargarIdentidad();
-	pipeline.Rotacion(100,225.0,270);
-	
-	
-	pipeline.Dibujar(pVertice3, 16);
-*/
-	// Para dibujar circulos
-/*	pipeline.ColorLinea(30,70,190);
-	pipeline.Traslacion(-100,300);
-	pipeline.Primitiva2D(PRIM2D_CIRCULO);
-	pipeline.Dibujar(pVertice,3);
-	pipeline.Escalado(2,1);
-	pipeline.ColorLinea(100,0,100);
-	pipeline.Dibujar(pVertice,3);
-	*/
-/*
-	delete[] pVertice8;
-	delete[] pVertice9;
-	delete[] pVertice;
-	delete[] pVertice2;
-	delete[] pVertice3;
-	delete[] pVertice4;
-*/	
+			pipeline->ColorRelleno(100,100,0);
+			pipeline->ColorLinea(200,200,0);
+			
+			//Dibuja el tronco
+			pipeline->Dibujar(v,4);
+		
+			// coordenadas de los triangulos
+			v[0].set(100,100-50);
+			v[1].set(150,200-50);
+			v[2].set(50,200-50);
 
-	CPipeline2D pipeline;
-	pipeline.VentanaMundo(0,0,800,800);
-	pipeline.Viewport(100,100,500,500);
-	pipeline.CargarIdentidad();
-	pipeline.ColorLinea(100,200,40);
-	pipeline.ColorPunto(255,0,0);
-	pipeline.ColorRelleno(130,0,160);
-
-	pipeline.Primitiva2D(PRIM2D_PUNTO);
-	pipeline.Dibujar(pVertice8, 10);
-	pipeline.Dibujar(pVertice9, 10);
-	pipeline.Primitiva2D(PRIM2D_POLIGONO);
-
-	//pipeline.Dibujar(pVertice20,4);
-	pipeline.Dibujar(pVertice3, 16);
-
-	pipeline.Rotacion(100,225.0,90);
+			//Dibuja los 3 triangulos del pino
+			pipeline->ColorLinea(10,255,10);
+			pipeline->ColorRelleno(0,255,0);
+			pipeline->Dibujar(v,3);
 	
-	pipeline.Dibujar(pVertice3, 16);
-	pipeline.CargarIdentidad();
-	pipeline.Rotacion(100,225.0,180);
+			pipeline->ColorRelleno(0,230,0);
+			pipeline->Traslacion(0,50);
+			pipeline->Dibujar(v,3);
+	
+			pipeline->ColorRelleno(0,200,0);
+			pipeline->Traslacion(0,50);
+			pipeline->Dibujar(v,3);
+		}
+	}
+	delete[] v;
+
+
+	pipeline->CargarIdentidad();
+	pipeline->ColorLinea(100,200,40);
+	pipeline->ColorPunto(255,0,0);
+	pipeline->ColorRelleno(130,0,160);
+
+	pipeline->Primitiva2D(PRIM2D_PUNTO);
+	pipeline->Dibujar(pVertice8, 10);
+	pipeline->Dibujar(pVertice9, 10);
+	pipeline->Primitiva2D(PRIM2D_POLIGONO);
+
+	//pipeline->Dibujar(pVertice20,4);
+	pipeline->Dibujar(pVertice3, 16);
+
+	pipeline->Rotacion(100,225.0,90);
+	
+	pipeline->Dibujar(pVertice3, 16);
+	pipeline->CargarIdentidad();
+	pipeline->Rotacion(100,225.0,180);
 	
 	
-	pipeline.Dibujar(pVertice3, 16);
-	pipeline.CargarIdentidad();
-	pipeline.Rotacion(100,225.0,270);
+	pipeline->Dibujar(pVertice3, 16);
+	pipeline->CargarIdentidad();
+	pipeline->Rotacion(100,225.0,270);
 	
 	
-	pipeline.Dibujar(pVertice3, 16);
+	pipeline->Dibujar(pVertice3, 16);
 
 	// Para dibujar circulos
-	pipeline.ColorLinea(30,70,190);
-	pipeline.Traslacion(-100,300);
-	pipeline.Primitiva2D(PRIM2D_CIRCULO);
-	pipeline.Dibujar(pVertice,3);
-	pipeline.Escalado(2,1);
-	pipeline.ColorLinea(100,0,100);
-	pipeline.Dibujar(pVertice,3);
+	pipeline->ColorLinea(30,70,190);
+	pipeline->Traslacion(-100,300);
+	pipeline->Primitiva2D(PRIM2D_CIRCULO);
+	pipeline->Dibujar(pVertice,3);
+	pipeline->Escalado(2,1);
+	pipeline->ColorLinea(100,0,100);
+	pipeline->Dibujar(pVertice,3);
+
 
 	///
   	glutSwapBuffers();
@@ -425,7 +334,7 @@ int main(int argc, char** argv)
    glutInitWindowSize (800,600); 
    glutInitWindowPosition (0, 0);
    glutCreateWindow (caption);
-   init ();
+   init (argc, argv);
    glutKeyboardFunc(keyboard);
    glutDisplayFunc(display); 
    glutReshapeFunc(reshape); 

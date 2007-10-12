@@ -45,7 +45,7 @@ int max(int n1, int n2){
 // Algoritmo de ScanLine para rellenar polígonos.
 void Poligono:: dibujarScanLine()
 {
-	int ymax, ymin, yscan, i, posMin = 0, ymaxscan;
+	int ymax = 0, ymin, yscan= 0, i, posMin = 0, ymaxscan;
 	bool fin;
 	std:: list<int> aristasActivas;
 	std::list<int>::iterator it;

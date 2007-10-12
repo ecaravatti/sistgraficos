@@ -54,14 +54,24 @@ private:
 	float altoMundo;		  // Alto de la ventana del mundo.
 	int anchoViewport;		  // Ancho de la ventana del viewport.
 	int altoViewport;		  // Alto de la ventana del viewport.
+	static CPipeline2D* pipe;
+	static bool instanceFlag;
 
-public:
+
 	/// \brief Constructor 
 	CPipeline2D ();
 
+public:
 	/// \brief Destructor
-	~CPipeline2D ();
+	~CPipeline2D ()
+	{
+		instanceFlag = false;
+	}
 
+
+	static CPipeline2D* getInstancia();
+
+	
 	/// \brief Configuracion de la primitiva2D
 	/// \param prim2d Identificador que indica el tipo de primitiva2D
 	void Primitiva2D (PRIMITIVA_2D prim2d);
@@ -157,6 +167,7 @@ public:
 	int getAnchoViewport() const;
 	setAltoViewport(int alto);
 	int getAltoViewport() const;
+
 
 
 private: 
