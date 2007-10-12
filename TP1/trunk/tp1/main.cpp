@@ -24,7 +24,9 @@ void reshape(int w, int h)
    gluOrtho2D(0.0, (GLdouble)w, (GLdouble)h, 0.0);
 }
 
-
+/**************************************************************/
+/* Inicializo el pipeline2D									  */
+/**************************************************************/
 void init(int argc, char** argv) 
 {
 	CPipeline2D* pipeline = CPipeline2D::getInstancia();
@@ -40,8 +42,6 @@ void init(int argc, char** argv)
 		pipeline->Viewport(atoi(argv[1]),atoi(argv[2]),atoi(argv[3]),atoi(argv[4]));
 		pipeline->VentanaMundo(atof(argv[5]),atof(argv[6]),atof(argv[7]),atof(argv[8]));
 	}
-	/// Incluir aquí todo lo que deba inicializare antes
-	/// de entrar en el loop de OpenGL
 }
 
 
@@ -54,212 +54,135 @@ void display()
     glLoadIdentity();
 	///
 
-
-	
-
-
-	
-	//Poligono 1 3 vertices
-	Vertice* pVertice = new Vertice[3];
-	pVertice[0].set(100,150);
-	pVertice[1].set(150,150);
-	pVertice[2].set(170,100);
-	//Poligono p(pVertice, 3);
-	
-	
-	// Estrella de 24 vertices
-	Vertice* pVertice2 = new Vertice[24];
-	pVertice2[0].set(250,100);
-	pVertice2[1].set(150,50);
-	pVertice2[2].set(150,150);
-	pVertice2[3].set(50,150);
-	pVertice2[4].set(100,250);
-	pVertice2[5].set(0,300);
-	pVertice2[6].set(100,350);
-	pVertice2[7].set(50,450);
-	pVertice2[8].set(150,450);
-	pVertice2[9].set(150,550);
-	pVertice2[10].set(250,500);
-	pVertice2[11].set(300,600);
-	pVertice2[12].set(350,500);
-	pVertice2[13].set(450,550);
-	pVertice2[14].set(450,450);
-	pVertice2[15].set(550,450);
-	pVertice2[16].set(500,350);
-	pVertice2[17].set(600,300);
-	pVertice2[18].set(500,250);
-	pVertice2[19].set(550,150);
-	pVertice2[20].set(450,150);
-	pVertice2[21].set(450,50);
-	pVertice2[22].set(350,100);
-	pVertice2[23].set(300,0);
-
-
-
-	//Linea punteada superior(10 puntos)
-	Vertice* pVertice9 = new Vertice[11];
-	pVertice9[0].set(175,190);
-	pVertice9[1].set(180,190);
-	pVertice9[2].set(185,190);
-	pVertice9[3].set(190,190);
-	pVertice9[4].set(195,190);
-	pVertice9[5].set(200,190);
-	pVertice9[6].set(205,190);
-	pVertice9[7].set(210,190);
-	pVertice9[8].set(215,190);
-	pVertice9[9].set(220,190);
-	pVertice9[10].set(225,190);
-
-	
-
-	Vertice* pVertice11 = new Vertice[4];
-	pVertice11[0].set(200,200);
-	pVertice11[1].set(150,250);
-	pVertice11[2].set(200,300);
-	pVertice11[3].set(250,275);
-	//Poligono p11(pVertice11, 4);
-
-	
-
-
-
-
-	
-
-		
-	Vertice* pVertice8 = new Vertice[11];
-	pVertice8[0].set(0,50);
-	pVertice8[1].set(5,50);
-	pVertice8[2].set(10,50);
-	pVertice8[3].set(15,50);
-	pVertice8[4].set(20,50);
-	pVertice8[5].set(25,50);
-	pVertice8[6].set(30,50);
-	pVertice8[7].set(35,50);
-	pVertice8[8].set(40,50);
-	pVertice8[9].set(45,50);
-	pVertice8[10].set(50,50);
-	
-	
-	Vertice* pVertice3 = new Vertice[16];
-	pVertice3[0].set(75,25);
-	pVertice3[1].set(125,25);
-	pVertice3[2].set(150,50);
-	pVertice3[3].set(125,75);
-	pVertice3[4].set(175,100);
-	pVertice3[5].set(125,125);
-	pVertice3[6].set(150,175);
-	pVertice3[7].set(125,200);
-	pVertice3[8].set(175,225);
-	pVertice3[9].set(25,225);
-	pVertice3[10].set(75,200);
-	pVertice3[11].set(50,175);
-	pVertice3[12].set(75,125);
-	pVertice3[13].set(25,100);
-	pVertice3[14].set(75,75);
-	pVertice3[15].set(50,50);
-	Poligono p3(pVertice3, 16);
-
-
-
-
-
 	CPipeline2D* pipeline = CPipeline2D::getInstancia();
-	pipeline->CargarIdentidad();
-	pipeline->ColorRelleno(100,100,0);
-/*
-	Vertice* v = new Vertice[4];
-
-  // bosque!
-	for(int x = -100; x<800;x+=75)
-	{
-		for(int y=-100; y<700;y+=225)
-		{
-			//Dibuja un pino
-			pipeline->CargarIdentidad();
-			pipeline->Traslacion(x,y);
-	
-			// coordenadas del tronco
-			v[0].set(90,300-50);
-			v[1].set(110,300-50);
-			v[2].set(110,400-50);
-			v[3].set(90,400-50);
-	
-			pipeline->Primitiva2D(PRIM2D_POLIGONO_RELLENO);
-	
-			pipeline->ColorRelleno(100,100,0);
-			pipeline->ColorLinea(200,200,0);
-			
-			//Dibuja el tronco
-			pipeline->Dibujar(v,4);
-		
-			// coordenadas de los triangulos
-			v[0].set(100,100-50);
-			v[1].set(150,200-50);
-			v[2].set(50,200-50);
-
-			//Dibuja los 3 triangulos del pino
-			pipeline->ColorLinea(10,255,10);
-			pipeline->ColorRelleno(0,255,0);
-			pipeline->Dibujar(v,3);
-	
-			pipeline->ColorRelleno(0,230,0);
-			pipeline->Traslacion(0,50);
-			pipeline->Dibujar(v,3);
-	
-			pipeline->ColorRelleno(0,200,0);
-			pipeline->Traslacion(0,50);
-			pipeline->Dibujar(v,3);
-		}
-	} 
-
-	delete[] v;
-*/
-
 	pipeline->CargarIdentidad();
 	pipeline->ColorLinea(100,200,40);
 	pipeline->ColorPunto(255,0,0);
 	pipeline->ColorRelleno(130,0,160);
 
-	//Dibuja unas lineas punteadas.
+/**************************************************************/
+/* Dibuja unas lineas punteadas.							  */
+/**************************************************************/
+	//Linea punteada superior (10 puntos)
+	Vertice* lineaPunteada1 = new Vertice[11];
+	lineaPunteada1[0].set(175,190);
+	lineaPunteada1[1].set(180,190);
+	lineaPunteada1[2].set(185,190);
+	lineaPunteada1[3].set(190,190);
+	lineaPunteada1[4].set(195,190);
+	lineaPunteada1[5].set(200,190);
+	lineaPunteada1[6].set(205,190);
+	lineaPunteada1[7].set(210,190);
+	lineaPunteada1[8].set(215,190);
+	lineaPunteada1[9].set(220,190);
+	lineaPunteada1[10].set(225,190);
+
+	// Linea puenteada inferior (11 puntos)
+	Vertice* lineaPunteada2 = new Vertice[11];
+	lineaPunteada2[0].set(0,50);
+	lineaPunteada2[1].set(5,50);
+	lineaPunteada2[2].set(10,50);
+	lineaPunteada2[3].set(15,50);
+	lineaPunteada2[4].set(20,50);
+	lineaPunteada2[5].set(25,50);
+	lineaPunteada2[6].set(30,50);
+	lineaPunteada2[7].set(35,50);
+	lineaPunteada2[8].set(40,50);
+	lineaPunteada2[9].set(45,50);
+	lineaPunteada2[10].set(50,50);
+
 	pipeline->Primitiva2D(PRIM2D_PUNTO);
-	pipeline->Dibujar(pVertice8, 10);
-	pipeline->Dibujar(pVertice9, 10);
+	pipeline->Dibujar(lineaPunteada2, 10);
+	pipeline->Dibujar(lineaPunteada1, 10);
 
+/**************************************************************/
+/* Dibuja poligono de 16 vértices (en color verde).			  */
+/**************************************************************/
+	Vertice* poligono16V = new Vertice[16];
+	poligono16V[0].set(75,25);
+	poligono16V[1].set(125,25);
+	poligono16V[2].set(150,50);
+	poligono16V[3].set(125,75);
+	poligono16V[4].set(175,100);
+	poligono16V[5].set(125,125);
+	poligono16V[6].set(150,175);
+	poligono16V[7].set(125,200);
+	poligono16V[8].set(175,225);
+	poligono16V[9].set(25,225);
+	poligono16V[10].set(75,200);
+	poligono16V[11].set(50,175);
+	poligono16V[12].set(75,125);
+	poligono16V[13].set(25,100);
+	poligono16V[14].set(75,75);
+	poligono16V[15].set(50,50);
 
-	// Dibuja poligono de 16 vértices (en color verde).
 	pipeline->Primitiva2D(PRIM2D_POLIGONO);
-	pipeline->Dibujar(pVertice3, 16);
+	pipeline->Dibujar(poligono16V, 16);
 	pipeline->Rotacion(100,225.0,90);
-	pipeline->Dibujar(pVertice3, 16);
+	pipeline->Dibujar(poligono16V, 16);
 	pipeline->CargarIdentidad();
 	pipeline->Rotacion(100,225.0,180);
-	pipeline->Dibujar(pVertice3, 16);
+	pipeline->Dibujar(poligono16V, 16);
 	pipeline->CargarIdentidad();
 	pipeline->Rotacion(100,225.0,270);
-	pipeline->Dibujar(pVertice3, 16);
+	pipeline->Dibujar(poligono16V, 16);
 
-	// Dibuja círculos azules.
-	pipeline->ColorLinea(30,70,190);
+/**************************************************************/
+/* Dibuja círculos azules.									  */
+/**************************************************************/
+	Vertice* circulos = new Vertice[2];
+	circulos[0].set(100,150);
+	circulos[1].set(150,150);
+
 	pipeline->CargarIdentidad();
-	pipeline->Traslacion(500,500);
+	pipeline->Traslacion(430,350);
 	pipeline->Primitiva2D(PRIM2D_CIRCULO);
 	for (int i = 0;i<120;i+=10)
 	{
 		pipeline->ColorLinea(0,0,5*i);
 		pipeline->Rotacion(150,150,i);
-		pipeline->Dibujar(pVertice,3);
+		pipeline->Dibujar(circulos,2);
 	}
 
-	// Dibuja Circulo violeta.
+/**************************************************************/
+/* Dibuja el Sol.											  */
+/**************************************************************/
 	pipeline->Primitiva2D(PRIM2D_CIRCULO_RELLENO);
 	pipeline->CargarIdentidad();
 	pipeline->Traslacion(150,250);
 	pipeline->Escalado(1.5,1);
 	pipeline->ColorLinea(200,200,000);
-	pipeline->Dibujar(pVertice,3);
+	pipeline->Dibujar(circulos,2);
 
-	// Dibuja polígono de 24 vértices (en color amarillo).
+/**************************************************************/
+/* Dibuja unas estrellas de 24 vértices (en color amarillo).  */
+/**************************************************************/
+	Vertice* estrella = new Vertice[24];
+	estrella[0].set(250,100);
+	estrella[1].set(150,50);
+	estrella[2].set(150,150);
+	estrella[3].set(50,150);
+	estrella[4].set(100,250);
+	estrella[5].set(0,300);
+	estrella[6].set(100,350);
+	estrella[7].set(50,450);
+	estrella[8].set(150,450);
+	estrella[9].set(150,550);
+	estrella[10].set(250,500);
+	estrella[11].set(300,600);
+	estrella[12].set(350,500);
+	estrella[13].set(450,550);
+	estrella[14].set(450,450);
+	estrella[15].set(550,450);
+	estrella[16].set(500,350);
+	estrella[17].set(600,300);
+	estrella[18].set(500,250);
+	estrella[19].set(550,150);
+	estrella[20].set(450,150);
+	estrella[21].set(450,50);
+	estrella[22].set(350,100);
+	estrella[23].set(300,0);
+
 	pipeline->Primitiva2D(PRIM2D_POLIGONO);
 	pipeline->CargarIdentidad();
 	pipeline->Escalado(0.5,0.5);
@@ -268,30 +191,29 @@ void display()
 
 	for(int n =0; n<=400; n+=110)
 	{
-		pipeline->Dibujar(pVertice2,24);
+		pipeline->Dibujar(estrella,24);
 		pipeline->Traslacion(n*2,n);
 		pipeline->ColorLinea(160+n*0.2,170+n*0.2,60);
 	}
 
-
-	///////////////
-
-	Vertice* v = new Vertice[4];
-
+/**************************************************************/	
+/* Dibuja unos pinos.										  */
+/**************************************************************/
+	Vertice* pino = new Vertice[4];
   
 	for(int x = -100; x<300;x+=75)
 	{
 		for(int y=500; y<700;y+=225)
 		{
-			//Dibuja un pino
+			//Cada iteración dibuja un pino
 			pipeline->CargarIdentidad();
 			pipeline->Traslacion(x,y);
 	
 			// coordenadas del tronco
-			v[0].set(90,300-50);
-			v[1].set(110,300-50);
-			v[2].set(110,400-50);
-			v[3].set(90,400-50);
+			pino[0].set(90,300-50);
+			pino[1].set(110,300-50);
+			pino[2].set(110,400-50);
+			pino[3].set(90,400-50);
 	
 			pipeline->Primitiva2D(PRIM2D_POLIGONO_RELLENO);
 	
@@ -299,45 +221,108 @@ void display()
 			pipeline->ColorLinea(200,200,0);
 			
 			//Dibuja el tronco
-			pipeline->Dibujar(v,4);
+			pipeline->Dibujar(pino,4);
 		
 			// coordenadas de los triangulos
-			v[0].set(100,100-50);
-			v[1].set(150,200-50);
-			v[2].set(50,200-50);
+			pino[0].set(100,100-50);
+			pino[1].set(150,200-50);
+			pino[2].set(50,200-50);
 
 			//Dibuja los 3 triangulos del pino
 			pipeline->ColorLinea(10,255,10);
 			pipeline->ColorRelleno(0,255,0);
-			pipeline->Dibujar(v,3);
+			pipeline->Dibujar(pino,3);
 	
 			pipeline->ColorRelleno(0,230,0);
 			pipeline->Traslacion(0,50);
-			pipeline->Dibujar(v,3);
+			pipeline->Dibujar(pino,3);
 	
 			pipeline->ColorRelleno(0,200,0);
 			pipeline->Traslacion(0,50);
-			pipeline->Dibujar(v,3);
+			pipeline->Dibujar(pino,3);
 		}
 	} 
 
-	delete[] v;
+/**************************************************************/
+/* Dibuja una casa.											  */
+/**************************************************************/
+	pipeline->ColorLinea(60,0,0);
+	Vertice* casa = new Vertice[6];
+	casa[0].set(0,20);
+	casa[1].set(15,30);
+	casa[2].set(60,30);
+	casa[3].set(60,50);
+	casa[4].set(15,50);
+	casa[5].set(0,40);
+
+	pipeline->CargarIdentidad();
+	pipeline->ColorRelleno(240,255,255);
+	pipeline->Escalado(4,4);
+	pipeline->Traslacion(120,150);
+	pipeline->Dibujar(casa,6);
+
+	//Dibuja el techo
+	casa[0].set(0,20);
+	casa[1].set(10,10);
+	casa[2].set(55,10);
+	casa[3].set(60,30);
+	casa[4].set(15,30);
+	
+	pipeline->ColorRelleno(240,0,30);
+	pipeline->Dibujar(casa,5);
+
+	// Dibuja la chimenea.
+	casa[0].set(40,0);
+	casa[1].set(45,10);
+	casa[2].set(50,10);
+	casa[3].set(50,25);
+	casa[4].set(45,25);
+	casa[5].set(40,15);
+
+	pipeline->ColorRelleno(220,0,30);
+	pipeline->Dibujar(casa,6);
+
+	casa[0].set(40,0);
+	casa[1].set(45,0);
+	casa[2].set(50,10);
+	casa[3].set(45,10);
+
+	pipeline->ColorRelleno(200,0,30);
+	pipeline->Dibujar(casa,4);
 
 
-	/////////////7
+	// Dibuja la puerta.
+	casa[0].set(3,42);
+	casa[1].set(3,26);
+	casa[2].set(11,32);
+	casa[3].set(11,48);
+
+	pipeline->ColorRelleno(80,50,0);
+	pipeline->Dibujar(casa,4);
+
+	// Dibuja la ventana
+	casa[0].set(25,42);
+	casa[1].set(25,35);
+	casa[2].set(50,35);
+	casa[3].set(50,42);
+
+	pipeline->ColorRelleno(0,0,20);
+	pipeline->Dibujar(casa,4);
 
 
-	delete[] pVertice2;
+	delete[] lineaPunteada1;
+	delete[] lineaPunteada2;
+	delete[] poligono16V;
+	delete[] circulos;
+	delete[] estrella;
+	delete[] pino;
+	delete[] casa;
 
 	///
   	glutSwapBuffers();
 	///
 
 }
-
-
-
-
 
 void keyboard(unsigned char key, int x, int y)
 {
