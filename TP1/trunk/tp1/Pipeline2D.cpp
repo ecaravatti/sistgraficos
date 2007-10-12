@@ -161,6 +161,7 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 			glColor3ub(colorLinea.r,colorLinea.g,colorLinea.b);
 			while (nro_vertices>=2){
 				Segmento segmento(&p_verticeTransf[i],&p_verticeTransf[i+1]);
+				segmento.clipping( this->ptoMinViewport.getX(), this->ptoMinViewport.getY(), this->ptoMinViewport.getX() + anchoViewport, this->ptoMinViewport.getY() + altoViewport);
 				segmento.dibujarBresenham();
 				i+=2;
 				nro_vertices-=2;
@@ -185,6 +186,22 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 			glEnd();
 			break;
 			}
+		case PRIM2D_CIRCULO_RELLENO:{
+			int i = 0;
+			glBegin(GL_POINTS);
+			glColor3ub(colorLinea.r,colorLinea.g,colorLinea.b);
+			int nro = nro_vertices;
+			while (nro>=2){
+				Circulo circulo(&p_verticeTransf[i],p_verticeTransf[i].distancia(p_verticeTransf[i+1]));
+				circulo.dibujarRelleno();
+				i+=2;
+				nro-=2;
+			}
+			
+			glEnd();
+			break;
+			}
+
 	}
 	//delete p_verticeTransf;
 	//delete p_aux;
