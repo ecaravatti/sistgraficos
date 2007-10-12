@@ -16,6 +16,7 @@ class Circulo
 private:
 	Vertice* vert0;
 	int radio;
+
 public:
 
 	Circulo(Vertice* vO, int r);

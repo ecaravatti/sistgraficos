@@ -34,7 +34,7 @@ void Circulo:: dibujarRelleno(){
 		this->dibujarBresenham(i);
 }
 
-
+// Metodo auxiliar para dibujar el circulo.
 void Circulo:: dibujarPtos(int x, int y){
 	int x0 = this->vert0->getX(), y0 = this->vert0->getY();
 

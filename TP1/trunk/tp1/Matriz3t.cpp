@@ -62,6 +62,7 @@ void Matriz3t:: cargarId(){
 			else this->matriz[i][j] = 0.0;	
 }
 
+// Carga la matriz de Traslación
 void Matriz3t:: cargarMatrizTraslacion(float tx, float ty){
 
 	this->cargarId();
@@ -69,6 +70,7 @@ void Matriz3t:: cargarMatrizTraslacion(float tx, float ty){
 	this->matriz[1][2] = ty;	
 }
 
+// Carga la matriz de Rotación
 void Matriz3t:: cargarMatrizRotacion( float angulo ){
 	double angRad = (angulo*PI)/180;
 
@@ -80,6 +82,7 @@ void Matriz3t:: cargarMatrizRotacion( float angulo ){
 
 }
 
+// Carga la matriz de escalamiento
 void Matriz3t:: cargarMatrizEscalamiento(float ex, float ey){
 	this->cargarId();
 	this->matriz[0][0] = ex;

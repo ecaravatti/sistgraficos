@@ -105,8 +105,6 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 	this->calcularMVista();
 	this->AplicarTransf(this->mTransformacion, p_vertice,p_aux,nro_vertices);
 	this->AplicarTransf(this->mVista,p_aux,p_verticeTransf,nro_vertices);
-	
-	//this->AplicarTransf(this->mTransformacion, p_vertice,p_verticeTransf,nro_vertices);
 
 	minViewport.setX(ptoMinViewport.getX());
 	minViewport.setY(ptoMinViewport.getY());
@@ -203,10 +201,8 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 			}
 
 	}
-	//delete p_verticeTransf;
-	//delete p_aux;
+	
 }
-//TODO: el circulo relleno, bajo que "case" se haria???
 
 // Define el Viewport
 // Este metodo permite definir la posición en la pantalla y las dimensiones
@@ -236,6 +232,7 @@ void CPipeline2D::Viewport (int x0, int y0, int ancho, int alto)
 	setAltoMundo(alto);
 }
 
+// Este método aplica las tranformaciones afines cargadas en el pipeline.
 void CPipeline2D::AplicarTransf(Matriz3t& m, const Vertice* p_vertice,Vertice* transf,
 								unsigned int nro_vertices){
 	Vector3t vectorResultado;
@@ -266,7 +263,31 @@ void CPipeline2D::ClearScreen()
 	delete[] v;
 }
 
+void CPipeline2D:: calcularMVista()
+{
+	Matriz3t aux,esc;
+	aux.cargarMatrizTraslacion(-this->ptoMinMundo.getX(), -this->ptoMinMundo.getY());
+	esc.cargarMatrizEscalamiento(this->anchoViewport/this->anchoMundo, this->altoViewport/this->altoMundo);
+	esc.multiplicar(aux);
+	this->mVista.cargarMatrizTraslacion(this->ptoMinViewport.getX(), this->ptoMinViewport.getY());
+	this->mVista.multiplicar(esc);
+}
 
+bool CPipeline2D::instanceFlag = false;
+
+CPipeline2D* CPipeline2D::pipe = NULL;
+
+CPipeline2D* CPipeline2D::getInstancia()
+{
+	if(!instanceFlag)
+	{
+		pipe = new CPipeline2D();
+		instanceFlag = true;
+		return pipe;
+	}
+	else
+		return pipe;
+}
 
 //////////////////////////////////////////////////////////////////////
 // Getters y setters
@@ -332,28 +353,3 @@ int CPipeline2D::getAltoViewport() const
 	return altoViewport;
 }
 
-void CPipeline2D:: calcularMVista()
-{
-	Matriz3t aux,esc;
-	aux.cargarMatrizTraslacion(-this->ptoMinMundo.getX(), -this->ptoMinMundo.getY());
-	esc.cargarMatrizEscalamiento(this->anchoViewport/this->anchoMundo, this->altoViewport/this->altoMundo);
-	esc.multiplicar(aux);
-	this->mVista.cargarMatrizTraslacion(this->ptoMinViewport.getX(), this->ptoMinViewport.getY());
-	this->mVista.multiplicar(esc);
-}
-
-bool CPipeline2D::instanceFlag = false;
-
-CPipeline2D* CPipeline2D::pipe = NULL;
-
-CPipeline2D* CPipeline2D::getInstancia()
-{
-	if(!instanceFlag)
-	{
-		pipe = new CPipeline2D();
-		instanceFlag = true;
-		return pipe;
-	}
-	else
-		return pipe;
-}

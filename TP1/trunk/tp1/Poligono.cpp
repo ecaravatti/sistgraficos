@@ -273,16 +273,18 @@ void Poligono:: destruirLVertices(std:: list<Vertice*>* l){
 
 	delete l;
 }
+
 /**********************************************************************************/
 void Poligono::clipping(Vertice* viewPmin,Vertice* viewPmax){
-	actualizarLista(/*listaNueva,*/ Left,viewPmin,viewPmax); //Recorta el lado izquierdo
-	actualizarLista(/*listaNueva,*/ Right,viewPmin,viewPmax); //Recorta el lado derecho
-	actualizarLista(/*listaNueva,*/ Top,viewPmin,viewPmax);	//Recorta el lado superior 
-	actualizarLista(/*listaNueva,*/ Bottom,viewPmin,viewPmax); //Recorta el lado inferior
+	actualizarLista( Left,viewPmin,viewPmax); //Recorta el lado izquierdo
+	actualizarLista( Right,viewPmin,viewPmax); //Recorta el lado derecho
+	actualizarLista( Top,viewPmin,viewPmax);	//Recorta el lado superior 
+	actualizarLista( Bottom,viewPmin,viewPmax); //Recorta el lado inferior
 	
 	this->cantVertices = this->lVertices->size();
 }
-void Poligono::actualizarLista(/*std:: list<Vertice*>* listaNueva,*/ enum Borde borde,Vertice *viewPmin,Vertice *viewPmax){
+
+void Poligono::actualizarLista( enum Borde borde,Vertice *viewPmin,Vertice *viewPmax){
 	Vertice *vertice, *v2, *vIni;
 	std::list<Vertice*>::iterator it,it2;
 	std::list<Vertice*>* listaNueva=new std::list<Vertice*>;

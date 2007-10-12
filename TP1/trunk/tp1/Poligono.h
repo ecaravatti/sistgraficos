@@ -69,11 +69,13 @@ private:
 	// Destruye la lista de vertices
 	void destruirLVertices(std:: list<Vertice*>* l);
 
+	// Se fija si el vertice v esta adentro del espacio definido por borde,
+	// viewPmin, y viewPmax
 	bool adentro(Vertice *v, enum Borde borde,Vertice *viewPmin,Vertice *viewPmax);
 	
 	Vertice* intersecar(Vertice *v1,Vertice *v2,enum Borde borde,Vertice *viewPmin,Vertice *viewPmax);
 	
-	void actualizarLista(/*std:: list<Vertice*>* nueva,*/ enum Borde borde,Vertice *viewPmin,Vertice *viewPmax);
+	void actualizarLista(enum Borde borde,Vertice *viewPmin,Vertice *viewPmax);
 
 	// Agrega el vertice a la lista, siempre y cuando, el ultimo en la lista
 	// no sea el que se igual al que se quiere agregar

@@ -44,8 +44,6 @@ void init(int argc, char** argv)
 	}
 }
 
-
-
 void display()
 {
 	///
@@ -109,6 +107,7 @@ void display()
 		pipeline->Rotacion(150,150,i);
 		pipeline->Dibujar(circulos,2);
 	}
+
 /*************************************************************/
 /* Dibuja una nube.                                          */
 /*************************************************************/
