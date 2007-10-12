@@ -47,7 +47,7 @@ private:
 	COLOR colorLinea;
 	COLOR colorRelleno;
 	COLOR colorPunto;
-	Matriz3t mTransformacion; // Matriz de transformacion
+	Matriz3t mTransformacion, mVista; // Matriz de transformacion, matriz de vista
 	Vertice ptoMinMundo;	  // Punto inferior izquierdo de las coordenadas del mundo.
 	Vertice ptoMinViewport;	  // Punto inferior izquierdo de las coordenadas del viewport.
 	float anchoMundo;		  // Ancho de la ventana del mundo.
@@ -160,7 +160,9 @@ public:
 
 
 private: 
-	void AplicarTransf(const Vertice* p_vertice,Vertice* transf,
+	void AplicarTransf(Matriz3t& m, const Vertice* p_vertice,Vertice* transf,
 						unsigned int nro_vertices);
+
+	void calcularMVista();
 };
 

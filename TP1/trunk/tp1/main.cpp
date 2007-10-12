@@ -46,7 +46,7 @@ void display()
 	//Vertical
 	Segmento seg1(new Vertice(200,0), new Vertice(200, 400));
 	//Horizontal
-	Segmento seg2(new Vertice(0,200), new Vertice(400,200));
+	Segmento seg2(new Vertice(0,250), new Vertice(400,250));
 	//pendiente abs(m) < 1
 	Segmento seg3(new Vertice(200,200), new Vertice(400,280));
 	//pendiente abs(m) == 1
@@ -86,24 +86,7 @@ void display()
 	//Poligono p2(pVertice2, 5);
 
 	//Poligono 3 16 vertices relleno
-	Vertice* pVertice3 = new Vertice[16];
-	pVertice3[0].set(75,25);
-	pVertice3[1].set(125,25);
-	pVertice3[2].set(150,50);
-	pVertice3[3].set(125,75);
-	pVertice3[4].set(175,100);
-	pVertice3[5].set(125,125);
-	pVertice3[6].set(150,175);
-	pVertice3[7].set(125,200);
-	pVertice3[8].set(175,225);
-	pVertice3[9].set(25,225);
-	pVertice3[10].set(75,200);
-	pVertice3[11].set(50,175);
-	pVertice3[12].set(75,125);
-	pVertice3[13].set(25,100);
-	pVertice3[14].set(75,75);
-	pVertice3[15].set(50,50);
-	//Poligono p3(pVertice3, 16);
+	
 
 	//Poligono 3 16 vertices contorno
 	Vertice* pVertice4 = new Vertice[16];
@@ -125,22 +108,8 @@ void display()
 	pVertice4[15].set(250,50);
 	//Poligono p4(pVertice4, 16);
 
-	//Linea punteada inferior (10 puntos)
-	Vertice* pVertice8 = new Vertice[10];
-	pVertice8[0].set(175,100);
-	pVertice8[1].set(180,100);
-	pVertice8[2].set(185,100);
-	pVertice8[3].set(190,100);
-	pVertice8[4].set(195,100);
-	pVertice8[5].set(200,100);
-	pVertice8[6].set(205,100);
-	pVertice8[7].set(210,100);
-	pVertice8[8].set(215,100);
-	pVertice8[9].set(220,100);
-	pVertice8[10].set(225,100);
-
 	//Linea punteada superior(10 puntos)
-	Vertice* pVertice9 = new Vertice[10];
+	Vertice* pVertice9 = new Vertice[11];
 	pVertice9[0].set(175,190);
 	pVertice9[1].set(180,190);
 	pVertice9[2].set(185,190);
@@ -200,16 +169,16 @@ void display()
 //glBegin(GL_POINTS);
 	//-------------------Para dibujar segmentos 
 	
-	/*	seg1.clipping(150, 250, 100, 300);
-		seg1.dibujarBresenham();
-		s1.dibujarBresenham();
-		s2.dibujarBresenham();
-		*/	
+	//	seg1.clipping(150, 250, 100, 300);
+		//seg1.dibujarBresenham();
+		//s1.dibujarBresenham();
+		//s2.dibujarBresenham();
+		
 
-	/*
-		seg2.clipping(50,150,100,400);
-		seg2.dibujarBresenham();
-	*/
+	
+	//	seg2.clipping(50,150,100,400);
+		//seg2.dibujarBresenham();
+	
 	/*	
 		seg3.clipping(250,350,200,300);
 		seg3.dibujarBresenham();
@@ -273,9 +242,9 @@ void display()
 	p.dibujarScanLine();
 	*/
 	
-	/*
-	p12.dibujarContorno();
-	p12.clipping(new Vertice(0, 0), new Vertice(80,100));
+	
+	//p12.dibujarContorno();
+	/*p12.clipping(new Vertice(0, 0), new Vertice(80,100));
 	p12.dibujarScanLine();
 	*/
 	
@@ -294,25 +263,52 @@ void display()
 	
 
 //glEnd();
+
+//Linea punteada inferior (10 puntos)
+	Vertice* pVertice8 = new Vertice[11];
+	pVertice8[0].set(0,50);
+	pVertice8[1].set(5,50);
+	pVertice8[2].set(10,50);
+	pVertice8[3].set(15,50);
+	pVertice8[4].set(20,50);
+	pVertice8[5].set(25,50);
+	pVertice8[6].set(30,50);
+	pVertice8[7].set(35,50);
+	pVertice8[8].set(40,50);
+	pVertice8[9].set(45,50);
+	pVertice8[10].set(50,50);
 	
+	/*
 	CPipeline2D pipeline;
+	pipeline.VentanaMundo(0,0,200,200);
+	pipeline.Viewport(100,200,200,200);
+
 	pipeline.Viewport(100,100,200,230);
+
 	pipeline.ColorLinea(100,200,40);
 	pipeline.ColorPunto(255,0,0);
 	pipeline.ColorRelleno(130,0,160);
 
 	pipeline.Primitiva2D(PRIM2D_PUNTO);
-	pipeline.Dibujar(pVertice8, 10);
+	pipeline.Dibujar(pVertice8, 11);
 	pipeline.Dibujar(pVertice9, 10);
+	
 	pipeline.Primitiva2D(PRIM2D_POLIGONO);
+	pipeline.Dibujar(pVertice20,4);
+	*/
+
+
+	//pipeline.Primitiva2D(PRIM2D_PUNTO);
+	//pipeline.Dibujar(new Vertice(200,250),1);
 
 	//pipeline.Dibujar(pVertice20,4);
-	pipeline.Dibujar(pVertice3, 16);
+	//pipeline.Dibujar(pVertice3, 16);
 
-	pipeline.Rotacion(100,225.0,90);
+
+	//pipeline.Rotacion(100,225.0,90);
 	
-	pipeline.Dibujar(pVertice3, 16);
-	pipeline.CargarIdentidad();
+	//pipeline.Dibujar(pVertice3, 16);
+	/*pipeline.CargarIdentidad();
 	pipeline.Rotacion(100,225.0,180);
 	
 	
@@ -322,15 +318,16 @@ void display()
 	
 	
 	pipeline.Dibujar(pVertice3, 16);
-
+*/
 	// Para dibujar circulos
-	pipeline.ColorLinea(30,70,190);
+/*	pipeline.ColorLinea(30,70,190);
 	pipeline.Traslacion(-100,300);
 	pipeline.Primitiva2D(PRIM2D_CIRCULO);
 	pipeline.Dibujar(pVertice,3);
 	pipeline.Escalado(2,1);
 	pipeline.ColorLinea(100,0,100);
 	pipeline.Dibujar(pVertice,3);
+	*/
 /*
 	delete[] pVertice8;
 	delete[] pVertice9;
@@ -340,6 +337,61 @@ void display()
 	delete[] pVertice4;
 */	
 	
+	
+	//
+	Vertice *ptroVertice = new Vertice[4];
+	//ptroVertice[0]
+	Vertice* pVertice3 = new Vertice[16];
+	pVertice3[0].set(75,25);
+	pVertice3[1].set(125,25);
+	pVertice3[2].set(150,50);
+	pVertice3[3].set(125,75);
+	pVertice3[4].set(175,100);
+	pVertice3[5].set(125,125);
+	pVertice3[6].set(150,175);
+	pVertice3[7].set(125,200);
+	pVertice3[8].set(175,225);
+	pVertice3[9].set(25,225);
+	pVertice3[10].set(75,200);
+	pVertice3[11].set(50,175);
+	pVertice3[12].set(75,125);
+	pVertice3[13].set(25,100);
+	pVertice3[14].set(75,75);
+	pVertice3[15].set(50,50);
+	Poligono p3(pVertice3, 16);
+
+	CPipeline2D pipeline;
+	pipeline.VentanaMundo(0,0,500,500);
+	pipeline.Viewport(100,100,400,400);
+	pipeline.ColorLinea(100,200,40);
+	pipeline.ColorPunto(255,0,0);
+	pipeline.ColorRelleno(130,0,160);
+
+	pipeline.Primitiva2D(PRIM2D_POLIGONO);
+	//pipeline.Traslacion(300,300);
+	//pipeline.Escalado(0.5,0.7);
+	//pipeline.Traslacion(150,0);
+
+	//pipeline.Escalado(0.9,0.9);
+	pipeline.Dibujar(pVertice3, 16);
+	pipeline.Rotacion(100,225,180);
+	pipeline.Dibujar(pVertice3, 16);
+	pipeline.CargarIdentidad();
+	pipeline.Rotacion(100,225,90);
+	pipeline.Traslacion(-200,0);
+	pipeline.Dibujar(pVertice4, 16);
+	//pipeline.CargarIdentidad();
+	//pipeline.Traslacion(-225,100);
+	pipeline.Escalado(1,-1);
+	pipeline.Traslacion(0, -450);
+	pipeline.Dibujar(pVertice4, 16);
+	
+	//
+	/*pipeline.Primitiva2D(PRIM2D_PUNTO);
+	Vertice* pto = new Vertice(0,1);
+	pipeline.Dibujar(pto,1);
+	pipeline.Traslacion(100,200);
+	pipeline.Dibujar(pto,1);*/
 	///
   	glutSwapBuffers();
 	///
@@ -366,8 +418,8 @@ int main(int argc, char** argv)
 {
    glutInit(&argc, argv);
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
-   glutInitWindowSize (800,800); 
-   glutInitWindowPosition (100, 100);
+   glutInitWindowSize (800,600); 
+   glutInitWindowPosition (0, 0);
    glutCreateWindow (caption);
    init ();
    glutKeyboardFunc(keyboard);

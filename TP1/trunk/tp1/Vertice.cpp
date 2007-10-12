@@ -75,7 +75,8 @@ Vertice::dibujar(int coorX, int coorY){
 // Dibuja el vértice.
 Vertice::dibujar()
 {
-	glVertex2i(x,y);
+	if (clip)
+			glVertex2i(x,y);
 }
 
 // Calcula la distancia con el vértice v.
@@ -88,7 +89,11 @@ int Vertice::distancia(Vertice v)
 }
 
 void Vertice:: clipping(Vertice* viewPmin,Vertice* viewPmax){
-
+	
+	if (this->getX() >= viewPmin->getX() && this->getX() <= viewPmax->getX() 
+		&& this->getY() >= viewPmin->getY() && this->getY() <= viewPmax->getY())
+		this->clip = true;
+	else this->clip = false;
 
 }
 
