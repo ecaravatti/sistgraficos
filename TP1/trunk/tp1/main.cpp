@@ -358,8 +358,8 @@ void display()
 */	
 
 	CPipeline2D pipeline;
-	pipeline.VentanaMundo(0,0,300,300);
-	pipeline.Viewport(200,200,200,230);
+	pipeline.VentanaMundo(0,0,800,800);
+	pipeline.Viewport(100,100,500,500);
 	pipeline.CargarIdentidad();
 	pipeline.ColorLinea(100,200,40);
 	pipeline.ColorPunto(255,0,0);

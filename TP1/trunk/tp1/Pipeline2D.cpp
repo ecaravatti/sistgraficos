@@ -123,7 +123,7 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 
 			glColor3ub(colorLinea.r,colorLinea.g,colorLinea.b);
 			Poligono poligono(p_verticeTransf,nro_vertices);
-			//poligono.clipping(&minViewport,&maxViewport);
+			poligono.clipping(&minViewport,&maxViewport);
 			poligono.dibujarContorno();
 
 			
@@ -135,7 +135,7 @@ void CPipeline2D::Dibujar(Vertice* p_vertice,unsigned int nro_vertices){
 			glBegin(GL_POINTS);
 
 			Poligono poligono(p_verticeTransf,nro_vertices);
-			//poligono.clipping(&minViewport,&maxViewport);
+			poligono.clipping(&minViewport,&maxViewport);
 			glColor3ub(colorLinea.r,colorLinea.g,colorLinea.b);
 			poligono.dibujarContorno();
 			glColor3ub(colorRelleno.r,colorRelleno.g,colorRelleno.b);
