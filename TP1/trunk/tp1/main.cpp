@@ -278,7 +278,27 @@ void display()
 	pVertice8[9].set(45,50);
 	pVertice8[10].set(50,50);
 	
-	/*
+	
+	Vertice* pVertice3 = new Vertice[16];
+	pVertice3[0].set(75,25);
+	pVertice3[1].set(125,25);
+	pVertice3[2].set(150,50);
+	pVertice3[3].set(125,75);
+	pVertice3[4].set(175,100);
+	pVertice3[5].set(125,125);
+	pVertice3[6].set(150,175);
+	pVertice3[7].set(125,200);
+	pVertice3[8].set(175,225);
+	pVertice3[9].set(25,225);
+	pVertice3[10].set(75,200);
+	pVertice3[11].set(50,175);
+	pVertice3[12].set(75,125);
+	pVertice3[13].set(25,100);
+	pVertice3[14].set(75,75);
+	pVertice3[15].set(50,50);
+	Poligono p3(pVertice3, 16);
+
+/*
 	CPipeline2D pipeline;
 	pipeline.VentanaMundo(0,0,200,200);
 	pipeline.Viewport(100,200,200,200);
@@ -295,8 +315,8 @@ void display()
 	
 	pipeline.Primitiva2D(PRIM2D_POLIGONO);
 	pipeline.Dibujar(pVertice20,4);
-	*/
 
+*/
 
 	//pipeline.Primitiva2D(PRIM2D_PUNTO);
 	//pipeline.Dibujar(new Vertice(200,250),1);
@@ -336,62 +356,46 @@ void display()
 	delete[] pVertice3;
 	delete[] pVertice4;
 */	
-	
-	
-	//
-	Vertice *ptroVertice = new Vertice[4];
-	//ptroVertice[0]
-	Vertice* pVertice3 = new Vertice[16];
-	pVertice3[0].set(75,25);
-	pVertice3[1].set(125,25);
-	pVertice3[2].set(150,50);
-	pVertice3[3].set(125,75);
-	pVertice3[4].set(175,100);
-	pVertice3[5].set(125,125);
-	pVertice3[6].set(150,175);
-	pVertice3[7].set(125,200);
-	pVertice3[8].set(175,225);
-	pVertice3[9].set(25,225);
-	pVertice3[10].set(75,200);
-	pVertice3[11].set(50,175);
-	pVertice3[12].set(75,125);
-	pVertice3[13].set(25,100);
-	pVertice3[14].set(75,75);
-	pVertice3[15].set(50,50);
-	Poligono p3(pVertice3, 16);
 
 	CPipeline2D pipeline;
-	pipeline.VentanaMundo(0,0,500,500);
-	pipeline.Viewport(100,100,400,400);
+	pipeline.VentanaMundo(0,0,300,300);
+	pipeline.Viewport(200,200,200,230);
+	pipeline.CargarIdentidad();
 	pipeline.ColorLinea(100,200,40);
 	pipeline.ColorPunto(255,0,0);
 	pipeline.ColorRelleno(130,0,160);
 
+	pipeline.Primitiva2D(PRIM2D_PUNTO);
+	pipeline.Dibujar(pVertice8, 10);
+	pipeline.Dibujar(pVertice9, 10);
 	pipeline.Primitiva2D(PRIM2D_POLIGONO);
-	//pipeline.Traslacion(300,300);
-	//pipeline.Escalado(0.5,0.7);
-	//pipeline.Traslacion(150,0);
 
-	//pipeline.Escalado(0.9,0.9);
+	//pipeline.Dibujar(pVertice20,4);
 	pipeline.Dibujar(pVertice3, 16);
-	pipeline.Rotacion(100,225,180);
+
+	pipeline.Rotacion(100,225.0,90);
+	
 	pipeline.Dibujar(pVertice3, 16);
 	pipeline.CargarIdentidad();
-	pipeline.Rotacion(100,225,90);
-	pipeline.Traslacion(-200,0);
-	pipeline.Dibujar(pVertice4, 16);
-	//pipeline.CargarIdentidad();
-	//pipeline.Traslacion(-225,100);
-	pipeline.Escalado(1,-1);
-	pipeline.Traslacion(0, -450);
-	pipeline.Dibujar(pVertice4, 16);
+	pipeline.Rotacion(100,225.0,180);
 	
-	//
-	/*pipeline.Primitiva2D(PRIM2D_PUNTO);
-	Vertice* pto = new Vertice(0,1);
-	pipeline.Dibujar(pto,1);
-	pipeline.Traslacion(100,200);
-	pipeline.Dibujar(pto,1);*/
+	
+	pipeline.Dibujar(pVertice3, 16);
+	pipeline.CargarIdentidad();
+	pipeline.Rotacion(100,225.0,270);
+	
+	
+	pipeline.Dibujar(pVertice3, 16);
+
+	// Para dibujar circulos
+	pipeline.ColorLinea(30,70,190);
+	pipeline.Traslacion(-100,300);
+	pipeline.Primitiva2D(PRIM2D_CIRCULO);
+	pipeline.Dibujar(pVertice,3);
+	pipeline.Escalado(2,1);
+	pipeline.ColorLinea(100,0,100);
+	pipeline.Dibujar(pVertice,3);
+
 	///
   	glutSwapBuffers();
 	///
