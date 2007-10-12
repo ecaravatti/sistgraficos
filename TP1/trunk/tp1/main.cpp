@@ -60,40 +60,6 @@ void display()
 	pipeline->ColorPunto(255,0,0);
 	pipeline->ColorRelleno(130,0,160);
 
-/**************************************************************/
-/* Dibuja unas lineas punteadas.							  */
-/**************************************************************/
-	//Linea punteada superior (10 puntos)
-	Vertice* lineaPunteada1 = new Vertice[11];
-	lineaPunteada1[0].set(175,190);
-	lineaPunteada1[1].set(180,190);
-	lineaPunteada1[2].set(185,190);
-	lineaPunteada1[3].set(190,190);
-	lineaPunteada1[4].set(195,190);
-	lineaPunteada1[5].set(200,190);
-	lineaPunteada1[6].set(205,190);
-	lineaPunteada1[7].set(210,190);
-	lineaPunteada1[8].set(215,190);
-	lineaPunteada1[9].set(220,190);
-	lineaPunteada1[10].set(225,190);
-
-	// Linea puenteada inferior (11 puntos)
-	Vertice* lineaPunteada2 = new Vertice[11];
-	lineaPunteada2[0].set(0,50);
-	lineaPunteada2[1].set(5,50);
-	lineaPunteada2[2].set(10,50);
-	lineaPunteada2[3].set(15,50);
-	lineaPunteada2[4].set(20,50);
-	lineaPunteada2[5].set(25,50);
-	lineaPunteada2[6].set(30,50);
-	lineaPunteada2[7].set(35,50);
-	lineaPunteada2[8].set(40,50);
-	lineaPunteada2[9].set(45,50);
-	lineaPunteada2[10].set(50,50);
-
-	pipeline->Primitiva2D(PRIM2D_PUNTO);
-	pipeline->Dibujar(lineaPunteada2, 10);
-	pipeline->Dibujar(lineaPunteada1, 10);
 
 /**************************************************************/
 /* Dibuja poligono de 16 vértices (en color verde).			  */
@@ -143,9 +109,42 @@ void display()
 		pipeline->Rotacion(150,150,i);
 		pipeline->Dibujar(circulos,2);
 	}
+/*************************************************************/
+/* Dibuja una nube.                                          */
+/*************************************************************/
+	Vertice* pVertice = new Vertice[3];
+	pVertice[0].set(100,150);
+	pVertice[1].set(150,150);
+	pVertice[2].set(170,100);
+
+	pipeline->Primitiva2D(PRIM2D_CIRCULO_RELLENO);
+
+	pipeline->CargarIdentidad();
+	pipeline->ColorLinea(100,140,200);
+	pipeline->ColorRelleno(0,0,200);
+	pipeline->Escalado(0.8,0.8);
+	pipeline->Traslacion(150,2);
+	pipeline->Dibujar(pVertice,3);
+	pipeline->Escalado(0.7,0.7);
+	pipeline->Traslacion(-25,60);
+	pipeline->Dibujar(pVertice,3);
+	pipeline->Traslacion(130,0);
+	pipeline->Dibujar(pVertice,3);
+
+	pipeline->CargarIdentidad();
+	pipeline->ColorLinea(100,140,200);
+	pipeline->ColorRelleno(0,0,200);
+	pipeline->Escalado(0.8,0.8);
+	pipeline->Traslacion(250,100);
+	pipeline->Dibujar(pVertice,3);
+	pipeline->Escalado(0.7,0.7);
+	pipeline->Traslacion(-25,60);
+	pipeline->Dibujar(pVertice,3);
+	pipeline->Traslacion(130,0);
+	pipeline->Dibujar(pVertice,3);
 
 /**************************************************************/
-/* Dibuja el Sol.											  */
+/* Dibuja la luna.											  */
 /**************************************************************/
 	pipeline->Primitiva2D(PRIM2D_CIRCULO_RELLENO);
 	pipeline->CargarIdentidad();
@@ -153,6 +152,25 @@ void display()
 	pipeline->Escalado(1.5,1);
 	pipeline->ColorLinea(200,200,000);
 	pipeline->Dibujar(circulos,2);
+
+/**************************************************************/
+/* Dibuja el sol                                              */
+/**************************************************************/
+	Vertice* pTriang=new Vertice [3];
+	pTriang[0].set(520,100);
+	pTriang[1].set(540,300);
+	pTriang[2].set(500,300);
+
+	pipeline->Primitiva2D(PRIM2D_POLIGONO_RELLENO);
+	pipeline->ColorLinea(255,255,0);
+	pipeline->ColorRelleno(255,255,0);
+	pipeline->CargarIdentidad();
+	pipeline->Escalado(0.4,0.4);
+	pipeline->Traslacion(1100.0,5.0);
+	for( int j=0;j<12;j++ ){
+		pipeline->Rotacion(600.0,200.0,30.0);
+		pipeline->Dibujar(pTriang,3);
+	}
 
 /**************************************************************/
 /* Dibuja unas estrellas de 24 vértices (en color amarillo).  */
@@ -310,14 +328,13 @@ void display()
 	pipeline->Dibujar(casa,4);
 
 
-	delete[] lineaPunteada1;
-	delete[] lineaPunteada2;
 	delete[] poligono16V;
 	delete[] circulos;
 	delete[] estrella;
 	delete[] pino;
 	delete[] casa;
-
+	delete[] pTriang;
+	delete[] pVertice;
 	///
   	glutSwapBuffers();
 	///
