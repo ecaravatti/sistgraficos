@@ -5,7 +5,7 @@
 #include "GeneradorPtos.h"
 #include <cstdlib>
 
-const int GeneradorPtos:: res = 500;
+const int GeneradorPtos:: res = 200;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -19,22 +19,23 @@ GeneradorPtos::GeneradorPtos(int _cantTramos):cantTramos(_cantTramos),
 
 GeneradorPtos::~GeneradorPtos()
 {
-	delete [] this->ptroPuntos;
+	//delete [] this->ptroPuntos;
 }
 
 
 void GeneradorPtos:: generarPtos(){
-	int menorX = 0, mayorX = res, rangoX, xAnt = -1, i = 1, x, rangoY, y;
+	int menorX = 0, rangoX, xAnt = -1, i = 1, x, rangoY, y;
 	bool cond = false;
 
 	this->cargarPtos(0,0,0);
 	
+	rangoX = res / (this->cantPtos - 2);
+
 	while (!cond){
-		rangoX = mayorX - menorX;
 		// Genero la coordenada x
-		x =  ( menorX + ( rand() % rangoX ) ) * i/(this->cantPtos - 1);
+		x =  ( menorX + ( rand() % rangoX ) ); // * i/(this->cantPtos - 1);
 	
-		if (x < res && x > xAnt){
+		if (x < res && x != xAnt){
 			//Genero la coordenada y
 			rangoY =  (this->pendiente * (float)x);
 			
@@ -45,8 +46,8 @@ void GeneradorPtos:: generarPtos(){
 
 			this->cargarPtos(i, x, y);
 			if (i == this->cantTramos*3 - 1) cond = true;
+			menorX = rangoX*i;
 			i++;
-			menorX = x;
 			xAnt = x;
 		}
 		
@@ -59,6 +60,12 @@ void GeneradorPtos:: generarPtos(){
 Punto* GeneradorPtos:: getPuntos(){
 	return this->ptroPuntos;
 }
+
+///getters y setters
+int GeneradorPtos:: getCantPtos(){
+	return this->cantPtos;
+}
+
 /*--------------------------------------------------------------------*/
 /// Metodos Privados
 void GeneradorPtos:: cargarPtos(int ind, int x, int y){

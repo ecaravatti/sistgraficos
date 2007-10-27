@@ -10,8 +10,12 @@
 #include <iostream>
 #include "Declaraciones.h"
 #include "GeneradorPtos.h"
+#include <cmath>
+#include "Estrella.h"
 
 using namespace std;
+
+#define RAD 57.2957795135
 
 char caption[]="Sistema Gráficos - 66.71 - 2007c1";
 
@@ -30,21 +34,6 @@ void init(void)
 	/// de entrar en el loop de OpenGL
 }
 
-// the basis function for a cubic B spline
-  float b(int i, float t) {
-    switch (i) {
-    case -2:
-      return (((-t+3)*t-3)*t+1)/6;
-    case -1:
-      return (((3*t-6)*t)*t+4)/6;
-    case 0:
-      return (((-3*t+3)*t+3)*t+1)/6;
-    case 1:
-      return (t*t*t)/6;
-    }
-    return 0; //we only get here if an invalid i is specified
-  }
-
 void display()
 {
 	///
@@ -52,7 +41,7 @@ void display()
    	glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 	///
-
+/*
 /// primer curva
 	GeneradorPtos gp(1);
 	gp.generarPtos();
@@ -64,10 +53,19 @@ void display()
 	Color color0 = {255,0,0};
 	Color color1 = {0,0,255};
 	//se tienen q copiar los ptos 
-	Curva c1(ptro, GeneradorPtos::res, 4, 1, 20,color0, color1,1);
+	Curva c1(ptro, GeneradorPtos::res, 4, 20,color0, color1,1);
 	glTranslatef(0, 50, 0);
 	c1.dibujarBSpline();
+	glBegin(GL_LINE_STRIP);
+		glVertex2i(0,0);
+		glVertex2i(GeneradorPtos::res, GeneradorPtos::res*0.125);
+	glEnd();
+	glBegin(GL_LINE_STRIP);
+		glVertex2i(0,0);
+		glVertex2i(GeneradorPtos::res, -GeneradorPtos::res*0.125);
+	glEnd();
 
+	
 /// segunda curva
 	GeneradorPtos gp2(3);
 	gp2.generarPtos();
@@ -79,12 +77,13 @@ void display()
 	Color color2 = {205,92,92};
 	Color color3 = {139,0,0};
 	//se tienen q copiar los ptos 
-	Curva c2(ptro2, GeneradorPtos::res, 10, 1, 20,color2, color3,1.5);
+	Curva c2(ptro2, GeneradorPtos::res, 10,20,color2, color3,1.5);
 	glTranslatef(0, 50, 0);
 	c2.dibujarBSpline();
+*/
 
 // Tercera curva
-	GeneradorPtos gp3(5);
+/*	GeneradorPtos gp3(5);
 	gp3.generarPtos();
 	Punto *ptro3 = gp3.getPuntos();
 	cout<<"Segunda Curva"<<endl;
@@ -94,13 +93,30 @@ void display()
 	Color color4 = {173, 255, 47};
 	Color color5 = {0, 128, 128};
 	//se tienen q copiar los ptos 
-	Curva c3(ptro3, GeneradorPtos::res, 16, 1, 20,color4, color5,2.0);
+	Curva c3(ptro3, GeneradorPtos::res, 16, 20,color4, color5,2.0);
 	glTranslatef(0, 50, 0);
 	c3.dibujarBSpline();
+	glBegin(GL_LINE_STRIP);
+		glVertex2i(0,0);
+		glVertex2i(GeneradorPtos::res, GeneradorPtos::res*0.125);
+	glEnd();
+	glBegin(GL_LINE_STRIP);
+		glVertex2i(0,0);
+		glVertex2i(GeneradorPtos::res, -GeneradorPtos::res*0.125);
+	glEnd();	
+*/
 
+/// Dibujar Estrella
+/// No tiene en cuenta radio max
+	Color color0 = {255,0,0};
+	Color color1 = {0,0,255};
+	Estrella e1(200, 200, 25, 100, 15, color0, color1);
+	e1.dibujar();
+	
 	///
   	glutSwapBuffers();
 	///
+	
 }
 
 

@@ -7,22 +7,36 @@
 #include <GL\glut.h>
 #include "Declaraciones.h"
 
+#ifndef NULL
+#define NULL 0
+#endif
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-Curva::Curva(Punto* _bPtos, int _res, int _cantPtos, int cantTramos, int _d,
+Curva::Curva(Punto* _bPtos, int _res, int _cantPtos, int _d,
 			 const Color& _color0, const Color& _color1, float _grosor):
 												bPtos(_bPtos),
 												res(_res),
 												cPtos(_cantPtos),
-												cTramos(cantTramos),
 												d(_d),
 												color0(_color0),
 												color1(_color1),
 												grosor(_grosor)
+{	
+}
+
+Curva:: Curva(int _res, int _d, const Color &_color0, const Color &_color1):
+												bPtos(NULL),
+												res(_res),
+												cPtos(0),
+												d(_d),
+												color0(_color0),
+												color1(_color1),
+												grosor(0)
+
 {
-	
 }
 
 Curva::~Curva()
@@ -37,9 +51,8 @@ void Curva:: dibujarBSpline(){
 	glColor3ub(color0.r,color0.g,color0.b);
 	glBegin(GL_LINE_STRIP);
 
-	glVertex2i(this->bPtos[0].x,this->bPtos[0].y);
 	// dibujar la curva
-    for (int i = 1; i < this->cPtos ; i++) {
+    for (int i =1; i < this->cPtos ; i++) {
       for (int j = 1; j <= this->d; j++) {
 			this->calcularPunto(i,j/(float)this->d, pto);
 			this->calcularColor(pto.x, colorPto);
@@ -47,13 +60,21 @@ void Curva:: dibujarBSpline(){
 			glVertex2i(pto.x,pto.y);
       }
     }
-	glColor3ub(color1.r,color1.g,color1.b);
-	glVertex2i(this->bPtos[this->cPtos-1].x,this->bPtos[this->cPtos-1].y);
-
     glEnd();
 }
 
+/// getters y setters
+void Curva:: setCantPtos(int nuevaCant){
+	this->cPtos = nuevaCant;
+}
 
+void Curva:: setGrosor(float nuevo){
+	this->grosor = nuevo;
+}
+
+void Curva:: setPuntos(Punto* nuevo){
+	this->bPtos = nuevo;
+}
 /*--------------------------------------------------------------------*/
 // Metodos Privados
 void Curva:: calcularPunto(int i, float u, Punto& p) {
@@ -64,11 +85,15 @@ void Curva:: calcularPunto(int i, float u, Punto& p) {
     for (int j = -2; j<=1; j++){
 	  indice = i + j;
 	  //Condicion para q la curva empiece en el primer pto
-	  if (indice < 0) 
-		  indice = 0;
+	  if (i == 1){ 
+		  if (j != 1) indice = 0;
+		  else indice = 1;
+	  }
 	  //cond. para q termine en el ultimo pto
-	  else if (indice >= cPtos) 
-		  indice = cPtos - 1; 
+	  else if (i == this->cPtos - 1){
+		  if (j == -2) indice = this->cPtos - 2;
+		  else indice = this->cPtos - 1;
+	  }
 
       p.x += base(j,u)*this->bPtos[indice].x;
       p.y += base(j,u)*this->bPtos[indice].y;

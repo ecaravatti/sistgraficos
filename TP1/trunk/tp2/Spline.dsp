@@ -89,6 +89,10 @@ SOURCE=.\Curva.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Estrella.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\GeneradorPtos.cpp
 # End Source File
 # Begin Source File
@@ -106,6 +110,10 @@ SOURCE=.\Curva.h
 # Begin Source File
 
 SOURCE=.\Declaraciones.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Estrella.h
 # End Source File
 # Begin Source File
 

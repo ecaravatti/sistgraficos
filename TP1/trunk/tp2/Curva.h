@@ -23,17 +23,31 @@ private:
 public:
 	/// bPuntos: buffer q contiene los puntos de control
 	/// cantPtos: cantidad de ptos de control en el buffer
-	/// cantTramos: cantidad de tramos q tendra la curva
 	/// d: cantidad de subdivisiones por tramo
 	/// color0: color inicial
 	/// color1: color final
-	Curva(Punto* bPtos, int res, int cantPtos, int cantTramos, int d, const Color &color0,
+	Curva(Punto* bPtos, int res, int cantPtos, int d, const Color &color0,
 		  const Color &color1, float grosor);
+
+	/// bPuntos: buffer q contiene los puntos de control
+	/// cantPtos: cantidad de ptos de control en el buffer
+	/// d: cantidad de subdivisiones por tramo
+	/// color0: color inicial
+	/// color1: color final
+	Curva(int res, int d, const Color &color0, const Color &color1);
 	
 	virtual ~Curva();
 
 	/// Dibuja una curva bspline cubica
 	void dibujarBSpline();
+
+/// getters y setters
+	void setCantPtos(int nuevaCant);
+
+	void setGrosor(float nuevo);
+
+	void setPuntos(Punto* nuevo);
+
 private:
 
 	/// i: subindice de la base

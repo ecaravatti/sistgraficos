@@ -29,6 +29,9 @@ public:
 	
 	Punto* getPuntos();
 
+/// getters y setters
+	int getCantPtos();
+
 private:
 	void cargarPtos(int ind, int x, int y);
 };
