@@ -110,9 +110,31 @@ void display()
 /// No tiene en cuenta radio max
 	Color color0 = {255,0,0};
 	Color color1 = {0,0,255};
-	Estrella e1(200, 200, 25, 100, 15, color0, color1);
+	Estrella e1(150, 150, 25, 100, 25, color0, color1);
 	e1.dibujar();
 	
+	// Circulo exterior
+	/*float angRad;
+	int paso = 5;
+	int radio = 100;
+
+	
+	//glColor3ub(color.r,color.g,color.b);
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(200, 200);
+	
+	for (int angulo = 0; angulo <= 360; angulo += paso){
+		angRad = angulo/RAD;
+		glVertex2f( 200 + sin(angRad) * radio, 200 + cos(angRad) * radio);
+	}
+	glEnd();
+	*/
+	
+	Color color2 = {255,248,220};
+	Color color3 = {128,0,0};
+	Estrella e2(300, 300, 20, 80, 15, color2, color3);
+	e2.dibujar();
+
 	///
   	glutSwapBuffers();
 	///

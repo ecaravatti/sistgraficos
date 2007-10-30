@@ -8,7 +8,6 @@
 #include <cstdlib>
 #include "Curva.h"
 #include "GeneradorPtos.h"
-#include <iostream>
 
 #define RAD 57.2957795135
 
@@ -58,6 +57,7 @@ void Estrella:: dibujar(){
 		glPushMatrix();
 			glTranslatef( (GLfloat)this->ptosRayos[i].x, (GLfloat)this->ptosRayos[i].y, 0.0);
 			glRotatef((GLfloat)(this->angRayos[i]), 0.0,0.0,1.0);
+			glScalef( (GLfloat) (this->rMax - this->rMin)/GeneradorPtos::res, 1.0,1.0 );
 			curva->dibujarBSpline();
 		glPopMatrix();
 	}
@@ -83,23 +83,20 @@ void Estrella:: circuloRelleno(int radio, Color color){
 }
 
 void Estrella:: generarRayos(){
-	int antAng = 0, rangoAng, i = 0, ang, angRad;
+	int rangoAng, i = 0, ang = 0;
+	float angRad;
 	rangoAng = 360/this->Nr;
 
 	while (i < this->Nr){
 		// Genero angulo
-		//ang =  ( antAng + ( rand() % rangoAng ) ); 
-		ang = (antAng + rangoAng/2);
+		ang = ang + rangoAng;
 		angRad = ang/RAD;
-		std:: cout<<ang<<std:: endl;
 		// Guardo el angulo y los puntos
 		this->angRayos[i] = ang;
 		this->ptosRayos[i].x = this->x + this->rMin*cos(angRad);
 		this->ptosRayos[i].y = this->y + this->rMin*sin(angRad);
 		this->ptosRayos[i].z = 1;
-		
 		i++;
-		antAng = rangoAng*i;
 	}
 }
 
