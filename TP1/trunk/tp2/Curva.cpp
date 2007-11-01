@@ -75,6 +75,8 @@ void Curva:: setGrosor(float nuevo){
 void Curva:: setPuntos(Punto* nuevo){
 	this->bPtos = nuevo;
 }
+
+
 /*--------------------------------------------------------------------*/
 // Metodos Privados
 void Curva:: calcularPunto(int i, float u, Punto& p) {
@@ -112,7 +114,7 @@ float Curva:: base(int i, float u) {
     case 1:
       return (u*u*u)/6;
     }
-    return 0; //we only get here if an invalid i is specified
+    return 0; // Solo se llega acá si se especifica una i inválida.
 }
 
 void Curva:: calcularColor(int posX, Color& color){

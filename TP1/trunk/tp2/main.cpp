@@ -42,21 +42,6 @@ void display()
     glLoadIdentity();
 	///
 
-/*
-/// Dibujar Estrella
-	Color color0 = {255,0,0};
-	Color color1 = {0,0,255};
-	Estrella e1(150, 150, 25, 100, 25, color0, color1);
-	e1.dibujar();
-	
-	
-	
-	Color color2 = {255,248,220};
-	Color color3 = {128,0,0};
-	Estrella e2(300, 300, 20, 80, 15, color2, color3);
-	e2.dibujar();
-*/
-////////////////////////////////////////////////////
 	int posicionX;
 	int posicionY;
 
@@ -68,19 +53,23 @@ void display()
 	Color colCentro;
 	Color colRayos;
 
+	// Se define cuantas estrellas dibujar.
 	int cantEstrellas = rand() % 20 + 25; 
 
 	Estrella * estrella;
 	
-	
+	// Se dibuja una estrella en cada iteración.
 	for(int i = 0; i<cantEstrellas; i++)
 	{
+		// se obtiene una posición aleatoria.
 		posicionX = rand() % 1000;
 		posicionY = rand() % 600;
 
+		// Se obtiene un tamaño aleatorio.
 		radMin = rand() % 20;
 		radMax = rand() % 50 + radMin + 20;
 
+		// Se define la cantidad de rayos de la estrella de forma aleatoria.
 		numRayos = rand() % 10 + 10;
 
 		// Se define un color aleatorio para el centro.
@@ -93,6 +82,7 @@ void display()
 		colRayos.g = rand()%255;
 		colRayos.b = rand()%255;
 
+		// Se instancia la estrella y se la dibuja.
 		estrella = new Estrella(posicionX,posicionY,radMin,radMax,numRayos,colCentro,colRayos);
 		estrella->dibujar();
 		delete estrella;
