@@ -37,7 +37,7 @@ void GeneradorPtos:: generarPtos(){
 	
 		if (x < res && x != xAnt){
 			//Genero la coordenada y
-			rangoY =  (this->pendiente * (float)x);
+			rangoY = (int) (this->pendiente * (float)x);
 			
 			if (rangoY != 0)
 				y = (1 + rand() % (rangoY*2)) - rangoY;
