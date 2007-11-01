@@ -15,7 +15,7 @@ class Curva
 {
 private:
 	Punto* bPtos;
-	int cPtos, cTramos, d;
+	int cPtos, d;
 	Color color0, color1;
 	int res;
 	float grosor;
@@ -53,13 +53,11 @@ private:
 	/// i: subindice de la base
 	/// u: parametro de la base
 	/// Calcula el valor de la base b(i)
-	float base(int i, float u) ;
-
-	//Punto Curva:: p(int i, float t) ;
+	float base(int i, float u);
 
 	///punto: punto donde se carga el pto de la curva calculado
 	/// Calcula un punto de la curva
-	void calcularPunto(int i, float u, Punto& p) ;
+	void calcularPunto(int i, float u, Punto& p);
 
 	/// Calcula el color para la posicion x
 	void calcularColor(int posX, Color& color);
