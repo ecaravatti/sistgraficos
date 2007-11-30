@@ -16,30 +16,47 @@
 //////////////////////////////////////////////////////////////////////
 
 Curva::Curva(Punto* _bPtos, int _cantPtos, int _d):
-												bPtos(_bPtos),
+												bPtosControl(_bPtos),
+												bPtosDiscret(NULL),
 												cPtos(_cantPtos),
 												d(_d)
 {	
 }
 
-
+Curva::Curva(int _d):
+					bPtosControl(NULL),
+					bPtosDiscret(NULL),
+					cPtos(0),
+					d(_d)
+{}
+					
 Curva::~Curva()
 {
+	delete [] this->bPtosDiscret;
 }
 
-void Curva:: dibujarBSpline(){
+void Curva:: discretizarCurva(){
 	Punto pto;
-
-	glBegin(GL_LINE_STRIP);
-
-	// dibujar la curva
+	int k = 0;
+	this->iniBufferPtosDiscret(this->cPtos, this->d);
+	// calcular todos los puntos
     for (int i =1; i < this->cPtos ; i++) {
       for (int j = 1; j <= this->d; j++) {
 			this->calcularPunto(i,j/(float)this->d, pto);
-			glVertex2i(pto.x,pto.y);
+			this->bPtosDiscret[k] = pto;
+			k++;
       }
     }
-    glEnd();
+    
+}
+
+void Curva:: dibujarBSpline() const{
+	
+	glBegin(GL_LINE_STRIP);
+		// dibujar la curva
+		for (int k = 0; k < this->getCantPtosDisc(); k++) 
+			glVertex3f(this->bPtosDiscret[k].x, this->bPtosDiscret[k].y,this->bPtosDiscret[k].z);
+	glEnd();
 }
 
 /// getters y setters
@@ -48,15 +65,28 @@ void Curva:: setCantPtos(int nuevaCant){
 }
 
 void Curva:: setPuntos(Punto* nuevo){
-	this->bPtos = nuevo;
+	this->bPtosControl = nuevo;
 }
 
+int Curva:: getCantPtosDisc() const{
+	return (this->cPtos-1)*this->d;
+}
+
+Punto* Curva:: getBufferPtosDisc() const{
+	return this->bPtosDiscret;
+}
 
 /*--------------------------------------------------------------------*/
 // Metodos Privados
+void Curva:: iniBufferPtosDiscret(int cPtos, int d){
+	if (this->bPtosDiscret != NULL) delete [] this->bPtosDiscret;
+	this->bPtosDiscret = new Punto[(cPtos-1)*d];
+}
+
 void Curva:: calcularPunto(int i, float u, Punto& p) {
 	
 	int indice;
+	float x = 0, y = 0, z = 0;
 	p.x = 0; p.y = 0; p.z = 0;
 
     for (int j = -2; j<=1; j++){
@@ -72,10 +102,9 @@ void Curva:: calcularPunto(int i, float u, Punto& p) {
 		  else indice = this->cPtos - 1;
 	  }
 
-      p.x += base(j,u)*this->bPtos[indice].x;
-      p.y += base(j,u)*this->bPtos[indice].y;
+      p.x += base(j,u)*this->bPtosControl[indice].x;
+      p.y += base(j,u)*this->bPtosControl[indice].y;
     }
-    
 }
 
 float Curva:: base(int i, float u) {

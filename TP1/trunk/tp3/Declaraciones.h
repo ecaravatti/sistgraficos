@@ -9,11 +9,9 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-static const int wancho = 600;
-static const int walto = 500;
 
 struct Punto{
-	int x, y, z;
+	double x, y, z;
 };
 
 struct Color{

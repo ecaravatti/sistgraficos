@@ -14,26 +14,42 @@
 class Curva  
 {
 private:
-	Punto* bPtos;
+	Punto* bPtosControl, *bPtosDiscret;
 	int cPtos, d;
 
 public:
+
 	/// bPuntos: buffer q contiene los puntos de control
 	/// cantPtos: cantidad de ptos de control en el buffer
 	/// d: cantidad de subdivisiones por tramo
-	Curva::Curva(Punto* _bPtos, int _cantPtos, int _d);
+	Curva(Punto* _bPtos, int _cantPtos, int _d);
 	
+	/// d: cantidad de subdivisiones por tramo
+	Curva(int _d);
+
 	virtual ~Curva();
 
 	/// Dibuja una curva bspline cubica
-	void dibujarBSpline();
+	void dibujarBSpline() const;
+
+	/// Obtiene cada punto de la curva y los guarda en el buffer bPtosDiscret
+	void discretizarCurva();
 
 /// getters y setters
 	void setCantPtos(int nuevaCant);
 
 	void setPuntos(Punto* nuevo);
 
+	// Devuelve la cantidad de puntos resultado de la discretizacion de la curva
+	int getCantPtosDisc() const;
+
+	Punto* getBufferPtosDisc() const;
+
 private:
+
+	/// Reserva memoria para el buffer donde se guardan los ptos de la 
+	/// curva
+	void iniBufferPtosDiscret(int cPtos, int d);
 
 	/// i: subindice de la base
 	/// u: parametro de la base

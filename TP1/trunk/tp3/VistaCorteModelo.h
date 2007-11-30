@@ -10,32 +10,32 @@
 #endif // _MSC_VER > 1000
 
 #include <list>
+#include "Curva.h"
 #include "Declaraciones.h"
 
 class VistaCorteModelo  
 {
 private:
-	int ancho, alto;
 	std::list<Punto> lPuntos;
 	Punto* bPuntos;
 	static VistaCorteModelo *vcm;
+	Curva generatriz;
+	bool cGeneratriz; //para indicar cuando debe ser calculada la curva generatriz
 
 	/*
 	 * _ancho: ancho del viewport
 	 * _alto: alto del viewport
 	 */
-	VistaCorteModelo(int _ancho, int _alto);
+	VistaCorteModelo();
 
 public:
 // Atributos publicos	
-	/*
-	 * _x: coordenada x de la esquina inferior del rectangulo de viewport
-	 * _y: coordenana y de la esquina inferior del rectangulo de viewport
-	 * cantidad de pasos para dibujar bspline
-	 */
-	static const int x, y, pasos;
-	//color de la curva
-	static const Color color;
+
+	// cantidad de pasos para dibujar bspline
+	static const int pasos;
+	//colorCurva: color de la curva
+	//colorPtoControl: color de los puntos de control
+	static const Color colorCurva, colorPtoControl;
 
 // Destructor
 	virtual ~VistaCorteModelo();
@@ -45,6 +45,8 @@ public:
 	 * Devuelve la instancia de esta clase
 	 */
 	static VistaCorteModelo* getInstancia();
+
+	static void destruir();
 
 	/*
 	 * Dibuja la vista cuando se agrega un punto
@@ -56,6 +58,19 @@ public:
 	 * Guarda punto en la lista de puntos
 	 */
 	void guardarPunto(const Punto& pto);
+
+	/*
+	 * Muestra los puntos de control
+	 */
+	void mostrarPuntoControl();
+
+	/*
+	 * Devuelve puntero a curva
+	 */
+	Curva* getCurvaGeneratriz();
+
+	//sacar
+	void mostrarCurvaDiscretizada();
 private:
 	//Copia la lista de puntos en un buffer de puntos
 	void copiarPuntos();
