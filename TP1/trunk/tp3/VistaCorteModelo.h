@@ -67,8 +67,11 @@ public:
 	 */
 	Curva* getCurvaGeneratriz();
 
-	//sacar
-	void mostrarCurvaDiscretizada();
+	/*
+	 * Elimina todos los datos de la vista
+	 */
+	void limpiarVista();
+
 private:
 	//Copia la lista de puntos en un buffer de puntos
 	void copiarPuntos();

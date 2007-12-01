@@ -23,6 +23,15 @@ static const int PLASTICO = 0;
 static const int DIFUSO = 1;
 static int material = 0; 
 
+//luces
+static int nroLuz = 0;
+GLfloat posicion_luz[8][4];
+GLenum luces[8] = {GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3,
+				   GL_LIGHT4, GL_LIGHT5, GL_LIGHT6, GL_LIGHT7};
+
+//angulos de rotacion
+float alpha = 0, beta = 0;
+static int x0_rot, y0_rot;
 //*-------------------------------------------------------------------*/
 // Plastico rojo
 const GLfloat plasticoAmb[3] = {0.0, 0.0, 0.0};
@@ -80,51 +89,22 @@ void rotarPunto(const double angulo, const Punto& p_in, Punto& p_out){
 
 void initVistaPerspecticaSombreada(int material){
 
-	GLfloat ambientlight[] =	{0.5f ,0.5f ,0.5f ,1.0f};
+	GLfloat ambientlight[] =	{0.75f ,0.75f ,0.75f ,1.0f};
 	GLfloat difuselight[] =		{1.0f ,1.0f ,1.0f ,1.0f};
 	GLfloat specularlight[] =	{1.0f ,1.0f ,1.0f ,1.0f};
 	GLfloat lightposition[] =	{0.0f,0.0f,10.0f,0.0f};
-	/*GLfloat ambientlight[] =	{0.5f ,1.0f ,0.0f ,1.0f};
-	GLfloat difuselight[] =		{1.0f ,1.0f ,0.0f ,1.0f};
-	GLfloat specularlight[] =	{1.0f ,1.0f ,0.0f ,1.0f};
-	GLfloat lightposition[] =	{0.0f,0.0f,10.0f,0.0f};*/
+	
+
 	
 	glEnable(GL_LIGHTING);	    //se activa la iluminacion
-	glEnable(GL_LIGHT0);	    //se activa la luz 0 que previamente se habia seteado
-	//glEnable(GL_LIGHT1);
 
-	//Se setean los parametros para luz 0
-	glLightfv(GL_LIGHT0,GL_AMBIENT,ambientlight);
-	glLightfv(GL_LIGHT0,GL_DIFFUSE,difuselight);
-	glLightfv(GL_LIGHT0,GL_SPECULAR,specularlight);
-	glLightfv(GL_LIGHT0,GL_POSITION,lightposition);
-	
-	float position1[] = { 0.0, 0.0, 10, 1.};
-	float spot_direction[] = { -1., 0., 0., 1.};
-
-	glLightf(GL_LIGHT0,GL_SPOT_CUTOFF,10.0);
-	//glLightfv(GL_LIGHT0,GL_SPOT_DIRECTION,spot_direction);
-	glLightf(GL_LIGHT0,GL_CONSTANT_ATTENUATION, 0.5);
-	glLightf(GL_LIGHT0,GL_LINEAR_ATTENUATION,0.0002);
-	glLightf(GL_LIGHT0,GL_QUADRATIC_ATTENUATION,0.0001);
-	glLightfv(GL_LIGHT0, GL_POSITION, position1);
-
-	// Se setean los parametros para luz 1
-	glLightfv(GL_LIGHT1,GL_AMBIENT,ambientlight);
-	glLightfv(GL_LIGHT1,GL_DIFFUSE,difuselight);
-	glLightfv(GL_LIGHT1,GL_SPECULAR,specularlight);
-	glLightfv(GL_LIGHT1,GL_POSITION,lightposition);
-	
-	float position2[] = { 50.0, 0.0, 0.0, 1.};
-	float spot_direction2[] = { -1., 0., 0., 1.};
-
-	glLightf(GL_LIGHT0,GL_SPOT_CUTOFF,10.0);
-	//glLightfv(GL_LIGHT0,GL_SPOT_DIRECTION,spot_direction);
-	glLightf(GL_LIGHT1,GL_CONSTANT_ATTENUATION, 0.5);
-	glLightf(GL_LIGHT1,GL_LINEAR_ATTENUATION,0.0002);
-	glLightf(GL_LIGHT1,GL_QUADRATIC_ATTENUATION,0.0001);
-	glLightfv(GL_LIGHT1, GL_POSITION, position2);
-		
+	for (int i = 0; i < nroLuz; i++){
+		glEnable(luces[i]);
+		glLightfv(luces[i],GL_AMBIENT,ambientlight);
+		glLightfv(luces[i],GL_DIFFUSE,difuselight);
+		glLightfv(luces[i],GL_SPECULAR,specularlight);
+		glLightfv(luces[i],GL_POSITION,posicion_luz[i]);
+	}
 	
 	glEnable(GL_COLOR_MATERIAL);	//Se activa lo materiales de color
 	glColorMaterial(GL_BACK,GL_AMBIENT_AND_DIFFUSE);  //Se desean de tipo ambiente y difusión (tambien incluyen specular
@@ -143,6 +123,12 @@ void initVistaPerspecticaSombreada(int material){
 	}
 }
 
+/// Para "desactivar" todas las fuentes de luz
+void eliminarFuentes(){
+	for (int i = 0; i < nroLuz; i++)
+		glDisable(luces[i]);
+		
+}
 //Para obtener el vector normal con norma = 1
 void Normaliza(Punto& normal){
  float norm;
@@ -213,7 +199,7 @@ void solido(Punto* bPuntos, int nPuntos, int cantCortes)
 	
 	
 
-	Punto r1,r2,r3,r4, normal;
+	Punto r1,r2,r3,r4;
 
 		for (i=0; i< nPuntos - 1 ; i++){
 
@@ -231,18 +217,20 @@ void solido(Punto* bPuntos, int nPuntos, int cantCortes)
 		rotarPunto(ang, p1, r3);
 		rotarPunto(ang, p2, r4);
 
-		// Vista de alambres
-		viewport(wancho/2, walto/2, wancho/2, walto/2);
-		glMatrixMode(GL_PROJECTION);
-		//glPushMatrix();
-			//gluLookAt(0.5,0.5,0.0,0.0,0.0,0.0,0.0,1.0,0.0);
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+
+			glRotatef(alpha, 1.0f, 0.0f, 0.0f);
+			glRotatef(beta, 0.0f, 1.0f, 0.0f);
+		/// Vista de alambres
+			viewport(wancho/2, walto/2, wancho/2, walto/2);
 			vistaAlambres(r1, r2, r3, r4);
-		//glPopMatrix();
 
 		//Vista Perspectiva Sombreada
-		viewport(0, walto/2, wancho/2, walto/2);
-		vistaSombreada(r1, r2, r3, r4);
-		
+			viewport(0, walto/2, wancho/2, walto/2);
+			vistaSombreada(r1, r2, r3, r4);
+		glPopMatrix();
+
 		/// Vista de luces
 		viewport(0, 0, wancho/2, walto/2);
 		glMatrixMode(GL_PROJECTION);
@@ -280,7 +268,15 @@ void init(void)
 {
 	/// Incluir aquí todo lo que deba inicializare antes
 	/// de entrar en el loop de OpenGL
-	//glClearColor(0.5f,0.5f,0.5f,1.0f);
+	nroLuz = 2;
+	posicion_luz[0][0] = 0.66;
+	posicion_luz[0][1] = 0.416;
+	posicion_luz[0][2] = 0.0;
+	posicion_luz[0][3] = 1.0;
+	posicion_luz[1][0] = -0.65333;
+	posicion_luz[1][1] = 0.424;
+	posicion_luz[1][2] = 0.0;
+	posicion_luz[1][3] = 1.0;
 }
 
 
@@ -295,6 +291,22 @@ void dibujarEjes()
 		glVertex3d(0,0,10);
 	glEnd();
 }
+
+void mostrarLuces(){
+	//
+	glDisable(GL_LIGHTING);
+	//
+	viewport(0, 0, wancho/2, walto/2);
+	glPointSize(3.0);
+	glColor3ub(255,255,255);
+	glBegin(GL_POINTS);
+	for (int i = 0; i < nroLuz; i++){
+		glVertex3f(posicion_luz[i][0],posicion_luz[i][1],posicion_luz[i][2]);
+		
+	}
+	glEnd();
+}
+
 void display(void)
 {
 	///
@@ -322,6 +334,8 @@ void display(void)
 		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 		solido(generatriz->getBufferPtosDisc(), generatriz->getCantPtosDisc(), cantCortes);
 
+	mostrarLuces();
+
 	///
   	glutSwapBuffers();
 	///
@@ -330,16 +344,48 @@ void display(void)
 
 void controlMouse(int button, int state, int x, int y){
 	Punto pto;
+	float posx, posy;
 
 	if (button == GLUT_LEFT_BUTTON){
 		if ( x >= wancho/2 && x <= wancho && y >= walto/2 && y < walto) {
-		normalizar(x,y,pto);
-		VistaCorteModelo::getInstancia()->guardarPunto(pto);
-		glutPostRedisplay();
+			normalizar(x,y,pto);
+			VistaCorteModelo::getInstancia()->guardarPunto(pto);
+			glutPostRedisplay();
+		}
+		else if ( x >= 0 && x <= wancho/2 && y >= walto/2 && y < walto 
+				  && nroLuz <= 7){
+			posx = (float)(x - wancho/4)/wancho*4;
+			posy = (float)(walto*3/4 - y)/walto*4;
+
+			if (posx != posicion_luz[nroLuz-1][0] && posy != posicion_luz[nroLuz-1][1]){
+			posicion_luz[nroLuz][0] = posx; 
+			posicion_luz[nroLuz][1] = posy;
+			posicion_luz[nroLuz][2] = 0.0;
+			posicion_luz[nroLuz][3] = 1.0;
+			nroLuz++;
+			cout<<"x: "<<posx<<" y: "<<posy<<endl;
+			glutPostRedisplay();
+			}
+		}
+	}
+	if (button == GLUT_LEFT_BUTTON & state == GLUT_DOWN){
+		if (y <= walto/2 && y >= 0){
+			x0_rot = x;
+			y0_rot = y;
+			cout<<"entro";
 		}
 	}
 }
 
+void controlMovimientoMouse(int x, int y){
+	if ( y <= walto/2 && y >= 0){
+		alpha = (alpha + (y - y0_rot));
+		beta = (beta + (x - x0_rot));
+		x0_rot = x; y0_rot = y;
+		glutPostRedisplay();
+		cout<<"alpha"<<alpha<<endl;
+	}
+}
 
 void keyboard(unsigned char key, int x, int y)
 {
@@ -353,12 +399,25 @@ void keyboard(unsigned char key, int x, int y)
 	case 'T':
 				if (material == PLASTICO) material = DIFUSO;
 				else material = PLASTICO;
+				break;
+	case 'l':
+	case 'L':
+				eliminarFuentes();
+				nroLuz = 0;
+				break;
+	case 'p':
+	case 'P':
+				VistaCorteModelo::getInstancia()->limpiarVista();
+				break;
 	}
+
 	glutPostRedisplay();
 }
 
 void uso(){
 	cout<<"Presione t...Para cambiar textura "<<endl;
+	cout<<"Presione l...Para eliminar todas las luces"<<endl;
+	cout<<"Presione p...Para eliminar todos los puntos de control"<<endl;
 }
 
 int main(int argc, char** argv)
@@ -370,6 +429,7 @@ int main(int argc, char** argv)
    glutCreateWindow (caption);
    init ();
    glutMouseFunc(controlMouse);
+   glutMotionFunc(controlMovimientoMouse);
    glutKeyboardFunc(keyboard);
    glutDisplayFunc(display); 
    glutReshapeFunc(reshape); 

@@ -80,19 +80,15 @@ void VistaCorteModelo:: mostrarPuntoControl(){
 	glEnd();
 }
 
-void VistaCorteModelo:: mostrarCurvaDiscretizada(){
-	Punto *ptos = this->generatriz.getBufferPtosDisc();
-
-	for (int i = 0; i < this->generatriz.getCantPtosDisc(); i++){
-		std:: cout<<"Punto i: "<<i<<std:: endl;
-		std:: cout<<"{"<<ptos[i].x<<" , "<<ptos[i].y<<" , "<<ptos[i].z<<"}"<<std::endl;
-	}
-
-}
-
 /// getters y setters
 Curva* VistaCorteModelo:: getCurvaGeneratriz(){
 	return &this->generatriz;
+}
+
+void VistaCorteModelo:: limpiarVista(){
+	//delete [] this->bPuntos;
+	this->lPuntos.clear();
+	this->cGeneratriz = true;
 }
 /*--------------------------------------------------------------------*/
 // Metodos privados
