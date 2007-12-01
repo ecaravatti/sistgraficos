@@ -21,7 +21,6 @@ private:
 	static VistaCorteModelo *vcm;
 	Curva generatriz;
 	bool cGeneratriz; //para indicar cuando debe ser calculada la curva generatriz
-
 	/*
 	 * _ancho: ancho del viewport
 	 * _alto: alto del viewport
@@ -30,12 +29,11 @@ private:
 
 public:
 // Atributos publicos	
-
-	// cantidad de pasos para dibujar bspline
-	static const int pasos;
 	//colorCurva: color de la curva
 	//colorPtoControl: color de los puntos de control
 	static const Color colorCurva, colorPtoControl;
+	// cantidad de pasos para dibujar bspline
+	static const int pasos;
 
 // Destructor
 	virtual ~VistaCorteModelo();

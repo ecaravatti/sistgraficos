@@ -9,7 +9,7 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-const int VistaCorteModelo::pasos = 5; //tramos de la curva bspline
+const int VistaCorteModelo::pasos = 5;
 const Color VistaCorteModelo::colorCurva = {0,0,255}; //color de la curva bpline
 const Color VistaCorteModelo::colorPtoControl = {255,0,0};
 
