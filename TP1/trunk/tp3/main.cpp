@@ -363,7 +363,6 @@ void controlMouse(int button, int state, int x, int y){
 			posicion_luz[nroLuz][2] = 0.0;
 			posicion_luz[nroLuz][3] = 1.0;
 			nroLuz++;
-			cout<<"x: "<<posx<<" y: "<<posy<<endl;
 			glutPostRedisplay();
 			}
 		}
@@ -372,7 +371,6 @@ void controlMouse(int button, int state, int x, int y){
 		if (y <= walto/2 && y >= 0){
 			x0_rot = x;
 			y0_rot = y;
-			cout<<"entro";
 		}
 	}
 }
@@ -383,7 +381,6 @@ void controlMovimientoMouse(int x, int y){
 		beta = (beta + (x - x0_rot));
 		x0_rot = x; y0_rot = y;
 		glutPostRedisplay();
-		cout<<"alpha"<<alpha<<endl;
 	}
 }
 
