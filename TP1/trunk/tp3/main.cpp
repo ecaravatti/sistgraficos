@@ -90,10 +90,12 @@ void rotarPunto(const double angulo, const Punto& p_in, Punto& p_out){
 void initVistaPerspecticaSombreada(int material){
 
 	GLfloat ambientlight[] =	{0.75f ,0.75f ,0.75f ,1.0f};
-	GLfloat difuselight[] =		{1.0f ,1.0f ,1.0f ,1.0f};
-	GLfloat specularlight[] =	{1.0f ,1.0f ,1.0f ,1.0f};
+	//GLfloat difuselight[] =	{1.0f ,1.0f ,1.0f ,1.0f};
+	//GLfloat specularlight[] =	{1.0f ,1.0f ,1.0f ,1.0f};
 	GLfloat lightposition[] =	{0.0f,0.0f,10.0f,0.0f};
 	
+	GLfloat difuselight[]=      {(float)1/nroLuz,(float)1/nroLuz,(float)1/nroLuz,1.0f};
+	GLfloat specularlight[]=    {(float)1/nroLuz,(float)1/nroLuz,(float)1/nroLuz,1.0f};
 
 	
 	glEnable(GL_LIGHTING);	    //se activa la iluminacion
