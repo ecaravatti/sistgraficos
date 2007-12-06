@@ -41,7 +41,7 @@ GLfloat plasticoShi = 32.0;
 
 // Material difuso
 const GLfloat difusionAmb[4] = {0.0f,0.0f,0.0f,1.0f};
-const GLfloat difusionDif[4] = {1.0f,1.0f,1.0f,1.0f};
+const GLfloat difusionDif[4] = {0.5f,0.0f,0.0f,1.0f};
 const GLfloat difusionSpe[4] = {0.0f,0.0f,0.0f,1.0f};
 GLfloat difusionShi = 1.0f;
 /*--------------------------------------------------------------------*/
