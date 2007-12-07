@@ -27,7 +27,7 @@ static int x0_rot, y0_rot;
 VistaCorteModelo vcm;
 Iluminacion iluminacion;
 Solido solido;
-static const int cortes = 40;
+static const int cortes = 20;
 int pasos = 4;
 
 /*--------------------------------------------------------------------*/
