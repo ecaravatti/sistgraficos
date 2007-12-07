@@ -89,10 +89,12 @@ void rotarPunto(const double angulo, const Punto& p_in, Punto& p_out){
 
 void initVistaPerspecticaSombreada(int material){
 
-	GLfloat ambientlight[] =	{0.75f ,0.75f ,0.75f ,1.0f};
-	//GLfloat difuselight[] =	{1.0f ,1.0f ,1.0f ,1.0f};
-	//GLfloat specularlight[] =	{1.0f ,1.0f ,1.0f ,1.0f};
-	GLfloat lightposition[] =	{0.0f,0.0f,10.0f,0.0f};
+	int div;
+	if (nroLuz == 0) div = 1;
+	else div = nroLuz;
+	GLfloat ambientlight[] =	{2.0f/div ,2.0f/div,2.0f/div,1.0f};
+	GLfloat difuselight[] =		{2.0f/div ,2.0f/div ,2.0f/div,1.0f};
+	GLfloat specularlight[] =	{2.0f/div,2.0f/div,2.0f/div,1.0f};
 	
 	GLfloat difuselight[]=      {(float)1/nroLuz,(float)1/nroLuz,(float)1/nroLuz,1.0f};
 	GLfloat specularlight[]=    {(float)1/nroLuz,(float)1/nroLuz,(float)1/nroLuz,1.0f};
@@ -237,7 +239,9 @@ void solido(Punto* bPuntos, int nPuntos, int cantCortes)
 		viewport(0, 0, wancho/2, walto/2);
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
-			gluLookAt(0.5,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0);
+			gluLookAt(0.0,1.0,0.0,
+					  0.0,-1.0,0.0,
+					  0.0,0.0,1.0);
 			glOrtho(-2.0, 2.0, -2.0 , 2.0, -1.0, 1.0);
 			vistaSombreada(r1, r2, r3, r4);
 		glPopMatrix();
@@ -369,7 +373,7 @@ void controlMouse(int button, int state, int x, int y){
 			}
 		}
 	}
-	if (button == GLUT_LEFT_BUTTON & state == GLUT_DOWN){
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
 		if (y <= walto/2 && y >= 0){
 			x0_rot = x;
 			y0_rot = y;
