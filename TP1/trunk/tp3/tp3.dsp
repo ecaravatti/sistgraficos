@@ -89,7 +89,15 @@ SOURCE=.\Curva.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Iluminacion.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\main.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Solido.cpp
 # End Source File
 # Begin Source File
 
@@ -106,6 +114,14 @@ SOURCE=.\Curva.h
 # Begin Source File
 
 SOURCE=.\Declaraciones.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Iluminacion.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Solido.h
 # End Source File
 # Begin Source File
 

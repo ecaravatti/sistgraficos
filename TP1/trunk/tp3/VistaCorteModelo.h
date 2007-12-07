@@ -18,14 +18,9 @@ class VistaCorteModelo
 private:
 	std::list<Punto> lPuntos;
 	Punto* bPuntos;
-	static VistaCorteModelo *vcm;
 	Curva generatriz;
 	bool cGeneratriz; //para indicar cuando debe ser calculada la curva generatriz
-	/*
-	 * _ancho: ancho del viewport
-	 * _alto: alto del viewport
-	 */
-	VistaCorteModelo();
+	int pasos;
 
 public:
 // Atributos publicos	
@@ -33,18 +28,20 @@ public:
 	//colorPtoControl: color de los puntos de control
 	static const Color colorCurva, colorPtoControl;
 	// cantidad de pasos para dibujar bspline
-	static const int pasos;
+	
+
+/// Constructor
+	/*
+	 * _ancho: ancho del viewport
+	 * _alto: alto del viewport
+	 */
+	VistaCorteModelo();
 
 // Destructor
 	virtual ~VistaCorteModelo();
 
 // Metodos publicos
-	/*
-	 * Devuelve la instancia de esta clase
-	 */
-	static VistaCorteModelo* getInstancia();
-
-	static void destruir();
+	void destruir();
 
 	/*
 	 * Dibuja la vista cuando se agrega un punto
@@ -63,14 +60,19 @@ public:
 	void mostrarPuntoControl();
 
 	/*
+	 * Elimina todos los datos de la vista
+	 */
+	void limpiarVista();
+
+/// getters y setter
+	/*
 	 * Devuelve puntero a curva
 	 */
 	Curva* getCurvaGeneratriz();
 
-	/*
-	 * Elimina todos los datos de la vista
-	 */
-	void limpiarVista();
+	void setCantPasos(int nueva);
+
+	int getCantPasos();
 
 private:
 	//Copia la lista de puntos en un buffer de puntos

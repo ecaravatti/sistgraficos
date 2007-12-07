@@ -23,11 +23,11 @@ Curva::Curva(Punto* _bPtos, int _cantPtos, int _d):
 {	
 }
 
-Curva::Curva(int _d):
+Curva::Curva():
 					bPtosControl(NULL),
 					bPtosDiscret(NULL),
 					cPtos(0),
-					d(_d)
+					d(0)
 {}
 					
 Curva::~Curva()
@@ -76,6 +76,10 @@ Punto* Curva:: getBufferPtosDisc() const{
 	return this->bPtosDiscret;
 }
 
+void Curva:: setPasos(int nueva){
+	this->d = nueva;
+
+}
 /*--------------------------------------------------------------------*/
 // Metodos Privados
 void Curva:: iniBufferPtosDiscret(int cPtos, int d){

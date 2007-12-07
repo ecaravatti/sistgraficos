@@ -9,17 +9,15 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-const int VistaCorteModelo::pasos = 5;
 const Color VistaCorteModelo::colorCurva = {0,0,255}; //color de la curva bpline
 const Color VistaCorteModelo::colorPtoControl = {255,0,0};
-
-VistaCorteModelo* VistaCorteModelo::vcm = NULL; //instancia
 
 VistaCorteModelo::VistaCorteModelo():
 											lPuntos(),
 											bPuntos(NULL),
-											generatriz(pasos),
-											cGeneratriz(false)
+											generatriz(),
+											cGeneratriz(false),
+											pasos(0)
 {
 }
 
@@ -44,14 +42,8 @@ void VistaCorteModelo:: dibujar(){
 	this->mostrarPuntoControl();
 }
 
-VistaCorteModelo* VistaCorteModelo::getInstancia(){
-	if (vcm == NULL) vcm = new VistaCorteModelo();
-		return vcm;
-}
-
 void VistaCorteModelo::destruir(){
-	//delete [] bPuntos;
-	delete vcm;
+	delete [] bPuntos;
 }
 
 void VistaCorteModelo:: guardarPunto(const Punto &pto){
@@ -80,16 +72,26 @@ void VistaCorteModelo:: mostrarPuntoControl(){
 	glEnd();
 }
 
+void VistaCorteModelo:: limpiarVista(){
+	this->lPuntos.clear();
+	this->cGeneratriz = true;
+}
+
 /// getters y setters
 Curva* VistaCorteModelo:: getCurvaGeneratriz(){
 	return &this->generatriz;
 }
 
-void VistaCorteModelo:: limpiarVista(){
-	//delete [] this->bPuntos;
-	this->lPuntos.clear();
-	this->cGeneratriz = true;
+void VistaCorteModelo:: setCantPasos(int nueva){
+	this->pasos = nueva;
+	this->generatriz.setPasos(this->pasos);
 }
+
+int VistaCorteModelo::getCantPasos(){
+	return this->pasos;
+}
+
+
 /*--------------------------------------------------------------------*/
 // Metodos privados
 void VistaCorteModelo:: copiarPuntos(){

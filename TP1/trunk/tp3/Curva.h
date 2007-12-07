@@ -25,7 +25,7 @@ public:
 	Curva(Punto* _bPtos, int _cantPtos, int _d);
 	
 	/// d: cantidad de subdivisiones por tramo
-	Curva(int _d);
+	Curva();
 
 	virtual ~Curva();
 
@@ -44,6 +44,9 @@ public:
 	int getCantPtosDisc() const;
 
 	Punto* getBufferPtosDisc() const;
+
+	void setPasos(int nueva);
+
 
 private:
 
