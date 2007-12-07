@@ -124,7 +124,6 @@ void display(void)
 		solido.solido(generatriz->getBufferPtosDisc(), generatriz->getCantPtosDisc(),
 					  wancho, walto);
 
-	
 	viewport(0, 0, wancho/2, walto/2);
 	iluminacion.mostrarLuces();
 
@@ -153,6 +152,18 @@ void controlMouse(int button, int state, int x, int y){
 											glutPostRedisplay();
 		}
 	}
+	if (button == GLUT_RIGHT_BUTTON){
+		if ( x >= wancho/2 && x <= wancho && y >= walto/2 && y < walto){ 
+			vcm.limpiarVista();	
+			glutPostRedisplay();
+		}
+		else if ( x >= 0 && x <= wancho/2 && y >= walto/2 && y < walto 
+			&& iluminacion.getCantLuces() <= 7){
+			iluminacion.eliminarFuentes();
+			glutPostRedisplay();
+		}
+	}
+
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
 		if (y <= walto/2 && y >= 0){
 			x0_rot = x;

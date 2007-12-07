@@ -57,6 +57,9 @@ void Solido:: solido(Punto* bPuntos, int nPuntos,
 
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
+			gluLookAt(0.0,0.0,1.0,
+					  0.0,0.0,-1.0,
+					  -0.2,0.5,-0.2);
 			glRotatef(alpha, 1.0f, 0.0f, 0.0f);
 			glRotatef(beta, 0.0f, 1.0f, 0.0f);
 
