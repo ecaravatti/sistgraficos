@@ -96,9 +96,6 @@ void initVistaPerspecticaSombreada(int material){
 	GLfloat difuselight[] =		{2.0f/div ,2.0f/div ,2.0f/div,1.0f};
 	GLfloat specularlight[] =	{2.0f/div,2.0f/div,2.0f/div,1.0f};
 	
-	GLfloat difuselight[]=      {(float)1/nroLuz,(float)1/nroLuz,(float)1/nroLuz,1.0f};
-	GLfloat specularlight[]=    {(float)1/nroLuz,(float)1/nroLuz,(float)1/nroLuz,1.0f};
-
 	
 	glEnable(GL_LIGHTING);	    //se activa la iluminacion
 
