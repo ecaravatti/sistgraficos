@@ -18,6 +18,7 @@ private:
 	int cantCortes;
 	int alpha, beta;
 	Iluminacion* iluminacion;
+	Punto* bNormales;
 
 public:
 	Solido();
@@ -50,8 +51,12 @@ private:
 				       const Punto& r4);
 
 	/// Completa la vista sombreada con 4 puntos
-	void vistaSombreada(const Punto& r1, const Punto& r2, const Punto& r3,
-						const Punto& r4);
+	void vistaSombreada(const Punto& r1, const Punto& r2,
+						const Punto& r3, const Punto& r4,
+						const Punto& n1, const Punto& n2,
+						const Punto& n3, const Punto& n4);
+
+	void calcularNormales(Punto* bPuntos, int nPuntos);
 };
 
 #endif // !defined(AFX_SOLIDO_H__CFDBD745_D827_41AE_AD2E_983274844BF8__INCLUDED_)

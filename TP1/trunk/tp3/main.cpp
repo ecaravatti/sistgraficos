@@ -99,6 +99,7 @@ void display(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glShadeModel(GL_SMOOTH);
    	glMatrixMode(GL_MODELVIEW);
+	glEnable(GL_NORMALIZE);
     glLoadIdentity();
 	///
 	
