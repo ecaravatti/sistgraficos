@@ -58,7 +58,7 @@ void Iluminacion:: mostrarLuces(){
 	glColor3ub(255,255,255);
 	glBegin(GL_POINTS);
 	for (int i = 0; i < nroLuz; i++)
-		glVertex3f(posicion_luz[i][0],posicion_luz[i][1],posicion_luz[i][2]);
+		glVertex3f(posicion_luz[i][0],posicion_luz[i][1],0);
 	
 	glEnd();
 }
@@ -69,9 +69,9 @@ void Iluminacion:: luces() const{
 	if (nroLuz == 0) div = 1;
 	else div = nroLuz;
 	
-	GLfloat ambientlight[] =	{2.0f/div ,2.0f/div,2.0f/div,1.0f};
-	GLfloat difuselight[] =		{2.0f/div ,2.0f/div ,2.0f/div,1.0f};
-	GLfloat specularlight[] =	{2.0f/div,2.0f/div,2.0f/div,1.0f};
+	GLfloat ambientlight[] =	{3.0f/div ,3.0f/div,3.0f/div,1.0f};
+	GLfloat difuselight[] =		{3.0f/div ,3.0f/div ,3.0f/div,1.0f};
+	GLfloat specularlight[] =	{3.0f/div,3.0f/div,3.0f/div,1.0f};
 	
 	
 	glEnable(GL_LIGHTING);	    //se activa la iluminacion
@@ -121,8 +121,8 @@ void Iluminacion:: setMaterial(int nuevo){
 void Iluminacion:: plastico() const{
 	GLfloat plasticoAmb[3] = {0.0, 0.0, 0.0};
 	GLfloat plasticoDif[3] = {0.5, 0.0, 0.0};
-	GLfloat plasticoSpe[3] = {0.7, 0.6, 0.6};
-	GLfloat plasticoShi = 32.0;
+	GLfloat plasticoSpe[3] = {1.0, 1.0, 1.0};
+	GLfloat plasticoShi = 68.0;
 
 	glMaterialfv(GL_FRONT, GL_AMBIENT, plasticoAmb);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, plasticoDif);

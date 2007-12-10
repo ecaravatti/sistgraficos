@@ -39,9 +39,9 @@ void Solido:: solido(Punto* bPuntos, int nPuntos,
 
 	Punto r1,r2,r3,r4;
 
-		for (i=0; i< nPuntos - 1 ; i++){
+		for (i=1; i< nPuntos - 1 ; i++){
 
-		p1.x = (bPuntos[i].x + 1)/2; p1.y = bPuntos[i].y; p1.z = bPuntos[i].z;
+		p1.x = (bPuntos[i-1].x + 1)/2; p1.y = bPuntos[i-1].y; p1.z = bPuntos[i-1].z;
 		p2.x = (bPuntos[i+1].x + 1)/2; p2.y = bPuntos[i+1].y; p2.z = bPuntos[i+1].z;
 
 		
@@ -55,9 +55,16 @@ void Solido:: solido(Punto* bPuntos, int nPuntos,
 		rotarPunto(ang, p1, r3);
 		rotarPunto(ang, p2, r4);
 
-		glMatrixMode(GL_MODELVIEW);
+		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
-			gluLookAt(0.0,0.0,1.0,
+				gluPerspective( 45 ,		// Ángulo de visión
+				(float)walto/(float)wancho, // Razón entre el largo y el ancho, para calcular la perspectiva
+				1,					    // Cuan cerca se puede ver
+				2000);	
+		glMatrixMode(GL_MODELVIEW);
+
+		glPushMatrix();
+			gluLookAt(0.0,0.0,3.0,
 					  0.0,0.0,-1.0,
 					  -0.2,0.5,-0.2);
 			glRotatef(alpha, 1.0f, 0.0f, 0.0f);
@@ -72,16 +79,23 @@ void Solido:: solido(Punto* bPuntos, int nPuntos,
 			vistaSombreada(r1, r2, r3, r4);
 
 		glPopMatrix();
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
 
 		/// Vista de luces
 		viewport(0, 0, wancho/2, walto/2);
-		glMatrixMode(GL_PROJECTION);
+		
+		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
 			gluLookAt(0.0,1.0,0.0,
 					  0.0,-1.0,0.0,
 					  0.0,0.0,1.0);
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
 			glOrtho(-2.0, 2.0, -2.0 , 2.0, -1.0, 1.0);
 			vistaSombreada(r1, r2, r3, r4);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
 					
 		}
@@ -134,6 +148,7 @@ void Solido:: calcularNormal(const Punto &v1, const Punto &v2, const Punto &v3, 
 	normal.y = Pz*Qx - Px*Qz;
 	normal.z = Px*Qy - Py*Qx;
 	this->normalizar(normal);
+
 }
 
 void Solido:: vistaAlambres(const Punto& r1, const Punto& r2, const Punto& r3,
@@ -167,4 +182,6 @@ void Solido:: vistaSombreada(const Punto& r1, const Punto& r2, const Punto& r3,
 			glVertex3f(r3.x, r3.y, r3.z);
 			glVertex3f(r4.x, r4.y, r4.z);
 		glEnd();
+	
+
 }

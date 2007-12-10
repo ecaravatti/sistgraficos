@@ -77,6 +77,7 @@ void init(void)
 {
 	/// Incluir aquí todo lo que deba inicializare antes
 	/// de entrar en el loop de OpenGL
+	glEnable(GL_DEPTH_TEST);
 }
 
 
@@ -95,8 +96,8 @@ void dibujarEjes()
 void display(void)
 {
 	///
-	glClear(GL_COLOR_BUFFER_BIT);
-
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glShadeModel(GL_SMOOTH);
    	glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 	///
@@ -126,7 +127,6 @@ void display(void)
 
 	viewport(0, 0, wancho/2, walto/2);
 	iluminacion.mostrarLuces();
-
 	///
   	glutSwapBuffers();
 	///
@@ -157,8 +157,7 @@ void controlMouse(int button, int state, int x, int y){
 			vcm.limpiarVista();	
 			glutPostRedisplay();
 		}
-		else if ( x >= 0 && x <= wancho/2 && y >= walto/2 && y < walto 
-			&& iluminacion.getCantLuces() <= 7){
+		else if ( x >= 0 && x <= wancho/2 && y >= walto/2 && y < walto ){
 			iluminacion.eliminarFuentes();
 			glutPostRedisplay();
 		}
