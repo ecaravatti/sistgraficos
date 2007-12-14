@@ -119,21 +119,10 @@ void Iluminacion:: setMaterial(int nuevo){
 ///---------------------------------------------------------------------
 /// Metodos privados
 void Iluminacion:: plastico() const{
-	//GLfloat plasticoAmb[3] = {0.0, 0.0, 0.0};
-	//GLfloat plasticoDif[3] = {0.5, 0.0, 0.0};
-	//GLfloat plasticoSpe[3] = {1.0, 1.0, 1.0};
-	//GLfloat plasticoShi = 68.0;
-
 	GLfloat plasticoAmb[3] = {0.0, 0.0, 0.0};
 	GLfloat  plasticoDif[3] = {0.1,0.35, 0.1};
 	GLfloat plasticoSpe[3] = {0.45, 0.55, 0.45};
 	GLfloat plasticoShi = 32.0;
-	
-	/*
-	GLfloat  plasticoAmb[4] = {0.0215f,0.1745f,0.0215f,0.55f};
-	GLfloat  plasticoDif[4] = {0.07568f,0.61424f,0.07568f,0.55f};
-	GLfloat  plasticoSpe[4] = {0.633f,0.727811f,0.633f,0.55};
-	GLfloat  plasticoShi = 76.8f;*/
 	
 	glMaterialfv(GL_FRONT, GL_AMBIENT, plasticoAmb);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, plasticoDif);
@@ -143,15 +132,10 @@ void Iluminacion:: plastico() const{
 
 void Iluminacion::  difuso() const{
 	GLfloat difusionAmb[4] = {0.0f,0.0f,0.0f,1.0f};
-	GLfloat difusionDif[4] = {0.5f,0.0f,0.0f,1.0f};
+	GLfloat difusionDif[4] = {1.0f,0.0f,0.0f,1.0f};
 	GLfloat difusionSpe[4] = {0.0f,0.0f,0.0f,1.0f};
 	GLfloat difusionShi = 1.0f;
 	
-	/*GLfloat difusionAmb[4] = {0.0f,0.0f,0.0f,1.0f};
-	GLfloat difusionDif[4] = {1.0f,1.0f,1.0f,1.0f};
-	GLfloat difusionSpe[4] = {0.0f,0.0f,0.0f,1.0f};
-	GLfloat difusionShi = 1.0f;*/
-
 	glMaterialfv(GL_FRONT, GL_AMBIENT, difusionAmb);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, difusionDif);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, difusionSpe);

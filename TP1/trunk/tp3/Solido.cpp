@@ -202,67 +202,7 @@ void Solido:: vistaSombreada(const Punto& r1, const Punto& r2,
 }
 
 void Solido:: calcularNormales(Punto* bPuntos, int nPuntos){
-	//Punto p1, p2, p3, normal;
-
-	/*
-	if (nPuntos > 3){
-	for (int i = 0; i < nPuntos ; i++){
-		if (i == 0){
-			p1.x = (bPuntos[i].x + 1)/2; p1.y = bPuntos[i].y; p1.z = bPuntos[i].z;
-			p2.x = (bPuntos[i+1].x + 1)/2; p2.y = bPuntos[i+1].y; p2.z = bPuntos[i+1].z;
-			p3.x = (bPuntos[i+2].x + 1)/2; p3.y = bPuntos[i+2].y; p3.z = bPuntos[i+2].z;
-		}
-		else if (i < nPuntos - 1){
-			p1.x = (bPuntos[i].x + 1)/2; p1.y = bPuntos[i].y; p1.z = bPuntos[i].z;
-			p2.x = (bPuntos[i-1].x + 1)/2; p2.y = bPuntos[i-1].y; p2.z = bPuntos[i-1].z;
-			p3.x = (bPuntos[i+1].x + 1)/2; p3.y = bPuntos[i+1].y; p3.z = bPuntos[i+1].z;
 	
-		}
-		else{
-			p1.x = (bPuntos[i].x + 1)/2; p1.y = bPuntos[i].y; p1.z = bPuntos[i].z;
-			p2.x = (bPuntos[i-1].x + 1)/2; p2.y = bPuntos[i-1].y; p2.z = bPuntos[i-1].z;
-			p3.x = (bPuntos[i-2].x + 1)/2; p3.y = bPuntos[i-2].y; p3.z = bPuntos[i-2].z;
-		}
-
-		calcularNormal(p1, p2, p3, normal);
-		bNormales[i].x = normal.x;
-		bNormales[i].y = normal.y;
-		bNormales[i].z = normal.z;
-	}
-	}
-	*/
-	
-	
-	/*
-	Punto der; //derivada
-	for(int i = 0; i < nPuntos; i++) {
-		if (i == 0) { //derivada en avance
-			der.x = (bPuntos[i+1].x - bPuntos[i].x)/0.1;
-			der.z = (bPuntos[i+1].y - bPuntos[i].y)/0.1;
-			bNormales[i].x = -der.z;
-			bNormales[i].z = 0.0;
-			bNormales[i].y = der.x;
-			normalizar(bNormales[i]);
-		}
-		else if (i == nPuntos -1) {
-			der.x = (bPuntos[i].x - bPuntos[i-1].x)/0.1;
-			der.z = (bPuntos[i].y - bPuntos[i-1].y)/0.1;
-			bNormales[i].x = -der.z;
-			bNormales[i].z = 0.0;
-			bNormales[i].y = der.x;
-			normalizar(bNormales[i]);
-		}
- 		else {  //derivada centrada
-			der.x = (bPuntos[i+1].x - bPuntos[i-1].x)/(2*0.1);
-			der.z = (bPuntos[i+1].y - bPuntos[i-1].y)/(2*0.1);
-			bNormales[i].x = -der.z;
-			bNormales[i].z = 0.0;
-			bNormales[i].y = der.x;
-			normalizar(bNormales[i]);
-		}
-	}
-	*/
-
 	double dery, mag; 
 	for(int i = 0; i < nPuntos; i++) {
 		if (i == 0) 
