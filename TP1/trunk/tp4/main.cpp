@@ -10,6 +10,7 @@
 #include "Iluminacion.h"
 #include "Solido.h"
 #include "Material.h"
+#include "textura.h"
 
 char caption[]="Sistema Gráficos - 66.71 - 2007c1";
 
@@ -19,10 +20,6 @@ char caption[]="Sistema Gráficos - 66.71 - 2007c1";
 // Declaraciones de variables
 static int wancho; 
 static int walto;
-
-//angulos de rotacion
-float alpha = 0, beta = 0;
-static int x0_rot, y0_rot;
 
 // Variables
 VistaCorteModelo vcm;
@@ -61,11 +58,66 @@ void viewport(int posx, int posy, int w, int h){
 void dibujarEjes(){
 
 	glBegin(GL_LINES);
-		glVertex3d(-10,-0.3,0);
-		glVertex3d(10,-0.3,0);
-		glVertex3d(0,-0.3,0);
+		glVertex3d(-10,-0.333,0);
+		glVertex3d(10,-0.333,0);
+		glVertex3d(0,-0.333,0);
 		glVertex3d(0,-10,0);
 	glEnd();
+}
+/*--------------------------------------------------------------------*/
+///Dibuja tablero
+void tablero(){
+	int largo = 12, ancho = 6;
+	double lado = 0.25;
+	Color c1 = {100, 100, 100}, c2 = {150, 150, 150};
+	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+	glColor3ub(255,255,255);
+
+	for (int j = 0; j < largo; j++){
+		for (int i = 0; i < ancho; i++){
+			glBegin(GL_QUADS);
+				if ((i + j) % 2 == 0)
+					glColor3ub(c1.r, c1.g, c1.b);
+				else glColor3ub(c2.r, c2.g, c2.b);
+
+				glVertex3d(i*lado, j*lado, 0.0);
+				glVertex3d((i+1)*lado, j*lado, 0.0);
+				glVertex3d((i+1)*lado, (j+1)*lado, 0.0);
+				glVertex3d(i*lado, (j+1)*lado, 0.0);
+			glEnd();
+		}
+	}
+
+	glEnable( GL_TEXTURE_2D );
+	glBindTexture( GL_TEXTURE_2D, texture[0] );
+	glColor3f(1.0,0.0,1.0);
+	glBegin(GL_QUADS);	
+		glTexCoord3d(0.0,0.0,0.0); glVertex3d(0.0, 0.0, 0.0);
+		glTexCoord3d(0.0,largo*lado, 0.0); glVertex3d(0.0, largo*lado, 0.0);
+		glTexCoord3d(0.0,largo*lado, 0.5); glVertex3d(0.0, largo*lado, 0.5);
+		glTexCoord3d(0.0, 0.0, 0.5); glVertex3d(0.0, 0.0, 0.5);
+	glEnd();
+
+	
+	glBindTexture( GL_TEXTURE_2D, texture[0] );
+	glColor3f(1.0,0.0,1.0);
+	glBegin(GL_QUADS);	
+		glVertex3d(0.0, largo*lado, 0.0);
+		glVertex3d(ancho*lado, largo*lado, 0.0);
+		glVertex3d(ancho*lado, largo*lado, 0.5);
+		glVertex3d(0.0, largo*lado, 0.5);	
+	glEnd();
+
+	glBindTexture( GL_TEXTURE_2D, texture[0] );
+	glColor3f(1.0,0.0,1.0);
+	glBegin(GL_QUADS);	
+		glVertex3d(lado*ancho, 0.0, 0.0);
+		glVertex3d(ancho*lado, largo*lado, 0.0);
+		glVertex3d(ancho*lado, largo*lado, 0.5);
+		glVertex3d(lado*ancho, 0.0, 0.5);		
+	glEnd();
+	glDisable( GL_TEXTURE_2D );
+	
 }
 /*--------------------------------------------------------------------*/
 void reshape(int w, int h)
@@ -117,15 +169,43 @@ void display(void)
 
 ///Viewport para el pinball
 	viewport(0, walto*1/3, wancho, walto*2/3);
-	Curva* generatriz = vcm.getCurvaGeneratriz();
-		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-		solido.setCantCortes(cortes);
-		iluminacion.luces();
-		material.material();
-		solido.setAngulo(alpha, beta);
-		solido.solido(generatriz->getBufferPtosDisc(), generatriz->getCantPtosDisc(),
-					  wancho, walto);
+	glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+				gluPerspective( 45 ,		// Ángulo de visión
+				(float)walto/(float)wancho, // Razón entre el largo y el ancho, para calcular la perspectiva
+				1,					    // Cuan cerca se puede ver
+				2000);	
+				
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+		gluLookAt(0.0,0.0,3.0, 0.0,0.0,0.0, 0.0,1.0,0.0);
+		
+		
+		glPushMatrix();
+			glTranslatef (-0.75, -0.7, 0.0);
+			glRotatef((GLfloat) -60, 1.0, 0.0, 0.0);
+			tablero();
+		glPopMatrix();
 
+		
+			Curva* generatriz = vcm.getCurvaGeneratriz();
+			glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+			solido.setCantCortes(cortes);
+
+		glPushMatrix();
+			glRotatef((GLfloat) 60, 1.0, 0.0, 0.0);
+			iluminacion.luces();
+		glPushMatrix();
+			material.material();
+			glScalef(0.3,0.3,0.3);
+			//glRotatef((GLfloat) 60, 1.0, 0.0, 0.0);
+			solido.solido(generatriz->getBufferPtosDisc(), generatriz->getCantPtosDisc(),
+						  wancho, walto);
+		glPopMatrix();
+		glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glDisable(GL_LIGHTING);
 	///
   	glutSwapBuffers();
 	///
@@ -163,21 +243,9 @@ void controlMouse(int button, int state, int x, int y){
 		}*/
 	}
 
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
-		if (y <= walto/2 && y >= 0){
-			x0_rot = x;
-			y0_rot = y;
-		}
-	}
 }
 
 void controlMovimientoMouse(int x, int y){
-	if ( y <= walto/2 && y >= 0){
-		alpha = (alpha + (y - y0_rot));
-		beta = (beta + (x - x0_rot));
-		x0_rot = x; y0_rot = y;
-		glutPostRedisplay();
-	}
 }
 
 void keyboard(unsigned char key, int x, int y)
@@ -215,6 +283,10 @@ int main(int argc, char** argv)
    glutInitWindowPosition (100, 100);
    glutCreateWindow (caption);
    init ();
+
+   // Carga las Texturas
+   LoadTextures();
+
    glutMouseFunc(controlMouse);
    glutMotionFunc(controlMovimientoMouse);
    glutKeyboardFunc(keyboard);

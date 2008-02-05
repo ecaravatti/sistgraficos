@@ -105,6 +105,10 @@ SOURCE=.\Solido.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\textura.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\VistaCorteModelo.cpp
 # End Source File
 # End Group
@@ -130,6 +134,10 @@ SOURCE=.\Material.h
 # Begin Source File
 
 SOURCE=.\Solido.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\textura.h
 # End Source File
 # Begin Source File
 

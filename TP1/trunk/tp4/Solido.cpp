@@ -15,8 +15,6 @@
 //////////////////////////////////////////////////////////////////////
 
 Solido::Solido():cantCortes(0),
-				 alpha(0),
-				 beta(0),
 				 bNormales(NULL)
 {
 
@@ -61,33 +59,9 @@ void Solido:: solido(Punto* bPuntos, int nPuntos,
 		rotarPunto(ang, p2, r4);
 		rotarPunto(ang, bNormales[i+1], n4);
 
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-				gluPerspective( 45 ,		// Ángulo de visión
-				(float)walto/(float)wancho, // Razón entre el largo y el ancho, para calcular la perspectiva
-				1,					    // Cuan cerca se puede ver
-				2000);	
-		glMatrixMode(GL_MODELVIEW);
-
-		glPushMatrix();
-			gluLookAt(0.0,0.0,3.0,
-					  0.0,0.0,-1.0,
-					  -0.2,0.5,-0.2);
-		//	iluminacion->luces();
-			glRotatef(alpha, 1.0f, 0.0f, 0.0f);
-			glRotatef(beta, 0.0f, 1.0f, 0.0f);
-
-		/// Vista de alambres
-		//	viewport(wancho/2, walto/2, wancho/2, walto/2);
-		//	vistaAlambres(r1, r2, r3, r4);
-
+		
 		//Vista Perspectiva Sombreada
-		//	viewport(0, walto/2, wancho/2, walto/2);
-			vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
-
-		glPopMatrix();
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
+		vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
 
 		/// Vista de luces
 		/*viewport(0, 0, wancho/2, walto/2);
@@ -116,11 +90,6 @@ void Solido:: setCantCortes(int nueva){
 	this->cantCortes = nueva;
 }
 
-
-void Solido:: setAngulo(int _alpha, int _beta){
-	this->alpha = _alpha;
-	this->beta = _beta;
-}
 ///----------------------------------------------------------------------
 /// Metodos privados
 void Solido:: rotarPunto(const double angulo, const Punto& p_in, Punto& p_out){

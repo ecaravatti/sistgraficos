@@ -16,7 +16,6 @@ class Solido
 {
 private:
 	int cantCortes;
-	int alpha, beta;
 	Punto* bNormales;
 
 public:
@@ -29,8 +28,6 @@ public:
 	/// Para dibujar los solidos
 	void solido(Punto* bPuntos, int nPuntos,
 				int wancho, int walto);
-
-	void setAngulo(int _alpha, int beta);
 
 private:
 	 

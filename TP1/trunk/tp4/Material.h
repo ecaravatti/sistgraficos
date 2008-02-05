@@ -19,9 +19,9 @@ private:
 	int nroMaterial;
 
 public:
-	static GLfloat ambiente[cantMat][3];
-	static GLfloat difuso[cantMat][3];
-	static GLfloat especular[cantMat][3];
+	static GLfloat ambiente[cantMat][4];
+	static GLfloat difuso[cantMat][4];
+	static GLfloat especular[cantMat][4];
 	static GLfloat brillo[cantMat];
 
 	Material();
