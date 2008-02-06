@@ -101,11 +101,19 @@ SOURCE=.\Material.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pelota.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Solido.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\textura.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Velocidad.cpp
 # End Source File
 # Begin Source File
 
@@ -133,11 +141,19 @@ SOURCE=.\Material.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pelota.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Solido.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\textura.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Velocidad.h
 # End Source File
 # Begin Source File
 

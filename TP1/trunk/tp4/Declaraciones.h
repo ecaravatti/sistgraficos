@@ -9,6 +9,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#define PI 3.1415926535
 
 struct Punto{
 	double x, y, z;
