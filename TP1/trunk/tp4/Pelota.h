@@ -11,6 +11,8 @@
 
 #include "Declaraciones.h"
 #include "Velocidad.h"
+#include "Pared.h"
+#include <stdlib.h>
 
 class Pelota  
 {
@@ -46,7 +48,30 @@ public:
 	Velocidad getVectorVelocidad();
 	double getDiametro();
 	double getMasa();
+	void setPosInicial(Punto posInicial);
+	void setAngulo(int angulo);
+	void setPosInicialX(double px);
+	void setPosInicialY(double py);
+	void setPosX(double x);
+	void setPosY(double y);
+	void setVelocidadInicial(double velocidad_i);
+	void setVelocidad(double velocidad);
+	void setVectorVelocidad(Velocidad v);
+	void setTiempoRebote(double tiempoRebote);
+	bool seChoca(Pared p);
+	void mover(double tiempo);
+	int calcularAnguloIncidencia(Punto p);
+	int calcularAnguloReflexion(int angIncidencia,int variacion);
+	void chocar(Pared p, double t);
+	double calcularVelocidadReflexion(int angIncidencia,int variacion, Punto dirPared);
+	void chocar(Pelota pelota, double tiempo); // TODO: VER SI SIRVE PARA LOS CUERPOS DE REVOLUCION.
 
+private:
+	void calcularPosicionX(double t);
+	void calcularPosicionY(double t);
+	void calcularVelocidad(double t);
+	void anguloReflexionASistFijo(Punto p,int angReflexion);
+	double calcularVelocidadMaxima();
 };
 
 #endif // !defined(AFX_PELOTA_H__1E5E39AE_A87D_4879_8FE6_179645554F3B__INCLUDED_)

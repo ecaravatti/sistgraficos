@@ -101,6 +101,10 @@ SOURCE=.\Material.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Pared.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pelota.cpp
 # End Source File
 # Begin Source File
@@ -138,6 +142,10 @@ SOURCE=.\Iluminacion.h
 # Begin Source File
 
 SOURCE=.\Material.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Pared.h
 # End Source File
 # Begin Source File
 
