@@ -12,6 +12,7 @@
 #include "Declaraciones.h"
 #include "Velocidad.h"
 #include "Pared.h"
+#include "Solido.h"
 #include <stdlib.h>
 
 class Pelota  
@@ -58,14 +59,14 @@ public:
 	void setVelocidad(double velocidad);
 	void setVectorVelocidad(Velocidad v);
 	void setTiempoRebote(double tiempoRebote);
-	bool seChoca(Pared p);
+	bool seChoca(Solido &solido);
+	bool seChoca(Pared& p);
 	void mover(double tiempo);
 	int calcularAnguloIncidencia(Punto p);
-	int calcularAnguloReflexion(int angIncidencia,int variacion);
+	int calcularAnguloReflexion(int angIncidencia);
 	void chocar(Pared p, double t);
-	double calcularVelocidadReflexion(int angIncidencia,int variacion, Punto dirPared);
+	double calcularVelocidadReflexion(int angIncidencia, Punto dirPared);
 	void chocar(Pelota pelota, double tiempo); // TODO: VER SI SIRVE PARA LOS CUERPOS DE REVOLUCION.
-
 private:
 	void calcularPosicionX(double t);
 	void calcularPosicionY(double t);

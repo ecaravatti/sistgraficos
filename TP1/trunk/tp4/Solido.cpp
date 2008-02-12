@@ -185,3 +185,11 @@ void Solido:: calcularNormales(Punto* bPuntos, int nPuntos){
 	}
 	
 }
+/************************************************************************************************/
+Punto Solido::getPosicion() const{
+	return posicion;
+}
+
+double Solido::getDiametro() const{
+	return diametro;
+}

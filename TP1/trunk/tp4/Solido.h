@@ -17,6 +17,8 @@ class Solido
 private:
 	int cantCortes;
 	Punto* bNormales;
+	Punto posicion;				//TODO: Setear posicion
+	double diametro;			//		Setear diametro del cilindro que lo rodea
 
 public:
 	Solido();
@@ -28,7 +30,8 @@ public:
 	/// Para dibujar los solidos
 	void solido(Punto* bPuntos, int nPuntos,
 				int wancho, int walto);
-
+	Punto getPosicion() const;
+	double getDiametro() const ;
 private:
 	 
 	/// Rota el punto p_in theta radianes sobre el eje Y dando como resultado p_out

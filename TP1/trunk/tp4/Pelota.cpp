@@ -199,20 +199,19 @@ void Pelota::calcularVelocidad(double t){
 }
 
 
-//TODO: ver si se puede adaptar para los solidos de revolucion!
 /**
- * Este metodo se fija si se produce un choque entre dos esferas. 
+ * Este metodo se fija si se produce un choque la pelota y un solido. 
  * Para esto se fija si la distancia entre ellas es menor a la suma de sus radios
- * @param Esfera <b>e</b> 
- * @return <b>boolean</b> Retorna true si se produjo el choque; 
+ * @param Solido <b>solido</b> 
+ * @return <b>bool</b> Retorna true si se produjo el choque; 
  * caso contrario retorna false
- */ /*
-public boolean seChoca(Esfera e){
-	if (this.getPosActual().distancia(e.getPosActual()) <= (diametro/2 + e.getDiametro()/2)) 
+ */
+bool Pelota::seChoca(Solido &solido){
+	if (posActual.distancia(solido.getPosicion()) <= (diametro/2 + solido.getDiametro()/2)) 
 		return true;
 	return false;
 }
-*/
+
 /**
  * Este metodo se fija si se produce un choque entre la esfera y la pared 
  * Para esto se fija si la distancia entre ellas es menor al radio de la esfera
@@ -220,7 +219,7 @@ public boolean seChoca(Esfera e){
  * @return <b>boolean</b> Retorna true si se produjo el choque; 
  * caso contrario retorna false
  */
-bool Pelota::seChoca(Pared p){
+bool Pelota::seChoca(Pared &p){
 
 	//Primero calculo una recta perpendicular a la direccion de la pared que pase por el punto p.
 	double x,y; //son las coordenadas de la direccion de la recta a calcular.
@@ -246,7 +245,7 @@ bool Pelota::seChoca(Pared p){
 	p2.x = (t*p.getDireccion().x+p.getOrigen().x);
 	p2.y = (t*p.getDireccion().y+p.getOrigen().y); 
 
-	if ((sqrt(pow((posActual.x-p2.x),2) + pow((posActual.y-p2.y),2))) <= diametro)
+	if (posActual.distancia(p2)<= diametro)
 		return true;
 	return false;
 }
@@ -332,7 +331,6 @@ void Pelota::chocar(Pared p, double t){
 	
 	int r = (rand() % 40);	// Numero random entre 0 y 40.
 
-	int variacion = r - 20; // Numero random entre 20 y -20.
 	angIncidencia=calcularAnguloIncidencia(p.getDireccion());
 	
 	setPosInicialX(getPosX());
@@ -347,7 +345,7 @@ void Pelota::chocar(Pared p, double t){
 	
 //	setTiempoRebote(t);
 // TODO: settear el tiempo a 0???	
-	setVelocidad(calcularVelocidadReflexion(angIncidencia,variacion,p.getDireccion()));
+	setVelocidad(calcularVelocidadReflexion(angIncidencia,p.getDireccion()));
 	
 	if (getVelocidad() <= 0){
 		setVelocidad(0);
@@ -371,9 +369,9 @@ double Pelota::calcularVelocidadMaxima(){
  * Este metodo calcula el angulo de reflexión en el choque contra una pared
  * @return int Devuelve el angulo en grados
  */
-int Pelota::calcularAnguloReflexion(int angIncidencia,int variacion){
+int Pelota::calcularAnguloReflexion(int angIncidencia){
 	
-	int reflexion = (int)(variacion + Velocidad::toDegrees(atan(tan(Velocidad::toRadians(angIncidencia))/(0.33/100.0))));
+	int reflexion = (int)(Velocidad::toDegrees(atan(tan(Velocidad::toRadians(angIncidencia))/(0.33/100.0))));
 	if (reflexion < 0)
 		reflexion = 360 + reflexion;
 	return(reflexion);
@@ -384,14 +382,12 @@ int Pelota::calcularAnguloReflexion(int angIncidencia,int variacion){
  * tambien le asigna un nuevo ángulo que le da la direccion de movimiento a la esfera.
  * @param int angIncidencia: angulo de incidencia del choque, medido desde la normal a 
  * la pared.
- * @param int variacion: es la variacion en grados al angulo de reflexión, causada por la
- * irregularidad de la pared.
  * @param Punto dirPared: es la direccion de la pared contra la que se choca, sirve para calcular 
  * el angulo de reflexión.
  * @return double que es el módulo de la velocidad de reflexión de la esfera.
  */
-double Pelota::calcularVelocidadReflexion(int angIncidencia,int variacion, Punto dirPared){
-	int angReflexion = calcularAnguloReflexion(angIncidencia,variacion);
+double Pelota::calcularVelocidadReflexion(int angIncidencia,Punto dirPared){
+	int angReflexion = calcularAnguloReflexion(angIncidencia);
 	anguloReflexionASistFijo(dirPared,angReflexion);
 	return(getVelocidad()*(sin((Velocidad::toRadians(angIncidencia))/(sin(Velocidad::toRadians(angReflexion))))));
 }
