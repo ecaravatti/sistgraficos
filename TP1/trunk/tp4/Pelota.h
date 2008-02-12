@@ -14,6 +14,7 @@
 #include "Pared.h"
 #include "Solido.h"
 #include <stdlib.h>
+#include <list>
 
 class Pelota  
 {
@@ -28,6 +29,8 @@ private:
 	double tiempoRebote;
 	double aceleracion;
 	double fuerzaRozamiento;
+	std::list<Pared*> listaParedes;
+	std::list<Solido*> listaSolidos;
 	
 	
 public:
@@ -59,20 +62,25 @@ public:
 	void setVelocidad(double velocidad);
 	void setVectorVelocidad(Velocidad v);
 	void setTiempoRebote(double tiempoRebote);
-	bool seChoca(Solido &solido);
-	bool seChoca(Pared& p);
+	bool seChoca(Solido* solido);
+	bool seChoca(Pared* p);
 	void mover(double tiempo);
 	int calcularAnguloIncidencia(Punto p);
 	int calcularAnguloReflexion(int angIncidencia);
-	void chocar(Pared p, double t);
+	void chocar(Pared* p, double t);
 	double calcularVelocidadReflexion(int angIncidencia, Punto dirPared);
-	void chocar(Pelota pelota, double tiempo); // TODO: VER SI SIRVE PARA LOS CUERPOS DE REVOLUCION.
+	void chocar(Solido* solido, double tiempo); // TODO: VER SI SIRVE PARA LOS CUERPOS DE REVOLUCION.
+	void cargarPared(Pared* pared);
+	void cargarSolido(Solido* solido);
+	void eliminarSolido(Solido* solido);
+	//void mover(double t);
 private:
 	void calcularPosicionX(double t);
 	void calcularPosicionY(double t);
 	void calcularVelocidad(double t);
 	void anguloReflexionASistFijo(Punto p,int angReflexion);
 	double calcularVelocidadMaxima();
+	void buscarChoques(double tiempo);
 };
 
 #endif // !defined(AFX_PELOTA_H__1E5E39AE_A87D_4879_8FE6_179645554F3B__INCLUDED_)

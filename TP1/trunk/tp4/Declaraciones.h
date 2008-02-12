@@ -29,6 +29,11 @@ struct Punto{
 		y=0;
 		z=0;
 	}
+	
+	bool operator==(const Punto& punto){
+		if (punto.x==x && punto.y==y) return true;
+		return false;
+	}
 
 };
 

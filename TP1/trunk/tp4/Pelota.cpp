@@ -206,8 +206,8 @@ void Pelota::calcularVelocidad(double t){
  * @return <b>bool</b> Retorna true si se produjo el choque; 
  * caso contrario retorna false
  */
-bool Pelota::seChoca(Solido &solido){
-	if (posActual.distancia(solido.getPosicion()) <= (diametro/2 + solido.getDiametro()/2)) 
+bool Pelota::seChoca(Solido* solido){
+	if (posActual.distancia(solido->getPosicion()) <= (diametro/2 + solido->getDiametro()/2)) 
 		return true;
 	return false;
 }
@@ -219,31 +219,31 @@ bool Pelota::seChoca(Solido &solido){
  * @return <b>boolean</b> Retorna true si se produjo el choque; 
  * caso contrario retorna false
  */
-bool Pelota::seChoca(Pared &p){
+bool Pelota::seChoca(Pared* p){
 
 	//Primero calculo una recta perpendicular a la direccion de la pared que pase por el punto p.
 	double x,y; //son las coordenadas de la direccion de la recta a calcular.
-	if (p.getDireccion().x==0) {
+	if (p->getDireccion().x==0) {
 		y=0;
 		x=1;
 	}
 	else{
-		if(p.getDireccion().y==0){
+		if(p->getDireccion().y==0){
 	
 		x=0;
 		y=1;
 		}
 		else {
 			x=1;
-			y= -p.getDireccion().x/p.getDireccion().y;
+			y= -p->getDireccion().x/p->getDireccion().y;
 		}
 	}// la nueva recta queda configurada como L1: r(x,y) + p ; donde r pertenece a los reales.
 	
 	//se calcula la interseccion entre la recta L1 y la pared,el punto p2 será el mas cercano a la esfera.
-	double t = (x*(p.getOrigen().y-posActual.y)+ y*(posActual.x-p.getOrigen().x))/(y*p.getDireccion().x-x*p.getDireccion().y);
+	double t = (x*(p->getOrigen().y-posActual.y)+ y*(posActual.x-p->getOrigen().x))/(y*p->getDireccion().x-x*p->getDireccion().y);
 	Punto p2;
-	p2.x = (t*p.getDireccion().x+p.getOrigen().x);
-	p2.y = (t*p.getDireccion().y+p.getOrigen().y); 
+	p2.x = (t*p->getDireccion().x+p->getOrigen().x);
+	p2.y = (t*p->getDireccion().y+p->getOrigen().y); 
 
 	if (posActual.distancia(p2)<= diametro)
 		return true;
@@ -326,12 +326,12 @@ void Pelota::anguloReflexionASistFijo(Punto p,int angReflexion){
  * con los datos del choque que agrega en las lista de rebotes de la esfera.
  * @param Pared p Es la pared contra la que choca la esfera.
  */
-void Pelota::chocar(Pared p, double t){
+void Pelota::chocar(Pared* p, double t){
 	int angIncidencia=0;
 	
-	int r = (rand() % 40);	// Numero random entre 0 y 40.
+	//int r = (rand() % 40);	// Numero random entre 0 y 40.
 
-	angIncidencia=calcularAnguloIncidencia(p.getDireccion());
+	angIncidencia=calcularAnguloIncidencia(p->getDireccion());
 	
 	setPosInicialX(getPosX());
 	setPosInicialY(getPosY());
@@ -345,7 +345,7 @@ void Pelota::chocar(Pared p, double t){
 	
 //	setTiempoRebote(t);
 // TODO: settear el tiempo a 0???	
-	setVelocidad(calcularVelocidadReflexion(angIncidencia,p.getDireccion()));
+	setVelocidad(calcularVelocidadReflexion(angIncidencia,p->getDireccion()));
 	
 	if (getVelocidad() <= 0){
 		setVelocidad(0);
@@ -397,9 +397,38 @@ double Pelota::calcularVelocidadReflexion(int angIncidencia,Punto dirPared){
  * @param Esfera e: Esfera contra la que choca
  * @param double tiempo: Tiempo en el que se produce la colision
  */
-void Pelota::chocar(Pelota pelota, double tiempo) {
+void Pelota::chocar(Solido* solido, double tiempo) {
 //	EstrategiaChoque estrategia= new EstrategiaChoqueEstandar(this,pelota,tiempo);
 //	estrategia.chocar();	
 	
 }
 
+void Pelota::cargarPared(Pared* pared){
+	listaParedes.push_back(pared);
+}
+
+void Pelota::cargarSolido(Solido* solido){
+	listaSolidos.push_back(solido);
+}
+
+void Pelota::eliminarSolido(Solido* solido){
+	std::list<Solido*>::iterator it;
+	for (it=listaSolidos.begin(); it!=listaSolidos.end(); it++)
+		if ((*it)->getPosicion()==solido->getPosicion()){
+			listaSolidos.erase(it);
+			return;
+		}
+}
+
+void Pelota::buscarChoques(double tiempo){
+	//Choques con solidos
+	std::list<Solido*>::iterator itSolidos;
+	for (itSolidos=listaSolidos.begin(); itSolidos!=listaSolidos.end(); itSolidos++)
+		if (this->seChoca(*itSolidos)) chocar(*itSolidos,tiempo);
+
+	//Choques con paredes
+	std::list<Pared*>::iterator itParedes;
+	for (itParedes=listaParedes.begin(); itParedes!=listaParedes.end(); itParedes++)
+		if (this->seChoca(*itParedes)) chocar(*itParedes,tiempo);
+
+}
