@@ -257,9 +257,12 @@ bool Pelota::seChoca(Pared* p){
  * @param double <b>tiempo</b>
  */
 void Pelota::mover(double tiempo){
-	 calcularPosicionX(tiempo); 
-	 calcularPosicionY(tiempo); 
-	 calcularVelocidad(tiempo);
+	if (getVelocidad()>0){ 
+				calcularPosicionX(tiempo); 
+				calcularPosicionY(tiempo); 
+				calcularVelocidad(tiempo);
+	}
+	buscarChoques(tiempo);
 }
 	
 /**

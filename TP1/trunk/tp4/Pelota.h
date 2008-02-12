@@ -62,18 +62,11 @@ public:
 	void setVelocidad(double velocidad);
 	void setVectorVelocidad(Velocidad v);
 	void setTiempoRebote(double tiempoRebote);
-	bool seChoca(Solido* solido);
-	bool seChoca(Pared* p);
-	void mover(double tiempo);
-	int calcularAnguloIncidencia(Punto p);
-	int calcularAnguloReflexion(int angIncidencia);
-	void chocar(Pared* p, double t);
-	double calcularVelocidadReflexion(int angIncidencia, Punto dirPared);
-	void chocar(Solido* solido, double tiempo); // TODO: VER SI SIRVE PARA LOS CUERPOS DE REVOLUCION.
 	void cargarPared(Pared* pared);
 	void cargarSolido(Solido* solido);
 	void eliminarSolido(Solido* solido);
-	//void mover(double t);
+	void mover(double tiempo);
+
 private:
 	void calcularPosicionX(double t);
 	void calcularPosicionY(double t);
@@ -81,6 +74,13 @@ private:
 	void anguloReflexionASistFijo(Punto p,int angReflexion);
 	double calcularVelocidadMaxima();
 	void buscarChoques(double tiempo);
+	int calcularAnguloIncidencia(Punto p);
+	int calcularAnguloReflexion(int angIncidencia);
+	double calcularVelocidadReflexion(int angIncidencia, Punto dirPared);
+	void chocar(Pared* p, double t);
+	void chocar(Solido* solido, double tiempo);//TODO: calcular choque segun angulo y velocidad
+	bool seChoca(Solido* solido);
+	bool seChoca(Pared* p);
 };
 
 #endif // !defined(AFX_PELOTA_H__1E5E39AE_A87D_4879_8FE6_179645554F3B__INCLUDED_)
