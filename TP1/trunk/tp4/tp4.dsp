@@ -93,6 +93,10 @@ SOURCE=.\Iluminacion.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\LSolidos.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\main.cpp
 # End Source File
 # Begin Source File
@@ -138,6 +142,10 @@ SOURCE=.\Declaraciones.h
 # Begin Source File
 
 SOURCE=.\Iluminacion.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LSolidos.h
 # End Source File
 # Begin Source File
 
