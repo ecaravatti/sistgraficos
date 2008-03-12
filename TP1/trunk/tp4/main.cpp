@@ -67,7 +67,7 @@ void dibujarEjes(){
 /*--------------------------------------------------------------------*/
 ///Dibuja tablero
 void tablero(){
-	int largo = 12, ancho = 6;
+	int largo = 8, ancho = 6;
 	double lado = 0.25;
 	Color c1 = {100, 100, 100}, c2 = {150, 150, 150};
 	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
@@ -203,9 +203,52 @@ void display(void)
 						  wancho, walto);
 		glPopMatrix();
 		glPopMatrix();
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
+	//glMatrixMode(GL_PROJECTION);
+	//glPopMatrix();
 	glDisable(GL_LIGHTING);
+
+///Viewport vista superior del tablero
+	viewport(0, 0, wancho/2, walto*1/3);
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+			gluLookAt(0.0,0.0,0.5, 
+				      0.0,0.0,0.0, 
+				      -1.0,0.0,0.0);
+
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+			//glOrtho(-1.0, 1.0, -2.0 , 2.0, -1.0, 1.0);
+			glMatrixMode(GL_MODELVIEW);
+				glPushMatrix();
+				    glTranslatef (-0.75, -1.0, 0.0);
+				//	glRotatef((GLfloat) -60, 1.0, 0.0, 0.0);
+					tablero();
+				glPopMatrix();
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+
+		
+		/*
+			Curva* generatriz2 = vcm.getCurvaGeneratriz();
+			glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+			solido.setCantCortes(cortes);
+
+		glPushMatrix();
+			glRotatef((GLfloat) 60, 1.0, 0.0, 0.0);
+			iluminacion.luces();
+		glPushMatrix();
+			material.material();
+			glScalef(0.3,0.3,0.3);
+			//glRotatef((GLfloat) 60, 1.0, 0.0, 0.0);
+			solido.solido(generatriz2->getBufferPtosDisc(), generatriz2->getCantPtosDisc(),
+						  wancho, walto);
+		glPopMatrix();
+		glPopMatrix();
+		*/
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
 	///
   	glutSwapBuffers();
 	///
