@@ -92,8 +92,10 @@ void tablero(bool borde){
 	}
 
 	if (borde){
+		
 		glEnable( GL_TEXTURE_2D );
 		glBindTexture( GL_TEXTURE_2D, texture[0] );
+
 		glColor3f(1.0,0.0,1.0);
 			glBegin(GL_QUADS);	
 				glTexCoord3d(0.0,0.0,0.0); glVertex3d(0.0, 0.0, 0.0);
