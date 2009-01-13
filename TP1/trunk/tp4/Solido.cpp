@@ -295,6 +295,7 @@ double Solido::calcularDiametro(){
 	}
 
 	return (distmax*2);
+
 }
 
 
