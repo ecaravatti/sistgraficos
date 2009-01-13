@@ -11,24 +11,28 @@
 
 #include "Declaraciones.h"
 #include "Iluminacion.h"
+#include <vector>
 
 class Solido  
 {
 private:
 	int cantCortes;
 	Punto* bNormales;
+	std::vector<Punto*> puntos;
 	Punto posicion;				//TODO: Setear posicion
 	double diametro;			//		Setear diametro del cilindro que lo rodea
 
 public:
 	Solido();
+	Solido(int posx, int posy,std::vector<Punto*> bPuntos);
 	virtual ~Solido();
 
 ///getters y setters
 	void setCantCortes(int nueva);
 
 	/// Para dibujar los solidos
-	void solido(Punto* bPuntos, int nPuntos,
+	void dibujar_solido(int wancho, int walto);
+	void dibujar_solido(Punto* bPuntos, int nPuntos,
 				int wancho, int walto);
 	Punto getPosicion() const;
 	double getDiametro() const ;
@@ -54,6 +58,8 @@ private:
 						const Punto& n3, const Punto& n4);
 
 	void calcularNormales(Punto* bPuntos, int nPuntos);
+	void calcularNormales();
+	double calcularDiametro();
 };
 
 #endif // !defined(AFX_SOLIDO_H__CFDBD745_D827_41AE_AD2E_983274844BF8__INCLUDED_)

@@ -54,7 +54,7 @@ void Material::material(){
 	glEnable(GL_COLOR_MATERIAL);	//Se activa lo materiales de color
 	glColorMaterial(GL_BACK,GL_AMBIENT_AND_DIFFUSE);  //tipo ambiente y difusión (tambien incluyen specular)
 
-	std:: cout<<mat<<std:: endl;
+	//std:: cout<<mat<<std:: endl;
 	glMaterialfv(GL_FRONT, GL_AMBIENT, ambiente[mat]);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, difuso[mat]);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, especular[mat]);

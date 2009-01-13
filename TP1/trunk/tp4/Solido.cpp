@@ -20,13 +20,89 @@ Solido::Solido():cantCortes(0),
 
 }
 
+Solido::Solido(int posx, int posy,std::vector<Punto*> bPuntos)
+{	
+	this->posicion.x=posx;
+	this->posicion.y=posy;
+	this->puntos=bPuntos;
+	bNormales = new Punto[puntos.size() + 1];
+	this->diametro=calcularDiametro();
+	std::cout<<"Posicion:"<<posicion.x<<","<<posicion.y<<std::endl;
+	std::cout<<"Diametro:"<<this->diametro<<std::endl;
+}
+
 Solido::~Solido()
 {
 
 }
+//Metodo q dibuja al solido
+void Solido::dibujar_solido(int wancho, int walto){
 
-// Dibuja los solidos 
-void Solido:: solido(Punto* bPuntos, int nPuntos,
+	double ang, c; 
+	Punto p1, p2, r1,r2,r3,r4, n1, n2, n3, n4;
+	int i, j;
+
+	c=3.14159/180.0; //grados a radianes
+	
+	
+	this->calcularNormales();
+	
+	for (i=0; i< puntos.size() - 1 ; i++){
+
+		p1.x = (puntos[i]->x + 1)/2;
+		p1.y = puntos[i]->y; 
+		p1.z = puntos[i]->z;
+
+		p2.x = (puntos[i+1]->x + 1)/2; 
+		p2.y = puntos[i+1]->y; 
+		p2.z = puntos[i+1]->z;
+
+		
+	for (j=0; j<=cantCortes-1;j++){
+
+		ang=j*360.0*c/cantCortes; //angulo de la curva a calcular
+		rotarPunto(ang, p1, r1);
+		rotarPunto(ang, bNormales[i], n1);
+		rotarPunto(ang, p2, r2);
+		rotarPunto(ang, bNormales[i+1], n2);
+
+		ang=(j+1)*360.0*c/cantCortes;
+		rotarPunto(ang, p1, r3);
+		rotarPunto(ang, bNormales[i], n3);
+		rotarPunto(ang, p2, r4);
+		rotarPunto(ang, bNormales[i+1], n4);
+
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+			glScalef(0.5,0.5,0.6);
+			//Vista Perspectiva Sombreada
+			vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
+		glPopMatrix();
+
+
+		/// Vista de luces
+		/*viewport(0, 0, wancho/2, walto/2);
+		
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+			gluLookAt(0.0,1.0,0.0,
+					  0.0,-1.0,0.0,
+					  0.0,0.0,1.0);
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+			glOrtho(-2.0, 2.0, -2.0 , 2.0, -1.0, 1.0);
+			vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();*/
+					
+		}
+	}
+
+
+}
+//Sobrecarga utilizada anteriormente
+void Solido::dibujar_solido(Punto* bPuntos, int nPuntos,
 					 int wancho, int walto){
 	double ang, c; 
 	Punto p1, p2, r1,r2,r3,r4, n1, n2, n3, n4;
@@ -166,6 +242,29 @@ void Solido:: vistaSombreada(const Punto& r1, const Punto& r2,
 	glEnd();
 }
 
+//Calcula las normales de la superficie del solido
+void Solido::calcularNormales(){
+
+	double dery, mag;
+	
+
+	for(int i = 0; i < puntos.size(); i++) {
+		if (i == 0) 
+			dery = (puntos[i+1]->y - puntos[i]->y)/0.1;
+		else if (i == puntos.size()-1) 
+			dery = (puntos[i]->y - puntos[i-1]->y)/0.1;
+		
+ 		else   
+			dery = (puntos[i+1]->y - puntos[i-1]->y)/(2*0.1);
+		
+		mag = sqrt(1.0+dery*dery);
+		bNormales[i].y = -dery/mag;
+		bNormales[i].x = 1.0/mag;
+		bNormales[i].z = 0.0;	
+	}
+}
+
+//Sobrecarga utilizada anteriormente
 void Solido:: calcularNormales(Punto* bPuntos, int nPuntos){
 	
 	double dery, mag; 
@@ -185,6 +284,21 @@ void Solido:: calcularNormales(Punto* bPuntos, int nPuntos){
 	}
 	
 }
+//Calcula el Diametro del Solido
+double Solido::calcularDiametro(){
+	Punto* punto;
+	double ndist=0,distmax=0;
+	for (int i=0; i<puntos.size(); i++){
+		punto=puntos[i];
+		ndist=posicion.distancia(*punto);
+		if (ndist>distmax) distmax=ndist;
+	}
+
+	return (distmax*2);
+}
+
+
+
 /************************************************************************************************/
 Punto Solido::getPosicion() const{
 	return posicion;

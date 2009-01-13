@@ -8,7 +8,7 @@
 GLenum Iluminacion:: eluces[8] = {GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3,
 						  GL_LIGHT4, GL_LIGHT5, GL_LIGHT6, GL_LIGHT7};
 
-#include <iostream>
+//#include <iostream>
 #include <GL\glut.h> 
 //////////////////////////////////////////////////////////////////////
 

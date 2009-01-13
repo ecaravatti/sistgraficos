@@ -7,6 +7,7 @@
 #include <GL\glut.h> 
 #include <stdlib.h>
 #include <list>
+#include <vector>
 #include "VistaCorteModelo.h"
 #include "LSolidos.h"
 #include "Iluminacion.h"
@@ -24,10 +25,9 @@ static int wancho;
 static int walto;
 
 // Variables
-LSolidos lSolidos;
+std::list<Solido*> lsolid;
 VistaCorteModelo vcm;
 Iluminacion iluminacion;
-Solido solido;
 Material material;
 
 static const int cortes = 20;
@@ -161,7 +161,7 @@ void display(void)
     glLoadIdentity();
 	///
 	
-	std:: list<RegSolido*>::iterator it;
+	std::list<Solido*>::iterator ite;
 
 	glViewport(0,0,wancho,walto);
 	glDisable(GL_LIGHTING);
@@ -189,7 +189,6 @@ void display(void)
 	glLoadIdentity();
 		gluLookAt(0.0,0.0,3.0, 0.0,0.0,0.0, 0.0,1.0,0.0);
 		
-		
 		glPushMatrix();
 			glTranslatef (-0.75, -0.7, 0.0);
 			glRotatef((GLfloat) -60, 1.0, 0.0, 0.0);
@@ -197,24 +196,23 @@ void display(void)
 		glPopMatrix();
 
 	float desp = 0.7;
-	int i = 0;
-	std:: cout<<"Cantidad de elementos: "<<lSolidos.lista.size()<<std:: endl;
-	for (it = lSolidos.lista.begin(); it != lSolidos.lista.end(); it++){
-			glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-			solido.setCantCortes(cortes);
+	desp=0;
 
+
+	for (ite=lsolid.begin();ite!=lsolid.end();ite++){
+		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+		(*ite)->setCantCortes(cortes);
+		
 		glPushMatrix();
 			glRotatef((GLfloat) 60, 1.0, 0.0, 0.0);
 			iluminacion.luces();
-		glPushMatrix();
-			material.material();
-			glScalef(0.3,0.3,0.3);
-			glTranslatef(i*desp, i*desp, 0);
-			solido.solido((*it)->bPuntos, (*it)->cantPuntos,
-						  wancho, walto);
+			glPushMatrix();
+
+				material.material();
+				glScalef(0.3,0.3,0.3);
+				(*ite)->dibujar_solido(wancho,walto);
+			glPopMatrix();
 		glPopMatrix();
-		glPopMatrix();
-		i++;
 	}
 
 	glDisable(GL_LIGHTING);
@@ -235,15 +233,20 @@ void display(void)
 		
 		Curva* generatriz2 = vcm.getCurvaGeneratriz();
 		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-		solido.setCantCortes(cortes);
 
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
 			material.material();
 			glScalef(0.3,0.3,0.3);
 			glRotatef((GLfloat) 90, 1.0, 0.0, 0.0);
-			solido.solido(generatriz2->getBufferPtosDisc(), generatriz2->getCantPtosDisc(),
-						  wancho, walto);
+			//solido.dibujar_solido(generatriz2->getBufferPtosDisc(), generatriz2->getCantPtosDisc(),
+			//			  wancho, walto);
+
+			for (ite=lsolid.begin();ite!=lsolid.end();ite++){
+				glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+				(*ite)->setCantCortes(cortes);
+				(*ite)->dibujar_solido(wancho,walto);
+			}
 		glPopMatrix();
 		glPopMatrix();
 		
@@ -267,12 +270,6 @@ void controlMouse(int button, int state, int x, int y){
 		/// Para agregar punto en el viewport 3
 			normalizar(x,y,pto);
 			vcm.guardarPunto(pto);
-			RegSolido *reg2 = lSolidos.lista.back(),
-			*reg = new RegSolido(reg2->posx, reg2->posy, vcm.getCurvaGeneratriz()->getCantPtosDisc(), 
-					   vcm.getCurvaGeneratriz()->getBufferPtosDisc());
-			delete reg2;
-			lSolidos.lista.pop_back();
-			lSolidos.lista.push_back(reg);
 			glutPostRedisplay();
 		}
 		else if ( x >= 0 && x <= wancho/2 && y >= walto/2 && y < walto 
@@ -281,6 +278,21 @@ void controlMouse(int button, int state, int x, int y){
 			posy = (float)(walto*5/6 - y)/walto*6;
 			material.sigMaterial();
 			/*if (iluminacion.agregarLuz(posx, posy))*/
+			
+			int cantPuntos=vcm.getCurvaGeneratriz()->getCantPtosDisc();
+			if (cantPuntos>=2){
+				Punto* nuevo_punto;
+				Punto* vPuntos =new Punto[cantPuntos];
+				vPuntos=vcm.getCurvaGeneratriz()->getBufferPtosDisc();
+				std::vector<Punto*> vec;
+				for (int i=0;i <cantPuntos; i++){
+					nuevo_punto=new Punto(vPuntos[i]);
+					vec.push_back(nuevo_punto);
+				}
+				Solido* solido=new Solido(x,y,vec);
+				lsolid.push_back(solido);
+				vcm.limpiarVista();
+			}
 			glutPostRedisplay();
 		}
 	}
@@ -298,6 +310,7 @@ void controlMouse(int button, int state, int x, int y){
 }
 
 void controlMovimientoMouse(int x, int y){
+	//std::cout<<"posicion:"<<x<<","<<y<<std::endl;
 }
 
 void keyboard(unsigned char key, int x, int y)
@@ -319,10 +332,22 @@ void keyboard(unsigned char key, int x, int y)
 	///Para agregar solido
 	case 's':
 	case 'S':	{
-				RegSolido* reg = new RegSolido(0, 0, 0, NULL);
-				lSolidos.lista.push_back(reg);
-				vcm.limpiarVista();
+				int cantPuntos=vcm.getCurvaGeneratriz()->getCantPtosDisc();
+				if (cantPuntos>=2){
+					Punto* nuevo_punto;
+					Punto* vPuntos =new Punto[cantPuntos];
+					vPuntos=vcm.getCurvaGeneratriz()->getBufferPtosDisc();
+					std::vector<Punto*> vec;
+					for (int i=0;i <cantPuntos; i++){
+						nuevo_punto=new Punto(vPuntos[i]);
+						vec.push_back(nuevo_punto);
+					}
+					Solido* solido=new Solido(x,y,vec);
+					lsolid.push_back(solido);
+					vcm.limpiarVista();
 				}
+				glutPostRedisplay();
+			}
 	}
 
 	glutPostRedisplay();
@@ -330,8 +355,8 @@ void keyboard(unsigned char key, int x, int y)
 
 /*-----------------------------------------------------------------------------*/
 void inicializarLista(){
-	RegSolido* reg = new RegSolido(0, 0, 0, NULL);
-	lSolidos.lista.push_back(reg);	
+	//RegSolido* reg = new RegSolido(0, 0, 0, NULL);
+	//lSolidos.lista.push_back(reg);	
 }
 
 void uso(){
