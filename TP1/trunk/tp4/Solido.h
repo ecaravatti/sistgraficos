@@ -26,14 +26,14 @@ private:
 
 public:
 	Solido();
-	Solido(int posx, int posy,std::vector<Punto*> bPuntos);
+	Solido(float posx, float posy,std::vector<Punto*> bPuntos);
 	virtual ~Solido();
 	static void cambiarVista(){
 		vista=!vista;
 	}
 ///getters y setters
 	void setCantCortes(int nueva);
-
+	void setPosicion(float posx,float posy,float posz);
 	/// Para dibujar los solidos
 	void dibujar_solido(int wancho, int walto);
 	void dibujar_solido(Punto* bPuntos, int nPuntos,

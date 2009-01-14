@@ -28,6 +28,8 @@ static bool modo_click=true;
 static bool click_timeout=true;
 
 // Variables
+//Solido* solido2;
+//bool funcionando=false;
 std::list<Solido*> lsolid;
 VistaCorteModelo vcm;
 Iluminacion iluminacion;
@@ -198,8 +200,6 @@ void display(void)
 			tablero(true);
 		glPopMatrix();
 
-	float desp = 0.7;
-	desp=0;
 
 	material.primero();
 	for (ite=lsolid.begin();ite!=lsolid.end();ite++){
@@ -268,16 +268,14 @@ void display(void)
 
 void funcionTimer(int numero){
 	click_timeout=true;
+	//funcionando=true;
 }
 
 void controlMouse(int button, int state, int x, int y){
 	Punto pto;
-	//float posx, posy;
+	float posx, posy;
 
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
-		//
-		//TODO: Falta controlar doble click por tiempo y GLUT_DOWN
-		//
 		if ( x >= wancho/2 && x <= wancho && y >= walto*2/3 && y < walto) {
 		/// Para agregar punto en el viewport 3
 			normalizar(x,y,pto);
@@ -294,8 +292,10 @@ void controlMouse(int button, int state, int x, int y){
 				return;
 			}
 			//material.sigMaterial();
-			//posx = (float)(x - wancho/4)/wancho*4;
-			//posy = (float)(walto*5/6 - y)/walto*6;
+			std::cout<<"x,y"<<x<<","<<y<<std::endl;
+			posx = (float)(x - wancho/4)/wancho*4;
+			posy = (float)(walto*5/6 - y)/walto*6;
+			std::cout<<"posx,posy"<<posx<<","<<posy<<std::endl;
 			/*if (iluminacion.agregarLuz(posx, posy))*/
 			if (modo_click==INSTANCE) {
 				int cantPuntos=vcm.getCurvaGeneratriz()->getCantPtosDisc();
@@ -308,7 +308,9 @@ void controlMouse(int button, int state, int x, int y){
 						nuevo_punto=new Punto(vPuntos[i]);
 						vec.push_back(nuevo_punto);
 					}
-					Solido* solido=new Solido(x,y,vec);
+					//Solido* solido=new Solido(x,y,vec);
+					Solido* solido=new Solido(posx,posy,vec);
+					//solido2=solido;
 					lsolid.push_back(solido);
 					vcm.limpiarVista();
 				}
@@ -330,7 +332,16 @@ void controlMouse(int button, int state, int x, int y){
 }
 
 void controlMovimientoMouse(int x, int y){
-	//std::cout<<"posicion:"<<x<<","<<y<<std::endl;
+	/*
+	std::cout<<"posicion:"<<x<<","<<y<<std::endl;
+	float posx,posy;
+	posx = (float)(x - wancho/4)/wancho*4;
+	posy = (float)(walto*5/6 - y)/walto*6;
+	if (funcionando){
+		solido2->setPosicion(posx,posy,0);
+		glutPostRedisplay();
+	}
+	*/
 }
 
 void keyboard(unsigned char key, int x, int y)
@@ -372,27 +383,6 @@ void keyboard(unsigned char key, int x, int y)
 					break;
 				}
 			}
-				
-
-	///Para agregar solido
-	case 's':
-	case 'S':	{
-				int cantPuntos=vcm.getCurvaGeneratriz()->getCantPtosDisc();
-				if (cantPuntos>=2){
-					Punto* nuevo_punto;
-					Punto* vPuntos =new Punto[cantPuntos];
-					vPuntos=vcm.getCurvaGeneratriz()->getBufferPtosDisc();
-					std::vector<Punto*> vec;
-					for (int i=0;i <cantPuntos; i++){
-						nuevo_punto=new Punto(vPuntos[i]);
-						vec.push_back(nuevo_punto);
-					}
-					Solido* solido=new Solido(x,y,vec);
-					lsolid.push_back(solido);
-					vcm.limpiarVista();
-				}
-				glutPostRedisplay();
-			}
 	}
 
 	glutPostRedisplay();
@@ -426,7 +416,7 @@ int main(int argc, char** argv)
    LoadTextures();
 
    glutMouseFunc(controlMouse);
-   glutMotionFunc(controlMovimientoMouse);
+   glutPassiveMotionFunc(controlMovimientoMouse);
    glutKeyboardFunc(keyboard);
    glutDisplayFunc(display); 
    glutReshapeFunc(reshape); 

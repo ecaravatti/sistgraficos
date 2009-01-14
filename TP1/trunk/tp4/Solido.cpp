@@ -17,7 +17,7 @@ bool Solido::vista=true;
 //////////////////////////////////////////////////////////////////////
 
 
-Solido::Solido(int posx, int posy,std::vector<Punto*> bPuntos)
+Solido::Solido(float posx, float posy,std::vector<Punto*> bPuntos)
 {	
 	this->posicion.x=posx;
 	this->posicion.y=posy;
@@ -31,7 +31,19 @@ Solido::Solido(int posx, int posy,std::vector<Punto*> bPuntos)
 
 Solido::~Solido()
 {
+	std::vector<Punto*>::iterator it;
+	for (it=puntos.begin(); it!=puntos.end(); it++)
+		delete (*it);
+	puntos.clear();
+	for (it=normales.begin(); it!=normales.end(); it++)
+		delete (*it);
+	normales.clear();
 
+}
+void Solido::setPosicion(float posx,float posy,float posz){
+	this->posicion.x=posx;
+	this->posicion.y=posy;
+	this->posicion.z=posz;
 }
 //Metodo q dibuja al solido
 void Solido::dibujar_solido(int wancho, int walto){
@@ -52,6 +64,10 @@ void Solido::dibujar_solido(int wancho, int walto){
 		p2.y = puntos[i+1]->y; 
 		p2.z = puntos[i+1]->z;
 		
+		glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+				glScalef(0.5,0.5,0.6);
+				glTranslatef(-this->posicion.y,this->posicion.z,-this->posicion.x);
 		for (j=0; j<=cantCortes-1;j++){
 
 			ang=j*360.0*c/cantCortes; //angulo de la curva a calcular
@@ -66,16 +82,17 @@ void Solido::dibujar_solido(int wancho, int walto){
 			rotarPunto(ang, p2, r4);
 			rotarPunto(ang, *(normales[i+1]), n4);
 
-			glMatrixMode(GL_MODELVIEW);
-			glPushMatrix();
-				glScalef(0.5,0.5,0.6);
+			//glMatrixMode(GL_MODELVIEW);
+			//glPushMatrix();
+			//	glScalef(0.5,0.5,0.6);
+			//	glTranslatef(this->posicion.x,this->posicion.y,this->posicion.z);
 				//vista sombreada o alambre segun seleccion
 				if (Solido::vista==true)
 					vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
 				else
 					vistaAlambres(r1,r2,r3,r4);
 				//
-			glPopMatrix();
+			//glPopMatrix();
 
 		// Vista de luces
 		/*viewport(0, 0, wancho/2, walto/2);
@@ -94,6 +111,7 @@ void Solido::dibujar_solido(int wancho, int walto){
 		glPopMatrix();*/
 					
 		}
+		glPopMatrix();
 	}
 
 }
