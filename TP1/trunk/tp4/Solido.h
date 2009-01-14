@@ -17,16 +17,20 @@ class Solido
 {
 private:
 	int cantCortes;
-	Punto* bNormales;
+	std::vector<Punto*> normales;
+	//Punto* bNormales;
 	std::vector<Punto*> puntos;
 	Punto posicion;				//TODO: Setear posicion
 	double diametro;			//		Setear diametro del cilindro que lo rodea
+	static bool vista;
 
 public:
 	Solido();
 	Solido(int posx, int posy,std::vector<Punto*> bPuntos);
 	virtual ~Solido();
-
+	static void cambiarVista(){
+		vista=!vista;
+	}
 ///getters y setters
 	void setCantCortes(int nueva);
 

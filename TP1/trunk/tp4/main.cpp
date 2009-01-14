@@ -18,11 +18,13 @@
 char caption[]="Sistema Gráficos - 66.71 - 2007c1";
 
 #include <iostream>
-
+#define INSTANCE true
+#define SHOOT false
 
 // Declaraciones de variables
 static int wancho; 
 static int walto;
+static bool modo_click=true;
 
 // Variables
 std::list<Solido*> lsolid;
@@ -263,7 +265,7 @@ void display(void)
 
 void controlMouse(int button, int state, int x, int y){
 	Punto pto;
-	float posx, posy;
+	//float posx, posy;
 
 	if (button == GLUT_LEFT_BUTTON){
 		if ( x >= wancho/2 && x <= wancho && y >= walto*2/3 && y < walto) {
@@ -274,24 +276,25 @@ void controlMouse(int button, int state, int x, int y){
 		}
 		else if ( x >= 0 && x <= wancho/2 && y >= walto/2 && y < walto 
 				  && iluminacion.getCantLuces() <= 7){
-			posx = (float)(x - wancho/4)/wancho*4;
-			posy = (float)(walto*5/6 - y)/walto*6;
+			//posx = (float)(x - wancho/4)/wancho*4;
+			//posy = (float)(walto*5/6 - y)/walto*6;
 			material.sigMaterial();
 			/*if (iluminacion.agregarLuz(posx, posy))*/
-			
-			int cantPuntos=vcm.getCurvaGeneratriz()->getCantPtosDisc();
-			if (cantPuntos>=2){
-				Punto* nuevo_punto;
-				Punto* vPuntos =new Punto[cantPuntos];
-				vPuntos=vcm.getCurvaGeneratriz()->getBufferPtosDisc();
-				std::vector<Punto*> vec;
-				for (int i=0;i <cantPuntos; i++){
-					nuevo_punto=new Punto(vPuntos[i]);
-					vec.push_back(nuevo_punto);
+			if (modo_click==INSTANCE) {
+				int cantPuntos=vcm.getCurvaGeneratriz()->getCantPtosDisc();
+				if (cantPuntos>=2){
+					Punto* nuevo_punto;
+					Punto* vPuntos =new Punto[cantPuntos];
+					vPuntos=vcm.getCurvaGeneratriz()->getBufferPtosDisc();
+					std::vector<Punto*> vec;
+					for (int i=0;i <cantPuntos; i++){
+						nuevo_punto=new Punto(vPuntos[i]);
+						vec.push_back(nuevo_punto);
+					}
+					Solido* solido=new Solido(x,y,vec);
+					lsolid.push_back(solido);
+					vcm.limpiarVista();
 				}
-				Solido* solido=new Solido(x,y,vec);
-				lsolid.push_back(solido);
-				vcm.limpiarVista();
 			}
 			glutPostRedisplay();
 		}
@@ -321,6 +324,13 @@ void keyboard(unsigned char key, int x, int y)
 				vcm.destruir();
 				exit (1);
 				break;
+
+	case 'v':
+	case 'V':	
+				//Cambia modo a modo sombreado/alambre
+				Solido::cambiarVista();
+				break;
+
 	case 'm':
 	case 'M':
 				material.sigMaterial();
@@ -329,6 +339,24 @@ void keyboard(unsigned char key, int x, int y)
 	case 'P':
 				vcm.limpiarVista();
 				break;
+	case 'c':
+	case 'C': //Cambia la interpretacion de los clicks en el viewport 2
+			  //instanciacion de solidos o disparo de pelota
+			  //true: solidos   |    false: disparo
+			{
+				if (modo_click==SHOOT) {
+					modo_click=INSTANCE;
+					std::cout<<"Se paso a modo INSTANCE"<<std::endl;
+					break;
+				}
+				if (modo_click==INSTANCE){
+					modo_click=SHOOT;
+					std::cout<<"Se paso a modo SHOOT"<<std::endl;
+					break;
+				}
+			}
+				
+
 	///Para agregar solido
 	case 's':
 	case 'S':	{
@@ -363,6 +391,8 @@ void uso(){
 	std::cout<<"Presione t...Para cambiar textura "<<std::endl;
 	std::cout<<"Presione l...Para eliminar todas las luces"<<std::endl;
 	std::cout<<"Presione p...Para eliminar todos los puntos de control"<<std::endl;
+	std::cout<<"Presione c...Para cambiar a modo disparo/instanciacion"<<std::endl;
+	std::cout<<"Presione v...Para cambiar a vista sombreada/alambre"<<std::endl;
 }
 
 int main(int argc, char** argv)

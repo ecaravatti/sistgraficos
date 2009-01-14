@@ -10,23 +10,21 @@
 #ifndef NULL
 #define NULL 0
 #endif
+
+bool Solido::vista=true;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-Solido::Solido():cantCortes(0),
-				 bNormales(NULL)
-{
-
-}
 
 Solido::Solido(int posx, int posy,std::vector<Punto*> bPuntos)
 {	
 	this->posicion.x=posx;
 	this->posicion.y=posy;
 	this->puntos=bPuntos;
-	bNormales = new Punto[puntos.size() + 1];
 	this->diametro=calcularDiametro();
+	this->calcularNormales();
+	
 	std::cout<<"Posicion:"<<posicion.x<<","<<posicion.y<<std::endl;
 	std::cout<<"Diametro:"<<this->diametro<<std::endl;
 }
@@ -44,9 +42,6 @@ void Solido::dibujar_solido(int wancho, int walto){
 
 	c=3.14159/180.0; //grados a radianes
 	
-	
-	this->calcularNormales();
-	
 	for (i=0; i< puntos.size() - 1 ; i++){
 
 		p1.x = (puntos[i]->x + 1)/2;
@@ -56,90 +51,33 @@ void Solido::dibujar_solido(int wancho, int walto){
 		p2.x = (puntos[i+1]->x + 1)/2; 
 		p2.y = puntos[i+1]->y; 
 		p2.z = puntos[i+1]->z;
-
-		
-	for (j=0; j<=cantCortes-1;j++){
-
-		ang=j*360.0*c/cantCortes; //angulo de la curva a calcular
-		rotarPunto(ang, p1, r1);
-		rotarPunto(ang, bNormales[i], n1);
-		rotarPunto(ang, p2, r2);
-		rotarPunto(ang, bNormales[i+1], n2);
-
-		ang=(j+1)*360.0*c/cantCortes;
-		rotarPunto(ang, p1, r3);
-		rotarPunto(ang, bNormales[i], n3);
-		rotarPunto(ang, p2, r4);
-		rotarPunto(ang, bNormales[i+1], n4);
-
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-			glScalef(0.5,0.5,0.6);
-			//Vista Perspectiva Sombreada
-			vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
-		glPopMatrix();
-
-
-		/// Vista de luces
-		/*viewport(0, 0, wancho/2, walto/2);
-		
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-			gluLookAt(0.0,1.0,0.0,
-					  0.0,-1.0,0.0,
-					  0.0,0.0,1.0);
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-			glOrtho(-2.0, 2.0, -2.0 , 2.0, -1.0, 1.0);
-			vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();*/
-					
-		}
-	}
-
-
-}
-//Sobrecarga utilizada anteriormente
-void Solido::dibujar_solido(Punto* bPuntos, int nPuntos,
-					 int wancho, int walto){
-	double ang, c; 
-	Punto p1, p2, r1,r2,r3,r4, n1, n2, n3, n4;
-	int i, j;
-
-	c=3.14159/180.0; //grados a radianes
-	
-	if (bNormales != NULL) delete [] bNormales;
-	bNormales = new Punto[nPuntos + 1];
-	
-	this->calcularNormales(bPuntos, nPuntos);
-	
-		for (i=0; i< nPuntos - 1 ; i++){
-
-		p1.x = (bPuntos[i].x + 1)/2; p1.y = bPuntos[i].y; p1.z = bPuntos[i-1].z;
-		p2.x = (bPuntos[i+1].x + 1)/2; p2.y = bPuntos[i+1].y; p2.z = bPuntos[i+1].z;
-
 		
 		for (j=0; j<=cantCortes-1;j++){
 
-		ang=j*360.0*c/cantCortes; //angulo de la curva a calcular
-		rotarPunto(ang, p1, r1);
-		rotarPunto(ang, bNormales[i], n1);
-		rotarPunto(ang, p2, r2);
-		rotarPunto(ang, bNormales[i+1], n2);
+			ang=j*360.0*c/cantCortes; //angulo de la curva a calcular
+			rotarPunto(ang, p1, r1);
+			rotarPunto(ang, *(normales[i]), n1);
+			rotarPunto(ang, p2, r2);
+			rotarPunto(ang, *(normales[i+1]), n2);
 
-		ang=(j+1)*360.0*c/cantCortes;
-		rotarPunto(ang, p1, r3);
-		rotarPunto(ang, bNormales[i], n3);
-		rotarPunto(ang, p2, r4);
-		rotarPunto(ang, bNormales[i+1], n4);
+			ang=(j+1)*360.0*c/cantCortes;
+			rotarPunto(ang, p1, r3);
+			rotarPunto(ang, *(normales[i]), n3);
+			rotarPunto(ang, p2, r4);
+			rotarPunto(ang, *(normales[i+1]), n4);
 
-		
-		//Vista Perspectiva Sombreada
-		vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
+			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+				glScalef(0.5,0.5,0.6);
+				//vista sombreada o alambre segun seleccion
+				if (Solido::vista==true)
+					vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
+				else
+					vistaAlambres(r1,r2,r3,r4);
+				//
+			glPopMatrix();
 
-		/// Vista de luces
+		// Vista de luces
 		/*viewport(0, 0, wancho/2, walto/2);
 		
 		glMatrixMode(GL_MODELVIEW);
@@ -157,8 +95,6 @@ void Solido::dibujar_solido(Punto* bPuntos, int nPuntos,
 					
 		}
 	}
-
-
 
 }
 
@@ -202,7 +138,7 @@ void Solido:: calcularNormal(const Punto &v1, const Punto &v2, const Punto &v3, 
 
 }
 
-void Solido:: vistaAlambres(const Punto& r1, const Punto& r2, const Punto& r3,
+void Solido::vistaAlambres(const Punto& r1, const Punto& r2, const Punto& r3,
 				   const Punto& r4){
 	glDisable(GL_LIGHTING);
 	glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
@@ -246,7 +182,7 @@ void Solido:: vistaSombreada(const Punto& r1, const Punto& r2,
 void Solido::calcularNormales(){
 
 	double dery, mag;
-	
+	Punto* normal;
 
 	for(int i = 0; i < puntos.size(); i++) {
 		if (i == 0) 
@@ -258,32 +194,16 @@ void Solido::calcularNormales(){
 			dery = (puntos[i+1]->y - puntos[i-1]->y)/(2*0.1);
 		
 		mag = sqrt(1.0+dery*dery);
-		bNormales[i].y = -dery/mag;
-		bNormales[i].x = 1.0/mag;
-		bNormales[i].z = 0.0;	
+
+		normal=new Punto();
+		normal->y=-dery/mag;
+		normal->x=1.0/mag;
+		normal->z=0.0;
+		normales.push_back(normal);
 	}
 }
 
-//Sobrecarga utilizada anteriormente
-void Solido:: calcularNormales(Punto* bPuntos, int nPuntos){
-	
-	double dery, mag; 
-	for(int i = 0; i < nPuntos; i++) {
-		if (i == 0) 
-			dery = (bPuntos[i+1].y - bPuntos[i].y)/0.1;
-		else if (i == nPuntos -1) 
-			dery = (bPuntos[i].y - bPuntos[i-1].y)/0.1;
-		
- 		else   
-			dery = (bPuntos[i+1].y - bPuntos[i-1].y)/(2*0.1);
-		
-		mag = sqrt(1.0+dery*dery);
-		bNormales[i].y = -dery/mag;
-		bNormales[i].x = 1.0/mag;
-		bNormales[i].z = 0.0;	
-	}
-	
-}
+
 //Calcula el Diametro del Solido
 double Solido::calcularDiametro(){
 	Punto* punto;
@@ -308,3 +228,90 @@ Punto Solido::getPosicion() const{
 double Solido::getDiametro() const{
 	return diametro;
 }
+
+/************************************************************************************************/
+/*
+Solido::Solido():cantCortes(0),
+				 bNormales(NULL)
+{
+
+}
+*/
+//Sobrecarga utilizada anteriormente
+//void Solido::dibujar_solido(Punto* bPuntos, int nPuntos,
+//					 int wancho, int walto){
+//	double ang, c; 
+//	Punto p1, p2, r1,r2,r3,r4, n1, n2, n3, n4;
+//	int i, j;
+//
+//	c=3.14159/180.0; //grados a radianes
+//	
+//	if (bNormales != NULL) delete [] bNormales;
+//	bNormales = new Punto[nPuntos + 1];
+//	
+//	this->calcularNormales(bPuntos, nPuntos);
+//	
+//		for (i=0; i< nPuntos - 1 ; i++){
+//
+//		p1.x = (bPuntos[i].x + 1)/2; p1.y = bPuntos[i].y; p1.z = bPuntos[i-1].z;
+//		p2.x = (bPuntos[i+1].x + 1)/2; p2.y = bPuntos[i+1].y; p2.z = bPuntos[i+1].z;
+//
+//		
+//		for (j=0; j<=cantCortes-1;j++){
+//
+//		ang=j*360.0*c/cantCortes; //angulo de la curva a calcular
+//		rotarPunto(ang, p1, r1);
+//		rotarPunto(ang, bNormales[i], n1);
+//		rotarPunto(ang, p2, r2);
+//		rotarPunto(ang, bNormales[i+1], n2);
+//
+//		ang=(j+1)*360.0*c/cantCortes;
+//		rotarPunto(ang, p1, r3);
+//		rotarPunto(ang, bNormales[i], n3);
+//		rotarPunto(ang, p2, r4);
+//		rotarPunto(ang, bNormales[i+1], n4);
+//
+//		
+		//Vista Perspectiva Sombreada
+//		vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
+//
+		/// Vista de luces
+//		/*viewport(0, 0, wancho/2, walto/2);
+		
+//		glMatrixMode(GL_MODELVIEW);
+//		glPushMatrix();
+//			gluLookAt(0.0,1.0,0.0,
+//					  0.0,-1.0,0.0,
+//					  0.0,0.0,1.0);
+//		glMatrixMode(GL_PROJECTION);
+//		glPushMatrix();
+//			glOrtho(-2.0, 2.0, -2.0 , 2.0, -1.0, 1.0);
+//			vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
+//		glPopMatrix();
+//		glMatrixMode(GL_MODELVIEW);
+//		glPopMatrix();*/
+//					
+//		}
+//	}
+//}
+
+//Sobrecarga utilizada anteriormente
+//void Solido:: calcularNormales(Punto* bPuntos, int nPuntos){
+//	
+//	double dery, mag; 
+//	for(int i = 0; i < nPuntos; i++) {
+//		if (i == 0) 
+//			dery = (bPuntos[i+1].y - bPuntos[i].y)/0.1;
+//		else if (i == nPuntos -1) 
+//			dery = (bPuntos[i].y - bPuntos[i-1].y)/0.1;
+//		
+//		else   
+//			dery = (bPuntos[i+1].y - bPuntos[i-1].y)/(2*0.1);
+//		
+//		mag = sqrt(1.0+dery*dery);
+//		bNormales[i].y = -dery/mag;
+//		bNormales[i].x = 1.0/mag;
+//		bNormales[i].z = 0.0;	
+//	}
+//	
+//}
