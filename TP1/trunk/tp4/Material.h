@@ -23,7 +23,7 @@ public:
 	static GLfloat difuso[cantMat][4];
 	static GLfloat especular[cantMat][4];
 	static GLfloat brillo[cantMat];
-
+	void primero();
 	Material();
 	virtual ~Material();
 

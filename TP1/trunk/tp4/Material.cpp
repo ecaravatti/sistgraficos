@@ -49,6 +49,10 @@ void Material::sigMaterial(){
 	this->nroMaterial++;
 }
 
+void Material::primero(){
+	this->nroMaterial=0;
+}
+
 void Material::material(){
 	int mat = this->nroMaterial % cantMat;
 	glEnable(GL_COLOR_MATERIAL);	//Se activa lo materiales de color

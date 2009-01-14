@@ -25,6 +25,7 @@ char caption[]="Sistema Gráficos - 66.71 - 2007c1";
 static int wancho; 
 static int walto;
 static bool modo_click=true;
+static bool click_timeout=true;
 
 // Variables
 std::list<Solido*> lsolid;
@@ -200,8 +201,9 @@ void display(void)
 	float desp = 0.7;
 	desp=0;
 
-
+	material.primero();
 	for (ite=lsolid.begin();ite!=lsolid.end();ite++){
+		material.sigMaterial();
 		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 		(*ite)->setCantCortes(cortes);
 		
@@ -238,13 +240,15 @@ void display(void)
 
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
-			material.material();
+		material.primero();
 			glScalef(0.3,0.3,0.3);
 			glRotatef((GLfloat) 90, 1.0, 0.0, 0.0);
 			//solido.dibujar_solido(generatriz2->getBufferPtosDisc(), generatriz2->getCantPtosDisc(),
 			//			  wancho, walto);
 
 			for (ite=lsolid.begin();ite!=lsolid.end();ite++){
+				material.sigMaterial();
+				material.material();
 				glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 				(*ite)->setCantCortes(cortes);
 				(*ite)->dibujar_solido(wancho,walto);
@@ -262,12 +266,18 @@ void display(void)
 
 }
 
+void funcionTimer(int numero){
+	click_timeout=true;
+}
 
 void controlMouse(int button, int state, int x, int y){
 	Punto pto;
 	//float posx, posy;
 
-	if (button == GLUT_LEFT_BUTTON){
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
+		//
+		//TODO: Falta controlar doble click por tiempo y GLUT_DOWN
+		//
 		if ( x >= wancho/2 && x <= wancho && y >= walto*2/3 && y < walto) {
 		/// Para agregar punto en el viewport 3
 			normalizar(x,y,pto);
@@ -275,10 +285,17 @@ void controlMouse(int button, int state, int x, int y){
 			glutPostRedisplay();
 		}
 		else if ( x >= 0 && x <= wancho/2 && y >= walto/2 && y < walto 
-				  && iluminacion.getCantLuces() <= 7){
+				  && iluminacion.getCantLuces() <= 7)
+			{
+			//para detectar doble click
+			if (click_timeout){
+				click_timeout=false;
+				glutTimerFunc(300,funcionTimer, 1);
+				return;
+			}
+			//material.sigMaterial();
 			//posx = (float)(x - wancho/4)/wancho*4;
 			//posy = (float)(walto*5/6 - y)/walto*6;
-			material.sigMaterial();
 			/*if (iluminacion.agregarLuz(posx, posy))*/
 			if (modo_click==INSTANCE) {
 				int cantPuntos=vcm.getCurvaGeneratriz()->getCantPtosDisc();
@@ -299,7 +316,7 @@ void controlMouse(int button, int state, int x, int y){
 			glutPostRedisplay();
 		}
 	}
-	if (button == GLUT_RIGHT_BUTTON){
+	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN){
 		if ( x >= wancho/2 && x <= wancho && y >= walto/2 && y < walto){ 
 			vcm.limpiarVista();	
 			glutPostRedisplay();
