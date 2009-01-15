@@ -22,14 +22,13 @@ char caption[]="Sistema Gráficos - 66.71 - 2007c1";
 #define SHOOT false
 
 // Declaraciones de variables
+static int xv,yv=0;
 static int wancho; 
 static int walto;
 static bool modo_click=true;
 static bool click_timeout=true;
 
 // Variables
-//Solido* solido2;
-//bool funcionando=false;
 std::list<Solido*> lsolid;
 VistaCorteModelo vcm;
 Iluminacion iluminacion;
@@ -44,7 +43,7 @@ void normalizar(int x, int y, Punto &pto){
 	pto.x = (float)(x - (float)wancho*3/4)/(float)wancho*4;
 	pto.y = (float)(walto*5/6 - y)/walto*6;
 	pto.z = 0;
-}
+}	
 
 /*--------------------------------------------------------------------*/
 // Configura un viewport
@@ -87,7 +86,7 @@ void tablero(bool borde){
 				if ((i + j) % 2 == 0)
 					glColor3ub(c1.r, c1.g, c1.b);
 				else glColor3ub(c2.r, c2.g, c2.b);
-
+				
 				glVertex3d(i*lado, j*lado, 0.0);
 				glVertex3d((i+1)*lado, j*lado, 0.0);
 				glVertex3d((i+1)*lado, (j+1)*lado, 0.0);
@@ -184,67 +183,63 @@ void display(void)
 	viewport(0, walto*1/3, wancho, walto*2/3);
 
 	glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-				gluPerspective( 45 ,		// Ángulo de visión
-				(float)walto/(float)wancho, // Razón entre el largo y el ancho, para calcular la perspectiva
-				1,					    // Cuan cerca se puede ver
-				2000);	
+	glPushMatrix();
+		gluPerspective( 45 ,		// Ángulo de visión
+		(float)walto/(float)wancho, // Razón entre el largo y el ancho, para calcular la perspectiva
+		1,					    // Cuan cerca se puede ver
+		2000);	
 				
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-		gluLookAt(0.0,0.0,3.0, 0.0,0.0,0.0, 0.0,1.0,0.0);
+	glPushMatrix();
+
+		/**********Vista horizontal Z=0 (Z clasico)**********/
+		/*gluLookAt(0.0,-3.0,0.0, 0.0,0.0,0.0, 0.0,0.0,1.0);*/
+		/*glTranslatef (-0.75, -0.7, 0.0);				    */
+	    /****************************************************/
 		
+		gluLookAt(0.75,-2.0,1.7, 0.75,0.7,0.0, 0.0,0.0,1.0); //Vista sin mover el tablero
+
+			
+		tablero(true);
+
+		material.primero();
+		iluminacion.luces();
+
 		glPushMatrix();
-			glTranslatef (-0.75, -0.7, 0.0);
-			glRotatef((GLfloat) -60, 1.0, 0.0, 0.0);
-			tablero(true);
-		glPopMatrix();
-
-
-	material.primero();
-	for (ite=lsolid.begin();ite!=lsolid.end();ite++){
-		material.sigMaterial();
-		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-		(*ite)->setCantCortes(cortes);
-		
-		glPushMatrix();
-			glRotatef((GLfloat) 60, 1.0, 0.0, 0.0);
-			iluminacion.luces();
-			glPushMatrix();
-
+			//glRotatef((GLfloat) 90, 1.0, 0.0, 0.0);
+			glScalef(0.2,0.2,0.2);
+			for (ite=lsolid.begin();ite!=lsolid.end();ite++){
+				material.sigMaterial();
+				glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+				(*ite)->setCantCortes(cortes);
 				material.material();
-				glScalef(0.3,0.3,0.3);
 				(*ite)->dibujar_solido(wancho,walto);
-			glPopMatrix();
+			}
 		glPopMatrix();
-	}
+	glPopMatrix();
 
 	glDisable(GL_LIGHTING);
 
 ///Viewport vista superior del tablero
 	viewport(0, 0, wancho/2, walto*1/3);
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-			gluLookAt(0.0,0.0,0.5, 
-				      0.0,0.0,0.0, 
-				      -1.0,0.0,0.0);
+	
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+		glLoadIdentity();
+		gluLookAt(0.75,1.0,3.0, 0.75,1.0,0.0, -1.0,0.0,0.0);		
+		/*******************Config vieja********************/
+		/*gluLookAt(0.0,0.0,3.5, 0.0,0.0,0.0, 0.0,1.0,0.0);*/
+		/*glRotatef((GLfloat) -90, 0.0, 0.0, 1.0);		   */	
+		/*glTranslatef (-0.75, -1.0, 0.0);//el bueno       */
+		/***************************************************/
+		tablero(false);
 
-			glMatrixMode(GL_MODELVIEW);
-				glPushMatrix();
-				    glTranslatef (-0.75, -1.0, 0.0);
-					tablero(false);
-				glPopMatrix();
-		
-		Curva* generatriz2 = vcm.getCurvaGeneratriz();
+
 		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 
-		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
-		material.primero();
-			glScalef(0.3,0.3,0.3);
-			glRotatef((GLfloat) 90, 1.0, 0.0, 0.0);
-			//solido.dibujar_solido(generatriz2->getBufferPtosDisc(), generatriz2->getCantPtosDisc(),
-			//			  wancho, walto);
+			material.primero();
+			glScalef(0.2,0.2,0.2); //Escalado del solido
 
 			for (ite=lsolid.begin();ite!=lsolid.end();ite++){
 				material.sigMaterial();
@@ -254,12 +249,12 @@ void display(void)
 				(*ite)->dibujar_solido(wancho,walto);
 			}
 		glPopMatrix();
-		glPopMatrix();
-		
-		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
+
+	glPopMatrix();
+
+
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
 	///
   	glutSwapBuffers();
 	///
@@ -268,7 +263,6 @@ void display(void)
 
 void funcionTimer(int numero){
 	click_timeout=true;
-	//funcionando=true;
 }
 
 void controlMouse(int button, int state, int x, int y){
@@ -291,11 +285,6 @@ void controlMouse(int button, int state, int x, int y){
 				glutTimerFunc(300,funcionTimer, 1);
 				return;
 			}
-			//material.sigMaterial();
-			std::cout<<"x,y"<<x<<","<<y<<std::endl;
-			posx = (float)(x - wancho/4)/wancho*4;
-			posy = (float)(walto*5/6 - y)/walto*6;
-			std::cout<<"posx,posy"<<posx<<","<<posy<<std::endl;
 			/*if (iluminacion.agregarLuz(posx, posy))*/
 			if (modo_click==INSTANCE) {
 				int cantPuntos=vcm.getCurvaGeneratriz()->getCantPtosDisc();
@@ -308,9 +297,11 @@ void controlMouse(int button, int state, int x, int y){
 						nuevo_punto=new Punto(vPuntos[i]);
 						vec.push_back(nuevo_punto);
 					}
-					//Solido* solido=new Solido(x,y,vec);
+
+					posy=(float)(-x+29)*(float)(10.0f/242.0f);
+					posx=(float)(y-438)*(float)(15.0f/242.0f);
+
 					Solido* solido=new Solido(posx,posy,vec);
-					//solido2=solido;
 					lsolid.push_back(solido);
 					vcm.limpiarVista();
 				}
@@ -332,16 +323,8 @@ void controlMouse(int button, int state, int x, int y){
 }
 
 void controlMovimientoMouse(int x, int y){
-	/*
-	std::cout<<"posicion:"<<x<<","<<y<<std::endl;
-	float posx,posy;
-	posx = (float)(x - wancho/4)/wancho*4;
-	posy = (float)(walto*5/6 - y)/walto*6;
-	if (funcionando){
-		solido2->setPosicion(posx,posy,0);
-		glutPostRedisplay();
-	}
-	*/
+	xv=x;
+	yv=y;
 }
 
 void keyboard(unsigned char key, int x, int y)
@@ -389,9 +372,7 @@ void keyboard(unsigned char key, int x, int y)
 }
 
 /*-----------------------------------------------------------------------------*/
-void inicializarLista(){
-	//RegSolido* reg = new RegSolido(0, 0, 0, NULL);
-	//lSolidos.lista.push_back(reg);	
+void inicializarLista(){	
 }
 
 void uso(){
@@ -407,7 +388,9 @@ int main(int argc, char** argv)
    inicializarLista();
    glutInit(&argc, argv);
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
-   glutInitWindowSize (600, 500); 
+   //glutInitWindowSize (600, 500);
+   glutInitWindowSize (600, 599);
+   
    glutInitWindowPosition (100, 100);
    glutCreateWindow (caption);
    init ();

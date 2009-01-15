@@ -28,7 +28,7 @@ Solido::Solido(float posx, float posy,std::vector<Punto*> bPuntos)
 	std::cout<<"Posicion:"<<posicion.x<<","<<posicion.y<<std::endl;
 	std::cout<<"Diametro:"<<this->diametro<<std::endl;
 }
-
+/**********************************************************************/
 Solido::~Solido()
 {
 	std::vector<Punto*>::iterator it;
@@ -40,11 +40,13 @@ Solido::~Solido()
 	normales.clear();
 
 }
+/**********************************************************************/
 void Solido::setPosicion(float posx,float posy,float posz){
 	this->posicion.x=posx;
 	this->posicion.y=posy;
 	this->posicion.z=posz;
 }
+/**********************************************************************/
 //Metodo q dibuja al solido
 void Solido::dibujar_solido(int wancho, int walto){
 
@@ -54,73 +56,71 @@ void Solido::dibujar_solido(int wancho, int walto){
 
 	c=3.14159/180.0; //grados a radianes
 	
-	for (i=0; i< puntos.size() - 1 ; i++){
-
-		p1.x = (puntos[i]->x + 1)/2;
-		p1.y = puntos[i]->y; 
-		p1.z = puntos[i]->z;
-
-		p2.x = (puntos[i+1]->x + 1)/2; 
-		p2.y = puntos[i+1]->y; 
-		p2.z = puntos[i+1]->z;
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+		glTranslatef(this->posicion.x,-this->posicion.y,this->posicion.z);
+		glTranslatef(0.0,0.0,1.0);
+		glRotatef((GLfloat) 90, 1.0, 0.0, 0.0);
 		
-		glMatrixMode(GL_MODELVIEW);
-			glPushMatrix();
-				glScalef(0.5,0.5,0.6);
-				glTranslatef(-this->posicion.y,this->posicion.z,-this->posicion.x);
-		for (j=0; j<=cantCortes-1;j++){
+		for (i=0; i< puntos.size() - 1 ; i++){
 
-			ang=j*360.0*c/cantCortes; //angulo de la curva a calcular
-			rotarPunto(ang, p1, r1);
-			rotarPunto(ang, *(normales[i]), n1);
-			rotarPunto(ang, p2, r2);
-			rotarPunto(ang, *(normales[i+1]), n2);
+			p1.x = (puntos[i]->x + 1)/2;
+			p1.y = puntos[i]->y; 
+			p1.z = puntos[i]->z;
 
-			ang=(j+1)*360.0*c/cantCortes;
-			rotarPunto(ang, p1, r3);
-			rotarPunto(ang, *(normales[i]), n3);
-			rotarPunto(ang, p2, r4);
-			rotarPunto(ang, *(normales[i+1]), n4);
+			p2.x = (puntos[i+1]->x + 1)/2; 
+			p2.y = puntos[i+1]->y; 
+			p2.z = puntos[i+1]->z;
+		
+			for (j=0; j<=cantCortes-1;j++){
 
-			//glMatrixMode(GL_MODELVIEW);
-			//glPushMatrix();
-			//	glScalef(0.5,0.5,0.6);
-			//	glTranslatef(this->posicion.x,this->posicion.y,this->posicion.z);
+				ang=j*360.0*c/cantCortes; //angulo de la curva a calcular
+				rotarPunto(ang, p1, r1);
+				rotarPunto(ang, *(normales[i]), n1);
+				rotarPunto(ang, p2, r2);
+				rotarPunto(ang, *(normales[i+1]), n2);
+
+				ang=(j+1)*360.0*c/cantCortes;
+				rotarPunto(ang, p1, r3);
+				rotarPunto(ang, *(normales[i]), n3);
+				rotarPunto(ang, p2, r4);
+				rotarPunto(ang, *(normales[i+1]), n4);
+
 				//vista sombreada o alambre segun seleccion
 				if (Solido::vista==true)
 					vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
 				else
 					vistaAlambres(r1,r2,r3,r4);
-				//
-			//glPopMatrix();
 
-		// Vista de luces
-		/*viewport(0, 0, wancho/2, walto/2);
+			// Vista de luces
+			/*viewport(0, 0, wancho/2, walto/2);
 		
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-			gluLookAt(0.0,1.0,0.0,
-					  0.0,-1.0,0.0,
-					  0.0,0.0,1.0);
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
+			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+				gluLookAt(0.0,1.0,0.0,
+						  0.0,-1.0,0.0,
+						  0.0,0.0,1.0);
+			glMatrixMode(GL_PROJECTION);
+			glPushMatrix();
 			glOrtho(-2.0, 2.0, -2.0 , 2.0, -1.0, 1.0);
 			vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();*/
-					
+			glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
+			glPopMatrix();*/		
+			}
 		}
-		glPopMatrix();
-	}
+	glPopMatrix();
 
 }
+
+/**********************************************************************/
 
 void Solido:: setCantCortes(int nueva){
 	this->cantCortes = nueva;
 }
 
-///----------------------------------------------------------------------
+/**********************************************************************/
+
 /// Metodos privados
 void Solido:: rotarPunto(const double angulo, const Punto& p_in, Punto& p_out){
 
@@ -130,6 +130,8 @@ void Solido:: rotarPunto(const double angulo, const Punto& p_in, Punto& p_out){
 	p_out.z = (p_in.x*sin(angulo) + p_in.z*cos(angulo));
 }
 
+/**********************************************************************/
+
 void Solido:: normalizar(Punto& normal){
 	double norm;
 
@@ -138,6 +140,8 @@ void Solido:: normalizar(Punto& normal){
 	normal.y = normal.y / norm;
 	normal.z = normal.z / norm;
 }
+
+/**********************************************************************/
 
 //Calcula el producto vectorial de dos vectores
 void Solido:: calcularNormal(const Punto &v1, const Punto &v2, const Punto &v3, Punto& normal){
@@ -156,6 +160,8 @@ void Solido:: calcularNormal(const Punto &v1, const Punto &v2, const Punto &v3, 
 
 }
 
+/**********************************************************************/
+
 void Solido::vistaAlambres(const Punto& r1, const Punto& r2, const Punto& r3,
 				   const Punto& r4){
 	glDisable(GL_LIGHTING);
@@ -167,6 +173,8 @@ void Solido::vistaAlambres(const Punto& r1, const Punto& r2, const Punto& r3,
 			glVertex3d(r3.x, r3.y, r3.z);
 		glEnd();
 }
+
+/**********************************************************************/
 
 void Solido:: vistaSombreada(const Punto& r1, const Punto& r2,
 							 const Punto& r3, const Punto& r4,
@@ -196,6 +204,8 @@ void Solido:: vistaSombreada(const Punto& r1, const Punto& r2,
 	glEnd();
 }
 
+/**********************************************************************/
+
 //Calcula las normales de la superficie del solido
 void Solido::calcularNormales(){
 
@@ -221,6 +231,7 @@ void Solido::calcularNormales(){
 	}
 }
 
+/**********************************************************************/
 
 //Calcula el Diametro del Solido
 double Solido::calcularDiametro(){
@@ -236,18 +247,18 @@ double Solido::calcularDiametro(){
 
 }
 
-
-
-/************************************************************************************************/
+/**********************************************************************/
 Punto Solido::getPosicion() const{
 	return posicion;
 }
+
+/**********************************************************************/
 
 double Solido::getDiametro() const{
 	return diametro;
 }
 
-/************************************************************************************************/
+/**********************************************************************/
 /*
 Solido::Solido():cantCortes(0),
 				 bNormales(NULL)
