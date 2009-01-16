@@ -21,7 +21,9 @@ char caption[]="Sistema Gráficos - 66.71 - 2007c1";
 #define INSTANCE true
 #define SHOOT false
 
+
 // Declaraciones de variables
+static float ro=2.0,tita,fi;
 static int xv,yv=0;
 static int wancho; 
 static int walto;
@@ -44,7 +46,6 @@ void normalizar(int x, int y, Punto &pto){
 	pto.y = (float)(walto*5/6 - y)/walto*6;
 	pto.z = 0;
 }	
-
 /*--------------------------------------------------------------------*/
 // Configura un viewport
 void viewport(int posx, int posy, int w, int h){
@@ -104,8 +105,8 @@ void tablero(bool borde){
 			glBegin(GL_QUADS);	
 				glTexCoord3d(0.0,0.0,0.0); glVertex3d(0.0, 0.0, 0.0);
 				glTexCoord3d(0.0,largo*lado, 0.0); glVertex3d(0.0, largo*lado, 0.0);
-				glTexCoord3d(0.0,largo*lado, 0.5); glVertex3d(0.0, largo*lado, 0.5);
-				glTexCoord3d(0.0, 0.0, 0.5); glVertex3d(0.0, 0.0, 0.5);
+				glTexCoord3d(0.0,largo*lado, 0.25); glVertex3d(0.0, largo*lado, 0.25);
+				glTexCoord3d(0.0, 0.0, 0.25); glVertex3d(0.0, 0.0, 0.25);
 			glEnd();
 
 	
@@ -114,8 +115,8 @@ void tablero(bool borde){
 			glBegin(GL_QUADS);	
 				glVertex3d(0.0, largo*lado, 0.0);
 				glVertex3d(ancho*lado, largo*lado, 0.0);
-				glVertex3d(ancho*lado, largo*lado, 0.5);
-				glVertex3d(0.0, largo*lado, 0.5);	
+				glVertex3d(ancho*lado, largo*lado, 0.25);
+				glVertex3d(0.0, largo*lado, 0.25);	
 			glEnd();
 
 		glBindTexture( GL_TEXTURE_2D, texture[0] );
@@ -123,8 +124,8 @@ void tablero(bool borde){
 			glBegin(GL_QUADS);	
 				glVertex3d(lado*ancho, 0.0, 0.0);
 				glVertex3d(ancho*lado, largo*lado, 0.0);
-				glVertex3d(ancho*lado, largo*lado, 0.5);
-				glVertex3d(lado*ancho, 0.0, 0.5);		
+				glVertex3d(ancho*lado, largo*lado, 0.25);
+				glVertex3d(lado*ancho, 0.0, 0.25);		
 			glEnd();
 		glDisable( GL_TEXTURE_2D );
 	}
@@ -184,9 +185,9 @@ void display(void)
 
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
-		gluPerspective( 45 ,		// Ángulo de visión
-		(float)walto/(float)wancho, // Razón entre el largo y el ancho, para calcular la perspectiva
-		1,					    // Cuan cerca se puede ver
+		gluPerspective( 45 ,// Ángulo de visión
+		1.5, // Antes: (float)walto/(float)wancho |||| Razón entre el largo y el ancho, para calcular la perspectiva 
+		0.01,	 // Cuan cerca se puede ver
 		2000);	
 				
 	glMatrixMode(GL_MODELVIEW);
@@ -196,9 +197,10 @@ void display(void)
 		/*gluLookAt(0.0,-3.0,0.0, 0.0,0.0,0.0, 0.0,0.0,1.0);*/
 		/*glTranslatef (-0.75, -0.7, 0.0);				    */
 	    /****************************************************/
-		
-		gluLookAt(0.75,-2.0,1.7, 0.75,0.7,0.0, 0.0,0.0,1.0); //Vista sin mover el tablero
 
+		//gluLookAt(0.75,-1.0,1.2, 0.75,0.7,0.0, 0.0,0.0,1.0); //Vista sin mover el tablero
+		//gluLookAt(0.75,-1.0,1.0, 0.75,0.7,0.0, 0.0,0.0,1.0);
+		gluLookAt(ro * cos(tita) * sin(fi),ro * sin(fi) * sin(tita),ro * cos(fi),0.75,1.0,0.0, 0.0,0.0,1.0);
 			
 		tablero(true);
 
@@ -223,17 +225,27 @@ void display(void)
 ///Viewport vista superior del tablero
 	viewport(0, 0, wancho/2, walto*1/3);
 	
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glOrtho(-1.5,1.5,1.0,-1.0,10,-10);//glOrtho(left,right,top,bottom,near,far);
+
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 		glLoadIdentity();
-		gluLookAt(0.75,1.0,3.0, 0.75,1.0,0.0, -1.0,0.0,0.0);		
+		gluLookAt(0.75,1.0,-3.0, 0.75,1.0,0.0, 1.0,0.0,0.0);		
 		/*******************Config vieja********************/
 		/*gluLookAt(0.0,0.0,3.5, 0.0,0.0,0.0, 0.0,1.0,0.0);*/
 		/*glRotatef((GLfloat) -90, 0.0, 0.0, 1.0);		   */	
 		/*glTranslatef (-0.75, -1.0, 0.0);//el bueno       */
 		/***************************************************/
+		
 		tablero(false);
-
+		glColor3ub(130,170,200);
+		glBegin(GL_POINTS);
+			glVertex3d(0.75, 1.0, 0.5);
+		glEnd();
 
 		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 
@@ -254,6 +266,7 @@ void display(void)
 
 
 	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
 	glPopMatrix();
 	///
   	glutSwapBuffers();
@@ -298,8 +311,11 @@ void controlMouse(int button, int state, int x, int y){
 						vec.push_back(nuevo_punto);
 					}
 
-					posy=(float)(-x+29)*(float)(10.0f/242.0f);
-					posx=(float)(y-438)*(float)(15.0f/242.0f);
+					//posy=(float)(-x+29)*(float)(10.0f/242.0f);
+					//posx=(float)(y-438)*(float)(15.0f/242.0f);
+
+					posy=(float)(-x+67)*(float)(10.0f/265.0f);
+					posx=(float)(y-423)*(float)(7.5f/151.0f);
 
 					Solido* solido=new Solido(posx,posy,vec);
 					lsolid.push_back(solido);
@@ -323,8 +339,16 @@ void controlMouse(int button, int state, int x, int y){
 }
 
 void controlMovimientoMouse(int x, int y){
-	xv=x;
-	yv=y;
+	if (y>=2 && y<=395 && x>=1 && x<=798){
+
+		//tita=(x-1)*((float)(2*PI)/797);
+		tita=(x-1)*((float) PI /398.5);
+		fi=(y-2)*((float)PI/786);
+		//std::cout<<"FI: "<<fi<<std::endl;
+		//std::cout<<"TITA: "<<tita<<std::endl;
+		//std::cout<<"Posicion Glut: "<<x<<" , "<<y<<std::endl;
+		glutPostRedisplay();
+	}
 }
 
 void keyboard(unsigned char key, int x, int y)
@@ -389,8 +413,8 @@ int main(int argc, char** argv)
    glutInit(&argc, argv);
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
    //glutInitWindowSize (600, 500);
-   glutInitWindowSize (600, 599);
-   
+   //glutInitWindowSize (600, 599); //ultimo modo funcionando
+   glutInitWindowSize (800, 600);
    glutInitWindowPosition (100, 100);
    glutCreateWindow (caption);
    init ();
@@ -399,7 +423,7 @@ int main(int argc, char** argv)
    LoadTextures();
 
    glutMouseFunc(controlMouse);
-   glutPassiveMotionFunc(controlMovimientoMouse);
+   glutMotionFunc(controlMovimientoMouse);
    glutKeyboardFunc(keyboard);
    glutDisplayFunc(display); 
    glutReshapeFunc(reshape); 
