@@ -21,7 +21,7 @@ private:
 	//Punto* bNormales;
 	std::vector<Punto*> puntos;
 	Punto posicion;				//TODO: Setear posicion
-	double diametro;			//		Setear diametro del cilindro que lo rodea
+	float diametro;			//		Setear diametro del cilindro que lo rodea
 	static bool vista;
 
 public:
@@ -31,6 +31,7 @@ public:
 	static void cambiarVista(){
 		vista=!vista;
 	}
+	static float Solido::calcularDiametro(std::vector<Punto*> &vector);
 ///getters y setters
 	void setCantCortes(int nueva);
 	void setPosicion(float posx,float posy,float posz);
@@ -39,7 +40,8 @@ public:
 	void dibujar_solido(Punto* bPuntos, int nPuntos,
 				int wancho, int walto);
 	Punto getPosicion() const;
-	double getDiametro() const ;
+	float getDiametro() const ;
+	
 private:
 	 
 	/// Rota el punto p_in theta radianes sobre el eje Y dando como resultado p_out
@@ -63,7 +65,7 @@ private:
 
 	void calcularNormales(Punto* bPuntos, int nPuntos);
 	void calcularNormales();
-	double calcularDiametro();
+	float calcularDiametro();
 };
 
 #endif // !defined(AFX_SOLIDO_H__CFDBD745_D827_41AE_AD2E_983274844BF8__INCLUDED_)

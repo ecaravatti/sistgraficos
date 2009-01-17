@@ -24,7 +24,6 @@ char caption[]="Sistema Gráficos - 66.71 - 2007c1";
 
 // Declaraciones de variables
 static float ro=2.0,tita,fi;
-static int xv,yv=0;
 static int wancho; 
 static int walto;
 static bool modo_click=true;
@@ -45,6 +44,27 @@ void normalizar(int x, int y, Punto &pto){
 	pto.x = (float)(x - (float)wancho*3/4)/(float)wancho*4;
 	pto.y = (float)(walto*5/6 - y)/walto*6;
 	pto.z = 0;
+}
+
+bool dentroPerimetro(float centro_x,float centro_y,float radio){
+	if ( centro_x<=0 || centro_x >=7.5 || centro_y>=0 || centro_y<=-10 )
+		return false;
+	if ( centro_x<=radio || (7.5 - centro_x)<=radio )
+		return false;
+	if ( -centro_y<=radio || (10+centro_y)<=radio )
+		return false;
+
+	return true;
+}
+
+bool superponeSolidos(float centro_x,float centro_y,float radio){
+	std::list<Solido*>::iterator itSolid;
+	Punto centro(centro_x,centro_y,0);
+	for (itSolid=lsolid.begin(); itSolid!=lsolid.end(); itSolid++){
+		if (centro.distancia((*itSolid)->getPosicion()) <= (radio + (*itSolid)->getDiametro()/2)) 
+			return true;
+	}
+	return false;
 }	
 /*--------------------------------------------------------------------*/
 // Configura un viewport
@@ -311,15 +331,17 @@ void controlMouse(int button, int state, int x, int y){
 						vec.push_back(nuevo_punto);
 					}
 
-					//posy=(float)(-x+29)*(float)(10.0f/242.0f);
-					//posx=(float)(y-438)*(float)(15.0f/242.0f);
-
 					posy=(float)(-x+67)*(float)(10.0f/265.0f);
 					posx=(float)(y-423)*(float)(7.5f/151.0f);
-
-					Solido* solido=new Solido(posx,posy,vec);
-					lsolid.push_back(solido);
-					vcm.limpiarVista();
+				
+					float radio= Solido::calcularDiametro(vec)/2.0f;
+					
+					if (dentroPerimetro(posx,posy,radio) && !superponeSolidos(posx,posy,radio)){
+						Solido* solido=new Solido(posx,posy,vec);
+						lsolid.push_back(solido);
+						vcm.limpiarVista();
+					}
+					else std::cout<<"Ubicacion no valida"<<std::endl;
 				}
 			}
 			glutPostRedisplay();
@@ -339,9 +361,8 @@ void controlMouse(int button, int state, int x, int y){
 }
 
 void controlMovimientoMouse(int x, int y){
-	if (y>=2 && y<=395 && x>=1 && x<=798){
-
-		//tita=(x-1)*((float)(2*PI)/797);
+	
+	if (y>=2 && y<=395 && x>=1 && x<=798){//dentro del vp1
 		tita=(x-1)*((float) PI /398.5);
 		fi=(y-2)*((float)PI/786);
 		//std::cout<<"FI: "<<fi<<std::endl;

@@ -234,17 +234,35 @@ void Solido::calcularNormales(){
 /**********************************************************************/
 
 //Calcula el Diametro del Solido
-double Solido::calcularDiametro(){
+float Solido::calcularDiametro(){
 	Punto* punto;
 	double ndist=0,distmax=0;
 	for (int i=0; i<puntos.size(); i++){
 		punto=puntos[i];
-		ndist=posicion.distancia(*punto);
+		ndist=sqrt(pow(punto->x+1,2));
+		if (ndist>distmax) distmax=ndist;
+	}
+	/*for (i=0; i<puntos.size(); i++){
+		punto=puntos[i];
+		std::cout<<"X: "<<punto->x<<" Y: "<<punto->y<<" Z: "<<punto->z<<std::endl;
+	}*/
+
+	return (distmax*0.96);
+
+}
+/**********************************************************************/
+//sobrecarga static
+float Solido::calcularDiametro(std::vector<Punto*> &vector){
+	Punto *punto;
+	double ndist=0,distmax=0;
+
+	for (int i=0; i<vector.size(); i++){
+		punto=vector[i];
+		ndist=sqrt(pow(punto->x+1,2));
 		if (ndist>distmax) distmax=ndist;
 	}
 
-	return (distmax*2);
-
+	return (distmax*0.96);
 }
 
 /**********************************************************************/
@@ -254,7 +272,7 @@ Punto Solido::getPosicion() const{
 
 /**********************************************************************/
 
-double Solido::getDiametro() const{
+float Solido::getDiametro() const{
 	return diametro;
 }
 

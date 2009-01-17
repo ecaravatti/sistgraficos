@@ -18,7 +18,11 @@ struct Punto{
 	double distancia(const Punto& punto){
 		return sqrt(pow(punto.x - x,2)+pow(punto.y - y,2));
 	}
-
+	Punto(double x,double y, double z){
+		this->x=x;
+		this->y=y;
+		this->z=z;
+	}
 	Punto(const Punto& punto){
 		x=punto.x;
 		y=punto.y;
