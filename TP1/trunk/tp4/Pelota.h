@@ -24,61 +24,65 @@ private:
 	int angulo;        
 	Velocidad velocidadInicial;
 	Velocidad velocidad;
-	double masa;
-	double diametro;
-	double tiempoRebote;
-	double aceleracion;
-	double fuerzaRozamiento;
+	float masa;
+	float diametro;
+	float tiempoRebote;
+	float aceleracion;
+	float fuerzaRozamiento;
 	std::list<Pared*> listaParedes;
 	std::list<Solido*> listaSolidos;
 	
 	
 public:
 	Pelota();
-	Pelota(double px, double py, double v, int ang);
+	Pelota(float px, float py, float v, int ang);
 	virtual ~Pelota();
 
 		
-	double getFRozamiento();
+	float getFRozamiento();
 	int getAngulo();
-	double getPosX();
-	double getPosY();
-	double getPosInicialX();
-	double getPosInicialY();
+	float getPosX();
+	float getPosY();
+	float getPosInicialX();
+	float getPosInicialY();
 	Punto getPosActual();
-	double getAceleracion();
-	double getVelocidadInicial();
-	double getVelocidad();
+	float getAceleracion();
+	float getVelocidadInicial();
+	float getVelocidad();
 	Velocidad getVectorVelocidad();
-	double getDiametro();
-	double getMasa();
+	float getDiametro();
+	float getMasa();
 	void setPosInicial(Punto posInicial);
 	void setAngulo(int angulo);
-	void setPosInicialX(double px);
-	void setPosInicialY(double py);
-	void setPosX(double x);
-	void setPosY(double y);
-	void setVelocidadInicial(double velocidad_i);
-	void setVelocidad(double velocidad);
-	void setVectorVelocidad(Velocidad v);
-	void setTiempoRebote(double tiempoRebote);
+	void setPosInicialX(float px);
+	void setPosInicialY(float py);
+	void setPosX(float x);
+	void setPosY(float y);
+	void setVelocidadInicial(float velocidad_i);
+	void setVelocidadInicial(Velocidad v);
+	//void setVelocidad(float velocidad);
+	//void setVectorVelocidad(Velocidad v);
+	void setTiempoRebote(float tiempoRebote);
 	void cargarPared(Pared* pared);
 	void cargarSolido(Solido* solido);
 	void eliminarSolido(Solido* solido);
-	void mover(double tiempo);
+	void mover(float tiempo);
+	void dibujar_pelota();
 
 private:
-	void calcularPosicionX(double t);
-	void calcularPosicionY(double t);
-	void calcularVelocidad(double t);
+	void setVelocidad(float velocidad);
+	void setVectorVelocidad(Velocidad v);
+	void calcularPosicionX(float t);
+	void calcularPosicionY(float t);
+	void calcularVelocidad(float t);
 	void anguloReflexionASistFijo(Punto p,int angReflexion);
-	double calcularVelocidadMaxima();
-	void buscarChoques(double tiempo);
+	float calcularVelocidadMaxima();
+	void buscarChoques(float tiempo);
 	int calcularAnguloIncidencia(Punto p);
 	int calcularAnguloReflexion(int angIncidencia);
-	double calcularVelocidadReflexion(int angIncidencia, Punto dirPared);
-	void chocar(Pared* p, double t);
-	void chocar(Solido* solido, double tiempo);//TODO: calcular choque segun angulo y velocidad
+	float calcularVelocidadReflexion(int angIncidencia, Punto dirPared);
+	void chocar(Pared* p, float t);
+	void chocar(Solido* solido, float tiempo);//TODO: calcular choque segun angulo y velocidad
 	bool seChoca(Solido* solido);
 	bool seChoca(Pared* p);
 };

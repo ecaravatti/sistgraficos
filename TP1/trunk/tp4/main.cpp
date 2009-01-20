@@ -14,6 +14,7 @@
 #include "Solido.h"
 #include "Material.h"
 #include "textura.h"
+#include "Pelota.h"
 
 char caption[]="Sistema Gráficos - 66.71 - 2007c1";
 
@@ -23,9 +24,15 @@ char caption[]="Sistema Gráficos - 66.71 - 2007c1";
 
 
 // Declaraciones de variables
+//static float velx=0;
+//static float vely=0;
+static Velocidad vel;
 static float ro=2.0,tita,fi;
 static int wancho; 
 static int walto;
+static GLfloat fSizes[2];        // Line width range metrics
+
+static bool draw_vect_vel=false;
 static bool modo_click=true;
 static bool click_timeout=true;
 
@@ -34,7 +41,7 @@ std::list<Solido*> lsolid;
 VistaCorteModelo vcm;
 Iluminacion iluminacion;
 Material material;
-
+Pelota pelota;
 static const int cortes = 20;
 int pasos = 4;
 
@@ -46,6 +53,7 @@ void normalizar(int x, int y, Punto &pto){
 	pto.z = 0;
 }
 
+//chequea q el nuevo solido se encuentre dentro del perimetro
 bool dentroPerimetro(float centro_x,float centro_y,float radio){
 	if ( centro_x<=0 || centro_x >=7.5 || centro_y>=0 || centro_y<=-10 )
 		return false;
@@ -54,6 +62,13 @@ bool dentroPerimetro(float centro_x,float centro_y,float radio){
 	if ( -centro_y<=radio || (10+centro_y)<=radio )
 		return false;
 
+	return true;
+}
+
+//chequea q el click se encuentre dentro del perimetro para definir disparos
+bool dentroPerimetro(float posx,float posy){
+	if ( posx<=0 || posx >=7.5 || posy>=0 || posy<=-10 )
+		return false;
 	return true;
 }
 
@@ -178,6 +193,7 @@ void init(void)
 
 void display(void)
 {
+	GLfloat fCurrSize;
 	///
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glShadeModel(GL_SMOOTH);
@@ -206,7 +222,7 @@ void display(void)
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 		gluPerspective( 45 ,// Ángulo de visión
-		1.5, // Antes: (float)walto/(float)wancho |||| Razón entre el largo y el ancho, para calcular la perspectiva 
+		2.0, // Antes: (float)walto/(float)wancho |||| Razón entre el largo y el ancho, para calcular la perspectiva 
 		0.01,	 // Cuan cerca se puede ver
 		2000);	
 				
@@ -220,8 +236,10 @@ void display(void)
 
 		//gluLookAt(0.75,-1.0,1.2, 0.75,0.7,0.0, 0.0,0.0,1.0); //Vista sin mover el tablero
 		//gluLookAt(0.75,-1.0,1.0, 0.75,0.7,0.0, 0.0,0.0,1.0);
+		//gluLookAt(ro * cos(tita) * sin(fi),ro * sin(fi) * sin(tita),ro * cos(fi),0.75,1.0,0.0, 0.0,0.0,1.0);
 		gluLookAt(ro * cos(tita) * sin(fi),ro * sin(fi) * sin(tita),ro * cos(fi),0.75,1.0,0.0, 0.0,0.0,1.0);
-			
+	
+
 		tablero(true);
 
 		material.primero();
@@ -237,11 +255,12 @@ void display(void)
 				material.material();
 				(*ite)->dibujar_solido(wancho,walto);
 			}
+			pelota.dibujar_pelota();
 		glPopMatrix();
+		
 	glPopMatrix();
 
-	glDisable(GL_LIGHTING);
-
+	iluminacion.apagar_luces();
 ///Viewport vista superior del tablero
 	viewport(0, 0, wancho/2, walto*1/3);
 	
@@ -254,33 +273,57 @@ void display(void)
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 		glLoadIdentity();
-		gluLookAt(0.75,1.0,-3.0, 0.75,1.0,0.0, 1.0,0.0,0.0);		
+		gluLookAt(0.75,1.0,-3.0, 0.75,1.0,0.0, 1.0,0.0,0.0);
+		
 		/*******************Config vieja********************/
 		/*gluLookAt(0.0,0.0,3.5, 0.0,0.0,0.0, 0.0,1.0,0.0);*/
 		/*glRotatef((GLfloat) -90, 0.0, 0.0, 1.0);		   */	
 		/*glTranslatef (-0.75, -1.0, 0.0);//el bueno       */
 		/***************************************************/
-		
+
+		/*****Punto posicionamiento*****/
+		/**********Solo debug***********/
+		/*							   */
+		/*glColor3ub(130,170,200);     */
+		/*glBegin(GL_POINTS);		   */
+		/*	glVertex3d(0.75, 1.0, 0.5);*/
+		/*glEnd();					   */
+		/*******************************/
+
 		tablero(false);
-		glColor3ub(130,170,200);
-		glBegin(GL_POINTS);
-			glVertex3d(0.75, 1.0, 0.5);
-		glEnd();
+		
+
+		iluminacion.luces();
 
 		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 
 		glPushMatrix();
 			material.primero();
 			glScalef(0.2,0.2,0.2); //Escalado del solido
-
+			
 			for (ite=lsolid.begin();ite!=lsolid.end();ite++){
 				material.sigMaterial();
 				material.material();
-				glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 				(*ite)->setCantCortes(cortes);
 				(*ite)->dibujar_solido(wancho,walto);
 			}
+
+			pelota.dibujar_pelota();
+
+			if(draw_vect_vel){
+				iluminacion.apagar_luces();
+				glColor3ub(255,0,0);
+				fCurrSize = fSizes[0];
+				glLineWidth(fCurrSize+1.0f);
+				glBegin(GL_LINES);
+					glVertex3f(pelota.getPosX(),pelota.getPosY(), 0.3f);
+					glVertex3f(vel.getVelX(),vel.getVelY(),0.3f);
+				glEnd();
+				glLineWidth(fCurrSize);
+			}
+
 		glPopMatrix();
+		
 
 	glPopMatrix();
 
@@ -297,6 +340,13 @@ void display(void)
 void funcionTimer(int numero){
 	click_timeout=true;
 }
+
+void timerVectVel(int numero){
+	draw_vect_vel=false;
+	pelota.setVelocidadInicial(vel);
+	glutPostRedisplay();
+}
+	
 
 void controlMouse(int button, int state, int x, int y){
 	Punto pto;
@@ -318,6 +368,10 @@ void controlMouse(int button, int state, int x, int y){
 				glutTimerFunc(300,funcionTimer, 1);
 				return;
 			}
+
+			posy=(float)(-x+67)*(float)(10.0f/265.0f);
+			posx=(float)(y-423)*(float)(7.5f/151.0f);
+
 			/*if (iluminacion.agregarLuz(posx, posy))*/
 			if (modo_click==INSTANCE) {
 				int cantPuntos=vcm.getCurvaGeneratriz()->getCantPtosDisc();
@@ -331,8 +385,8 @@ void controlMouse(int button, int state, int x, int y){
 						vec.push_back(nuevo_punto);
 					}
 
-					posy=(float)(-x+67)*(float)(10.0f/265.0f);
-					posx=(float)(y-423)*(float)(7.5f/151.0f);
+					//posy=(float)(-x+67)*(float)(10.0f/265.0f);
+					//posx=(float)(y-423)*(float)(7.5f/151.0f);
 				
 					float radio= Solido::calcularDiametro(vec)/2.0f;
 					
@@ -344,6 +398,16 @@ void controlMouse(int button, int state, int x, int y){
 					else std::cout<<"Ubicacion no valida"<<std::endl;
 				}
 			}
+			if (modo_click==SHOOT && dentroPerimetro(posx,posy)){
+				draw_vect_vel=true;
+				vel.setVelX(posx);
+				vel.setVelY(-posy);
+				//velx=posx;
+				//vely=-posy;
+				glutTimerFunc(500,timerVectVel, 1);
+			}
+
+					
 			glutPostRedisplay();
 		}
 	}
@@ -415,12 +479,16 @@ void keyboard(unsigned char key, int x, int y)
 
 	glutPostRedisplay();
 }
-
+void onIdleFunc(int valor){
+	pelota.mover(6);
+	glutPostRedisplay();
+	glutTimerFunc(33,onIdleFunc, 1);
+}
 /*-----------------------------------------------------------------------------*/
 void inicializarLista(){	
 }
 
-void uso(){
+void comandos(){
 	std::cout<<"Presione t...Para cambiar textura "<<std::endl;
 	std::cout<<"Presione l...Para eliminar todas las luces"<<std::endl;
 	std::cout<<"Presione p...Para eliminar todos los puntos de control"<<std::endl;
@@ -447,8 +515,10 @@ int main(int argc, char** argv)
    glutMotionFunc(controlMovimientoMouse);
    glutKeyboardFunc(keyboard);
    glutDisplayFunc(display); 
-   glutReshapeFunc(reshape); 
-   uso();
+   glutReshapeFunc(reshape);
+   glGetFloatv(GL_LINE_WIDTH_RANGE,fSizes);
+   comandos();
+   glutTimerFunc(33,onIdleFunc, 1);
    glutMainLoop();
    return 0;
 }

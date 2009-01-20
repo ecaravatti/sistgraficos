@@ -15,30 +15,31 @@ Velocidad::Velocidad()
 
 /**
  * Constructor 
- * @param double v: representa el modulo de la velocidad.
+ * @param float v: representa el modulo de la velocidad.
  * @param int ang: representa el angulo que da la direccion del vector velocidad.
  */	
-Velocidad::Velocidad(double vel, int ang)
+Velocidad::Velocidad(float vel, int ang)
 {
 
 	if (vel<0)
 		vel = 0;
 	modulo = vel;
-	velX = vel* cos(toRadians(ang));
-	velY = vel*sin(toRadians(ang));
+	velX = vel* (float)cos(toRadians(ang));
+	velY = vel*(float)sin(toRadians(ang));
 	
 }
 
 /**
  *Constructor 
- * @param double x 
- * @param double y
+ * @param float x 
+ * @param float y
  * 	Representan las coordenadas en x e y del vector velocidad.
  */
-Velocidad::Velocidad(double x, double y){
+Velocidad::Velocidad(float x, float y){
 	velX = x;
 	velY = y;
-	CalcularModulo();
+	calcularModulo();
+	angulo=calcularAngulo();
 }
 
 
@@ -49,45 +50,50 @@ Velocidad::~Velocidad()
 
 
 //Getters		
-double Velocidad::getVelX() 
+float Velocidad::getVelX() 
 {
 	return velX;
 }
 
-double Velocidad::getVelY() 
+float Velocidad::getVelY() 
 {
 	return velY;
 }
 
-double Velocidad::getVelocidad()
+float Velocidad::getModulo()
 {
 	return modulo; 
 }
 
-
+int Velocidad::getAngulo(){
+	return angulo;
+}
 
 
 	
 //Setters
-void Velocidad::setVelX(double vX) 
+void Velocidad::setVelX(float vX) 
 {
 	this->velX = vX;
-	CalcularModulo(); //Al cambiar una coordenada del vector hay que actualizar el módulo del mismo.
+	calcularModulo(); //Al cambiar una coordenada del vector hay que actualizar el módulo del mismo.
+	angulo=calcularAngulo(); //idem para el angulo
 }
 
-void Velocidad::setVelY(double vY) 
+void Velocidad::setVelY(float vY) 
 {
 	this->velY = vY;
-	CalcularModulo(); //Al cambiar una coordenada del vector hay que actualizar el módulo del mismo.
+	calcularModulo(); //Al cambiar una coordenada del vector hay que actualizar el módulo del mismo.
+	angulo=calcularAngulo();//idem para el angulo
 }
 
-void Velocidad::setVelocidad(double v,int ang)
+void Velocidad::setVelocidad(float v,int ang)
 {
 	if (v<0)
 		v = 0;
 	modulo = v;
-	velX = modulo*cos(toRadians(ang));
-	velY = modulo*sin(toRadians(ang));
+	angulo=ang;
+	velX = modulo* (float)cos(toRadians(ang));
+	velY = modulo* (float)sin(toRadians(ang));
 }
 
 	
@@ -95,9 +101,9 @@ void Velocidad::setVelocidad(double v,int ang)
 /**
  * Calcula el modulo del vector velocidad; y actualiza dicho atributo.
  */
-void Velocidad::CalcularModulo()
+void Velocidad::calcularModulo()
 {
-	modulo = sqrt(pow(velX, 2) + pow(velY, 2));
+	modulo =(float) sqrt(pow(velX, 2) + pow(velY, 2));
 }
 
 /**
@@ -106,13 +112,13 @@ void Velocidad::CalcularModulo()
  */
 int Velocidad::calcularAngulo(){
 	if (velX>0 && velY>0)
-		return (int)toDegrees(atan(velY/velX));
+		return (int)toDegrees((float)atan(velY/velX));
 	else {
 		if (velX>0 && velY<0)
-			return(int)(360 + toDegrees(atan(velY/velX)));				
+			return(int)(360 + toDegrees((float)atan(velY/velX)));				
 		else {
 			if (velX<0)
-				return (int)(toDegrees(atan(velY/velX))+ 180);
+				return (int)(toDegrees((float)atan(velY/velX))+ 180);
 			else{
 				if (velY>0) // && velX=0
 					return 90;
@@ -123,14 +129,14 @@ int Velocidad::calcularAngulo(){
 	}
 }
 	
-double Velocidad::toRadians(int ang)
+float Velocidad::toRadians(int ang)
 {
-	return (ang*PI)/180;
+	return ((float)(ang*PI)/180);
 }
 
-double Velocidad::toDegrees(double ang)
+float Velocidad::toDegrees(float ang)
 {
-	return (ang*180)/PI;
+	return ((float)(ang*180)/PI);
 }
 
 

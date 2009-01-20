@@ -18,10 +18,9 @@ class Solido
 private:
 	int cantCortes;
 	std::vector<Punto*> normales;
-	//Punto* bNormales;
 	std::vector<Punto*> puntos;
-	Punto posicion;				//TODO: Setear posicion
-	float diametro;			//		Setear diametro del cilindro que lo rodea
+	Punto posicion;	
+	float diametro;
 	static bool vista;
 
 public:

@@ -30,6 +30,8 @@ public:
 	/// Habilita y configura las luces
 	void luces() const;
 
+	void apagar_luces();
+
 ///getters y setters
 	int getCantLuces() const;
 	

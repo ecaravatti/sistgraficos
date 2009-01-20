@@ -10,12 +10,12 @@
 
 Pelota::Pelota()
 {
-	posInicial.x = 0;
-	posInicial.y = 0;
-	posInicial.z = 0;
-	posActual.x = 0;
-	posActual.y = 0;
-	posActual.z = 0;
+	posInicial.x = 3.75;
+	posInicial.y = 0.0;
+	posInicial.z = 0.0;
+	posActual.x = 3.75;
+	posActual.y = 0.0;
+	posActual.z = 0.0;
 	masa = 100;
 	fuerzaRozamiento = 0.35*masa*10;
 	aceleracion = fuerzaRozamiento/masa;
@@ -25,7 +25,7 @@ Pelota::Pelota()
 	velocidad = Velocidad(5,0);
 }
 
-Pelota::Pelota(double px, double py, double v, int ang)
+Pelota::Pelota(float px, float py, float v, int ang)
 {
 	posInicial.x = px;
 	posInicial.y = py;
@@ -49,7 +49,7 @@ Pelota::~Pelota()
 
 
 //	getters
-double Pelota::getFRozamiento(){
+float Pelota::getFRozamiento(){
 	return(fuerzaRozamiento);
 }
 
@@ -57,19 +57,19 @@ int Pelota::getAngulo() {
 	return angulo;
 }
 
-double Pelota::getPosX(){
+float Pelota::getPosX(){
 	return posActual.x;
 }
 	
-double Pelota::getPosY(){
+float Pelota::getPosY(){
 	return posActual.y;
 }
 	
-double Pelota::getPosInicialX(){ 
+float Pelota::getPosInicialX(){ 
 	return posInicial.x;
 }
 
-double Pelota::getPosInicialY(){ 
+float Pelota::getPosInicialY(){ 
 	return posInicial.y; 
 }
 
@@ -77,27 +77,27 @@ Punto Pelota::getPosActual(){
 	return posActual;
 }
 	
-double Pelota::getAceleracion() { 
+float Pelota::getAceleracion() { 
 	return aceleracion;
 }
 	
-double Pelota::getVelocidadInicial() {
-	return velocidadInicial.getVelocidad();
+float Pelota::getVelocidadInicial() {
+	return velocidadInicial.getModulo();
 }
 	
-double Pelota::getVelocidad() {
-	return velocidad.getVelocidad();
+float Pelota::getVelocidad() {
+	return velocidad.getModulo();
 }
 
 Velocidad Pelota::getVectorVelocidad(){
 	return velocidad;
 }
 
-double Pelota::getDiametro() {
+float Pelota::getDiametro() {
 	return diametro;
 }
 	
-double Pelota::getMasa() {
+float Pelota::getMasa() {
 	return masa;
 }
 
@@ -111,23 +111,23 @@ void Pelota::setAngulo(int angulo) {
 	velocidad.setVelocidad(getVelocidad(),angulo);
 }
 
-void Pelota::setPosInicialX(double px){ 
+void Pelota::setPosInicialX(float px){ 
 	posInicial.x = px;
 }
 
-void Pelota::setPosInicialY(double py){ 
+void Pelota::setPosInicialY(float py){ 
 	posInicial.y = py;
 }
 
-void Pelota::setPosX(double x){
+void Pelota::setPosX(float x){
 	posActual.x = x;
 }
 
-void Pelota::setPosY(double y){
+void Pelota::setPosY(float y){
 	posActual.y = y;
 }
 
-void Pelota::setVelocidadInicial(double velocidad_i) {
+void Pelota::setVelocidadInicial(float velocidad_i) {
 		if (velocidad_i < 0)
 			velocidad_i = 0;
 		if (velocidad_i>	calcularVelocidadMaxima())	
@@ -136,7 +136,19 @@ void Pelota::setVelocidadInicial(double velocidad_i) {
 		this->velocidadInicial.setVelocidad(velocidad_i,angulo);
 }
 
-void Pelota::setVelocidad(double velocidad) {
+void Pelota::setVelocidadInicial(Velocidad v){
+	float vMax=calcularVelocidadMaxima();
+	float nvel=v.getModulo();
+
+	if ( nvel > vMax )
+		nvel=vMax;
+
+	this->velocidadInicial.setVelocidad(nvel,v.getAngulo());
+	this->setAngulo(v.getAngulo());
+
+}
+
+void Pelota::setVelocidad(float velocidad) {
 		if (velocidad < 0)
 			velocidad = 0;
 		if (velocidad>	calcularVelocidadMaxima())	
@@ -149,7 +161,7 @@ void Pelota::setVectorVelocidad(Velocidad v){
 	velocidad=v;
 }
 	
-void Pelota::setTiempoRebote(double tiempoRebote) {
+void Pelota::setTiempoRebote(float tiempoRebote) {
 	this->tiempoRebote = tiempoRebote;
 } 
 	
@@ -170,32 +182,32 @@ void Pelota::setTiempoRebote(double tiempoRebote) {
  * irregularidad de la pared.
  * @param Punto <b> dirPared </b> es la direccion de la pared contra la que se choca, sirve para calcular 
  * el angulo de reflexión.
- * @return double que es el módulo de la velocidad de reflexión de la esfera.
+ * @return float que es el módulo de la velocidad de reflexión de la esfera.
  */ /*
-public abstract double CalcularVelocidadReflexion(int angIncidencia,int variacion, Punto dirPared);
+public abstract float CalcularVelocidadReflexion(int angIncidencia,int variacion, Punto dirPared);
 */
 // otros métodos
 	
 /**
  * Calcula la posicion en la coordenada X luego de un tiempo "t"
- * @param double t 
+ * @param float t 
  */
 //TODO: ver lo del tiempo de rebote!!!
-void Pelota::calcularPosicionX(double t){
+void Pelota::calcularPosicionX(float t){
 	posActual.x = (posInicial.x + velocidadInicial.getVelX()*(t-tiempoRebote) +0.5*aceleracion*cos(Velocidad::toRadians(angulo))*pow(t-tiempoRebote,2));
 }
 
 /**
  * Calcula la posicion en la coordenada Y luego de un tiempo "t"
- * @param double t
+ * @param float t
  */
-void Pelota::calcularPosicionY(double t){
+void Pelota::calcularPosicionY(float t){
 	posActual.y = (posInicial.y + velocidadInicial.getVelY()*(t-tiempoRebote) +0.5*aceleracion*sin(Velocidad::toRadians(angulo))*pow(t-tiempoRebote,2));
 }
 	
 	
-void Pelota::calcularVelocidad(double t){
-	velocidad.setVelocidad(velocidadInicial.getVelocidad()+aceleracion*(t-tiempoRebote),angulo);
+void Pelota::calcularVelocidad(float t){
+	velocidad.setVelocidad(velocidadInicial.getModulo()+aceleracion*(t-tiempoRebote),angulo);
 }
 
 
@@ -222,7 +234,7 @@ bool Pelota::seChoca(Solido* solido){
 bool Pelota::seChoca(Pared* p){
 
 	//Primero calculo una recta perpendicular a la direccion de la pared que pase por el punto p.
-	double x,y; //son las coordenadas de la direccion de la recta a calcular.
+	float x,y; //son las coordenadas de la direccion de la recta a calcular.
 	if (p->getDireccion().x==0) {
 		y=0;
 		x=1;
@@ -240,7 +252,7 @@ bool Pelota::seChoca(Pared* p){
 	}// la nueva recta queda configurada como L1: r(x,y) + p ; donde r pertenece a los reales.
 	
 	//se calcula la interseccion entre la recta L1 y la pared,el punto p2 será el mas cercano a la esfera.
-	double t = (x*(p->getOrigen().y-posActual.y)+ y*(posActual.x-p->getOrigen().x))/(y*p->getDireccion().x-x*p->getDireccion().y);
+	float t = (x*(p->getOrigen().y-posActual.y)+ y*(posActual.x-p->getOrigen().x))/(y*p->getDireccion().x-x*p->getDireccion().y);
 	Punto p2;
 	p2.x = (t*p->getDireccion().x+p->getOrigen().x);
 	p2.y = (t*p->getDireccion().y+p->getOrigen().y); 
@@ -254,9 +266,9 @@ bool Pelota::seChoca(Pared* p){
  * Este método calcula la posición y velocidad a la que llega la esfera 
  * luego de un periodo de tiempo <b>tiempo</b>; y agrega esta nueva huella a 
  * la trayectoria de la misma.
- * @param double <b>tiempo</b>
+ * @param float <b>tiempo</b>
  */
-void Pelota::mover(double tiempo){
+void Pelota::mover(float tiempo){
 	if (getVelocidad()>0){ 
 				calcularPosicionX(tiempo); 
 				calcularPosicionY(tiempo); 
@@ -329,7 +341,7 @@ void Pelota::anguloReflexionASistFijo(Punto p,int angReflexion){
  * con los datos del choque que agrega en las lista de rebotes de la esfera.
  * @param Pared p Es la pared contra la que choca la esfera.
  */
-void Pelota::chocar(Pared* p, double t){
+void Pelota::chocar(Pared* p, float t){
 	int angIncidencia=0;
 	
 	//int r = (rand() % 40);	// Numero random entre 0 y 40.
@@ -360,9 +372,9 @@ void Pelota::chocar(Pared* p, double t){
 /**
  * Calcula la velocidad máxima para que la esfera no avance mas de su
  * diametro en 0,1 segundos.
- * @return double - La velocidad maxima calculada
+ * @return float - La velocidad maxima calculada
  */
-double Pelota::calcularVelocidadMaxima(){
+float Pelota::calcularVelocidadMaxima(){
 	return((this->getDiametro()-0.005*this->getAceleracion())/0.1);
 }
 	
@@ -387,9 +399,9 @@ int Pelota::calcularAnguloReflexion(int angIncidencia){
  * la pared.
  * @param Punto dirPared: es la direccion de la pared contra la que se choca, sirve para calcular 
  * el angulo de reflexión.
- * @return double que es el módulo de la velocidad de reflexión de la esfera.
+ * @return float que es el módulo de la velocidad de reflexión de la esfera.
  */
-double Pelota::calcularVelocidadReflexion(int angIncidencia,Punto dirPared){
+float Pelota::calcularVelocidadReflexion(int angIncidencia,Punto dirPared){
 	int angReflexion = calcularAnguloReflexion(angIncidencia);
 	anguloReflexionASistFijo(dirPared,angReflexion);
 	return(getVelocidad()*(sin((Velocidad::toRadians(angIncidencia))/(sin(Velocidad::toRadians(angReflexion))))));
@@ -398,9 +410,9 @@ double Pelota::calcularVelocidadReflexion(int angIncidencia,Punto dirPared){
 /**
  * Este metodo resuelve el choque entre esferas.
  * @param Esfera e: Esfera contra la que choca
- * @param double tiempo: Tiempo en el que se produce la colision
+ * @param float tiempo: Tiempo en el que se produce la colision
  */
-void Pelota::chocar(Solido* solido, double tiempo) {
+void Pelota::chocar(Solido* solido, float tiempo) {
 //	EstrategiaChoque estrategia= new EstrategiaChoqueEstandar(this,pelota,tiempo);
 //	estrategia.chocar();	
 	
@@ -423,7 +435,7 @@ void Pelota::eliminarSolido(Solido* solido){
 		}
 }
 
-void Pelota::buscarChoques(double tiempo){
+void Pelota::buscarChoques(float tiempo){
 	//Choques con solidos
 	std::list<Solido*>::iterator itSolidos;
 	for (itSolidos=listaSolidos.begin(); itSolidos!=listaSolidos.end(); itSolidos++)
@@ -433,5 +445,23 @@ void Pelota::buscarChoques(double tiempo){
 	std::list<Pared*>::iterator itParedes;
 	for (itParedes=listaParedes.begin(); itParedes!=listaParedes.end(); itParedes++)
 		if (this->seChoca(*itParedes)) chocar(*itParedes,tiempo);
+
+}
+void Pelota::dibujar_pelota(){
+	GLfloat mat_ambient_esfera[] = {0.1, 0.1, 0.1, 1.0f};
+	GLfloat mat_diffuse_esfera[] = {0.1, 0.1, 0.1, 1.0f};
+	GLfloat mat_specular_esfera[] = {0.8, 0.8, 0.8, 1.0f};
+	glMaterialfv (GL_FRONT, GL_AMBIENT, mat_ambient_esfera);
+	glMaterialfv (GL_FRONT, GL_DIFFUSE, mat_diffuse_esfera);
+	glMaterialfv (GL_FRONT, GL_SPECULAR, mat_specular_esfera);
+	glMaterialf (GL_FRONT, GL_SHININESS, 50.0f);
+	
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+
+		glTranslatef (this->getPosX(), this->getPosY(), 1.25*1/8);
+		glutSolidSphere(1.25*1/8,25,25);
+
+	glPopMatrix();
 
 }

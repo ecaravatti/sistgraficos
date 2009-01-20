@@ -16,28 +16,31 @@ class Velocidad
 {
 
 private:
-	double velX;
-	double velY;
-	double modulo;
+	float velX;
+	float velY;
+	float modulo;
+	int angulo;
 
 public:
 	Velocidad();
-	Velocidad(double vel, int ang);
-	Velocidad(double x, double y);
+	Velocidad(float vel, int ang);
+	Velocidad(float x, float y);
 	virtual ~Velocidad();
 
-	static double toRadians(int ang);
-	static double toDegrees(double ang);
-	double getVelX();
-	double getVelY();
-	double getVelocidad();
-	void setVelX(double vX);
-	void setVelY(double vY);
-	void setVelocidad(double v,int ang);
-	void CalcularModulo();
+	static float toRadians(int ang);
+	static float toDegrees(float ang);
+	float getVelX();
+	float getVelY();
+	float getModulo();
+	int getAngulo();
+	void setVelX(float vX);
+	void setVelY(float vY);
+	void setVelocidad(float v,int ang);
+	
+
+private:
+	void calcularModulo();
 	int calcularAngulo();
-
-
 
 };
 
