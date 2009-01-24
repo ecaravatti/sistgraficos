@@ -8,7 +8,7 @@
 // Ej: 8, 16, 32, 64, 128, 256, 512, etc
 
 char * texturefiles[] = {
-	"logo.bmp",
+	/*"Envroll.bmp",*/"paredes.bmp",/*"logo.bmp",*/
 	"dibujo.bmp",
 };
 
@@ -35,6 +35,7 @@ int CreateTexture2(UINT texture[], LPSTR strFileName, int i)
 		glBindTexture(GL_TEXTURE_2D, texture[i]);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexImage2D(GL_TEXTURE_2D, 0, 3, 
 			TextureImage->sizeX, 
 			TextureImage->sizeY, 

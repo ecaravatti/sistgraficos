@@ -117,7 +117,7 @@ SOURCE=.\Solido.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\textura.cpp
+SOURCE=.\Texture.cpp
 # End Source File
 # Begin Source File
 
@@ -165,7 +165,7 @@ SOURCE=.\Solido.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\textura.h
+SOURCE=.\Texture.h
 # End Source File
 # Begin Source File
 

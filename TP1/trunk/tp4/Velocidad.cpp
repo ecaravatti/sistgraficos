@@ -136,7 +136,7 @@ float Velocidad::toRadians(int ang)
 
 float Velocidad::toDegrees(float ang)
 {
-	return ((float)(ang*180)/PI);
+	return ((ang*180)/(float)PI);
 }
 
 

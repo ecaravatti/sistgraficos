@@ -25,8 +25,8 @@ Solido::Solido(float posx, float posy,std::vector<Punto*> bPuntos)
 	this->diametro=calcularDiametro();
 	this->calcularNormales();
 	
-	std::cout<<"Posicion:"<<posicion.x<<","<<posicion.y<<std::endl;
-	std::cout<<"Diametro:"<<this->diametro<<std::endl;
+	//std::cout<<"Posicion:"<<posicion.x<<","<<posicion.y<<std::endl;
+	//std::cout<<"Diametro:"<<this->diametro<<std::endl;
 }
 /**********************************************************************/
 Solido::~Solido()
@@ -58,7 +58,7 @@ void Solido::dibujar_solido(int wancho, int walto){
 	
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-		glTranslatef(this->posicion.x,-this->posicion.y,this->posicion.z);
+		glTranslatef(this->posicion.x,this->posicion.y,this->posicion.z);
 		glTranslatef(0.0,0.0,1.0);
 		glRotatef((GLfloat) 90, 1.0, 0.0, 0.0);
 		
@@ -91,22 +91,7 @@ void Solido::dibujar_solido(int wancho, int walto){
 					vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
 				else
 					vistaAlambres(r1,r2,r3,r4);
-
-			// Vista de luces
-			/*viewport(0, 0, wancho/2, walto/2);
-		
-			glMatrixMode(GL_MODELVIEW);
-			glPushMatrix();
-				gluLookAt(0.0,1.0,0.0,
-						  0.0,-1.0,0.0,
-						  0.0,0.0,1.0);
-			glMatrixMode(GL_PROJECTION);
-			glPushMatrix();
-			glOrtho(-2.0, 2.0, -2.0 , 2.0, -1.0, 1.0);
-			vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
-			glPopMatrix();
-			glMatrixMode(GL_MODELVIEW);
-			glPopMatrix();*/		
+	
 			}
 		}
 	glPopMatrix();
@@ -172,6 +157,7 @@ void Solido::vistaAlambres(const Punto& r1, const Punto& r2, const Punto& r3,
 			glVertex3d(r4.x, r4.y, r4.z);
 			glVertex3d(r3.x, r3.y, r3.z);
 		glEnd();
+	glEnable(GL_LIGHTING);
 }
 
 /**********************************************************************/
@@ -242,10 +228,6 @@ float Solido::calcularDiametro(){
 		ndist=sqrt(pow(punto->x+1,2));
 		if (ndist>distmax) distmax=ndist;
 	}
-	/*for (i=0; i<puntos.size(); i++){
-		punto=puntos[i];
-		std::cout<<"X: "<<punto->x<<" Y: "<<punto->y<<" Z: "<<punto->z<<std::endl;
-	}*/
 
 	return (distmax*0.96);
 
@@ -275,90 +257,3 @@ Punto Solido::getPosicion() const{
 float Solido::getDiametro() const{
 	return diametro;
 }
-
-/**********************************************************************/
-/*
-Solido::Solido():cantCortes(0),
-				 bNormales(NULL)
-{
-
-}
-*/
-//Sobrecarga utilizada anteriormente
-//void Solido::dibujar_solido(Punto* bPuntos, int nPuntos,
-//					 int wancho, int walto){
-//	double ang, c; 
-//	Punto p1, p2, r1,r2,r3,r4, n1, n2, n3, n4;
-//	int i, j;
-//
-//	c=3.14159/180.0; //grados a radianes
-//	
-//	if (bNormales != NULL) delete [] bNormales;
-//	bNormales = new Punto[nPuntos + 1];
-//	
-//	this->calcularNormales(bPuntos, nPuntos);
-//	
-//		for (i=0; i< nPuntos - 1 ; i++){
-//
-//		p1.x = (bPuntos[i].x + 1)/2; p1.y = bPuntos[i].y; p1.z = bPuntos[i-1].z;
-//		p2.x = (bPuntos[i+1].x + 1)/2; p2.y = bPuntos[i+1].y; p2.z = bPuntos[i+1].z;
-//
-//		
-//		for (j=0; j<=cantCortes-1;j++){
-//
-//		ang=j*360.0*c/cantCortes; //angulo de la curva a calcular
-//		rotarPunto(ang, p1, r1);
-//		rotarPunto(ang, bNormales[i], n1);
-//		rotarPunto(ang, p2, r2);
-//		rotarPunto(ang, bNormales[i+1], n2);
-//
-//		ang=(j+1)*360.0*c/cantCortes;
-//		rotarPunto(ang, p1, r3);
-//		rotarPunto(ang, bNormales[i], n3);
-//		rotarPunto(ang, p2, r4);
-//		rotarPunto(ang, bNormales[i+1], n4);
-//
-//		
-		//Vista Perspectiva Sombreada
-//		vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
-//
-		/// Vista de luces
-//		/*viewport(0, 0, wancho/2, walto/2);
-		
-//		glMatrixMode(GL_MODELVIEW);
-//		glPushMatrix();
-//			gluLookAt(0.0,1.0,0.0,
-//					  0.0,-1.0,0.0,
-//					  0.0,0.0,1.0);
-//		glMatrixMode(GL_PROJECTION);
-//		glPushMatrix();
-//			glOrtho(-2.0, 2.0, -2.0 , 2.0, -1.0, 1.0);
-//			vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
-//		glPopMatrix();
-//		glMatrixMode(GL_MODELVIEW);
-//		glPopMatrix();*/
-//					
-//		}
-//	}
-//}
-
-//Sobrecarga utilizada anteriormente
-//void Solido:: calcularNormales(Punto* bPuntos, int nPuntos){
-//	
-//	double dery, mag; 
-//	for(int i = 0; i < nPuntos; i++) {
-//		if (i == 0) 
-//			dery = (bPuntos[i+1].y - bPuntos[i].y)/0.1;
-//		else if (i == nPuntos -1) 
-//			dery = (bPuntos[i].y - bPuntos[i-1].y)/0.1;
-//		
-//		else   
-//			dery = (bPuntos[i+1].y - bPuntos[i-1].y)/(2*0.1);
-//		
-//		mag = sqrt(1.0+dery*dery);
-//		bNormales[i].y = -dery/mag;
-//		bNormales[i].x = 1.0/mag;
-//		bNormales[i].z = 0.0;	
-//	}
-//	
-//}

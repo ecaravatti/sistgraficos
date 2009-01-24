@@ -21,12 +21,15 @@ class Pelota
 private:
 	Punto posInicial;
 	Punto posActual;
-	int angulo;        
+	//int angulo;        
 	Velocidad velocidadInicial;
-	Velocidad velocidad;
+	//Velocidad velocidad;
 	float masa;
 	float diametro;
-	float tiempoRebote;
+	//float tiempoRebote;
+	//float t0;
+	float tiempo;
+	float tiempoAnt;
 	float aceleracion;
 	float fuerzaRozamiento;
 	std::list<Pared*> listaParedes;
@@ -37,36 +40,30 @@ public:
 	Pelota();
 	Pelota(float px, float py, float v, int ang);
 	virtual ~Pelota();
-
-		
-	float getFRozamiento();
+	Velocidad velocidad;
 	int getAngulo();
 	float getPosX();
 	float getPosY();
 	float getPosInicialX();
 	float getPosInicialY();
 	Punto getPosActual();
-	float getAceleracion();
 	float getVelocidadInicial();
 	float getVelocidad();
 	Velocidad getVectorVelocidad();
 	float getDiametro();
-	float getMasa();
 	void setPosInicial(Punto posInicial);
 	void setAngulo(int angulo);
 	void setPosInicialX(float px);
 	void setPosInicialY(float py);
 	void setPosX(float x);
 	void setPosY(float y);
-	void setVelocidadInicial(float velocidad_i);
 	void setVelocidadInicial(Velocidad v);
-	//void setVelocidad(float velocidad);
-	//void setVectorVelocidad(Velocidad v);
-	void setTiempoRebote(float tiempoRebote);
+	//void setTiempoInicial(float t0);
 	void cargarPared(Pared* pared);
 	void cargarSolido(Solido* solido);
 	void eliminarSolido(Solido* solido);
-	void mover(float tiempo);
+	//void mover(float tiempo);
+	void mover();
 	void dibujar_pelota();
 
 private:
@@ -76,15 +73,16 @@ private:
 	void calcularPosicionY(float t);
 	void calcularVelocidad(float t);
 	void anguloReflexionASistFijo(Punto p,int angReflexion);
-	float calcularVelocidadMaxima();
+	//float calcularVelocidadMaxima();
 	void buscarChoques(float tiempo);
 	int calcularAnguloIncidencia(Punto p);
 	int calcularAnguloReflexion(int angIncidencia);
 	float calcularVelocidadReflexion(int angIncidencia, Punto dirPared);
 	void chocar(Pared* p, float t);
-	void chocar(Solido* solido, float tiempo);//TODO: calcular choque segun angulo y velocidad
+	void chocar(Solido* solido);
 	bool seChoca(Solido* solido);
 	bool seChoca(Pared* p);
+	void buscarChoquesPared();
 };
 
 #endif // !defined(AFX_PELOTA_H__1E5E39AE_A87D_4879_8FE6_179645554F3B__INCLUDED_)
