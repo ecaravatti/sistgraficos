@@ -23,15 +23,15 @@ public:
 	static GLfloat difuso[cantMat][4];
 	static GLfloat especular[cantMat][4];
 	static GLfloat brillo[cantMat];
-	void primero();
+	//void primero();
 	Material();
 	virtual ~Material();
 
 	///Elige el siguiente material
 	void sigMaterial();
-
+	void activar();
 	///Configura el material elegido
-	void material();
+	//void material();
 };
 
 #endif // !defined(AFX_MATERIAL_H__D393042B_175B_4EF3_AA62_A767E7B91306__INCLUDED_)

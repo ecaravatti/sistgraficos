@@ -236,6 +236,62 @@ void tablero(bool borde){
 	}
 }
 /*****************************************************************************************/
+void drawWorld(){
+	std::list<Solido*>::iterator ite;
+
+	glPushMatrix();
+
+		glScalef(0.2,0.2,0.2);
+
+		glEnable( GL_TEXTURE_2D );
+		glEnable(GL_TEXTURE_GEN_S);
+		glEnable(GL_TEXTURE_GEN_T);
+		glBindTexture( GL_TEXTURE_2D, texture[0] );
+		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+
+		for (ite=lsolid.begin();ite!=lsolid.end();ite++){
+			material.sigMaterial();
+			(*ite)->dibujar_solido(wancho,walto);
+		}
+		glDisable(GL_TEXTURE_GEN_S);
+		glDisable(GL_TEXTURE_GEN_T);
+		glDisable(GL_TEXTURE_2D);
+
+		pelota.dibujar_pelota();
+
+	glPopMatrix();
+
+}
+/*****************************************************************************************/
+void drawUnderworld(){
+	std::list<Solido*>::iterator ite;
+
+	glPushMatrix();
+
+		glScalef(1.0f, -1.0f, 1.0f);
+		glRotatef((GLfloat) 180, 1.0, 0.0, 0.0);
+		glScalef(0.2,0.2,0.2);
+
+		glEnable( GL_TEXTURE_2D );
+		glEnable(GL_TEXTURE_GEN_S);
+		glEnable(GL_TEXTURE_GEN_T);
+		glBindTexture( GL_TEXTURE_2D, texture[0] );
+		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+
+		for (ite=lsolid.begin();ite!=lsolid.end();ite++){
+			material.sigMaterial();
+			(*ite)->dibujar_solido(wancho,walto);
+		}
+
+		glDisable( GL_TEXTURE_2D );	
+		glDisable(GL_TEXTURE_GEN_S);
+		glDisable(GL_TEXTURE_GEN_T);
+
+		pelota.dibujar_pelota();
+
+	glPopMatrix();
+}
+/*****************************************************************************************/
 void reshape(int w, int h)
 {
    glViewport (0, 0, (GLsizei) w, (GLsizei) h);
@@ -319,9 +375,6 @@ void display(void)
 		/*glTranslatef (-0.75, -0.7, 0.0);				    */
 	    /****************************************************/
 
-		//gluLookAt(0.75,-1.0,1.2, 0.75,0.7,0.0, 0.0,0.0,1.0); //Vista sin mover el tablero
-		//gluLookAt(0.75,-1.0,1.0, 0.75,0.7,0.0, 0.0,0.0,1.0);
-		//gluLookAt(ro * cos(tita) * sin(fi),ro * sin(fi) * sin(tita),ro * cos(fi),0.75,1.0,0.0, 0.0,0.0,1.0);
 		gluLookAt(ro * cos(tita) * sin(fi) + 0.75f
 				 ,ro * sin(fi) * sin(tita) + 1.0f
 				 ,ro * cos(fi)
@@ -330,68 +383,40 @@ void display(void)
 				 ,0.0
 				 ,0.0
 				 ,0.0
-				 ,1.0);
-		/*********Underworld**********/
-		glPushMatrix();
-			glScalef(1.0f, -1.0f, 1.0f);
-			glRotatef((GLfloat) 180, 1.0, 0.0, 0.0);
-			
-			material.primero();
-			iluminacion.luces();
+				 ,1.0
+				 );
 
-			glScalef(0.2,0.2,0.2);
-			for (ite=lsolid.begin();ite!=lsolid.end();ite++){
-				material.sigMaterial();
-				glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-				(*ite)->setCantCortes(cortes);
-				material.material();
-				(*ite)->dibujar_solido(wancho,walto);
-			}
-			pelota.dibujar_pelota();
-		glPopMatrix();
-		/*****************************/	
-		material.primero();
 		iluminacion.luces();
-		/***********World*************/
-		glPushMatrix();
-			//glRotatef((GLfloat) 90, 1.0, 0.0, 0.0);
-			glScalef(0.2,0.2,0.2);
-			for (ite=lsolid.begin();ite!=lsolid.end();ite++){
-				material.sigMaterial();
-				glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-				(*ite)->setCantCortes(cortes);
-				material.material();
-				(*ite)->dibujar_solido(wancho,walto);
-			}
-			pelota.dibujar_pelota();
-		glPopMatrix();
-		/*****************************/
-		iluminacion.apagar_luces();
+		material.activar();
+
+		drawUnderworld();
 		
+		iluminacion.apagar_luces();
+
 		tablero(true);
+
+		iluminacion.luces();
+		material.activar();
+
+		drawWorld();
 
 	glPopMatrix();
 
-	//iluminacion.apagar_luces();
 ///Viewport vista superior del tablero
+
 	viewport(0, 0, wancho/2, walto*1/3);
 	
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
 
-	glOrtho(-1.5,1.5,1.0,-1.0,10,-10);//glOrtho(left,right,top,bottom,near,far);
+	glOrtho(-1.5,1.5,1.0,-1.0,10,-10);
 
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
+
 		glLoadIdentity();
 		gluLookAt(0.75,1.0,-3.0, 0.75,1.0,0.0, 1.0,0.0,0.0);
-		
-		/*******************Config vieja********************/
-		/*gluLookAt(0.0,0.0,3.5, 0.0,0.0,0.0, 0.0,1.0,0.0);*/
-		/*glRotatef((GLfloat) -90, 0.0, 0.0, 1.0);		   */	
-		/*glTranslatef (-0.75, -1.0, 0.0);//el bueno       */
-		/***************************************************/
 
 		/*****Punto posicionamiento*****/
 		/**********Solo debug***********/
@@ -402,38 +427,18 @@ void display(void)
 		/*glEnd();					   */
 		/*******************************/
 
+		iluminacion.apagar_luces();
+
 		tablero(false);
 		
-
 		iluminacion.luces();
+		material.activar();
 
-		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-
-		glPushMatrix();
-			material.primero();
-			glScalef(0.2,0.2,0.2); //Escalado del solido
-			
-			for (ite=lsolid.begin();ite!=lsolid.end();ite++){
-				material.sigMaterial();
-				material.material();
-				(*ite)->setCantCortes(cortes);
-				(*ite)->dibujar_solido(wancho,walto);
-			}
-
-			pelota.dibujar_pelota();
-
-			/*iluminacion.apagar_luces();
-			glColor3ub(255,0,0);
-			fCurrSize = fSizes[0];
-			glLineWidth(fCurrSize+1.0f);
-			glBegin(GL_LINES);
-				glVertex3f(pelota.getPosX(),pelota.getPosY(), 0.3f);
-				glVertex3f(pelota.getVectorVelocidad().getVelX()+pelota.getPosX(),pelota.getVectorVelocidad().getVelY()+pelota.getPosY(), 0.3f);
-				//std::cout<<pelota.getVectorVelocidad().getModulo()<<std::endl;
-			glEnd();
-			glLineWidth(fCurrSize);
-			*/
+		drawWorld();
+		
 			if(draw_vect_vel){
+				glPushMatrix();
+				glScalef(0.2,0.2,0.2);
 				iluminacion.apagar_luces();
 				glColor3ub(255,0,0);
 				fCurrSize = fSizes[0];
@@ -443,9 +448,8 @@ void display(void)
 					glVertex3f(vel.getVelX(),vel.getVelY(),0.3f);
 				glEnd();
 				glLineWidth(fCurrSize);
+				glPopMatrix();
 			}
-
-		glPopMatrix();
 		
 
 	glPopMatrix();
@@ -477,7 +481,6 @@ void timerVectVel(int numero){
 	vel.setVelX(vel.getVelX()-pelota.getPosX());
 	vel.setVelY(vel.getVelY()-pelota.getPosY());
 	pelota.setVelocidadInicial(vel);
-	//glutPostRedisplay();
 }
 /*****************************************************************************************/
 void controlMouse(int button, int state, int x, int y){
@@ -520,6 +523,7 @@ void controlMouse(int button, int state, int x, int y){
 					
 					if (dentroPerimetro(posx,posy,radio) && !superponeSolidos(posx,posy,radio)){
 						Solido* solido=new Solido(posx,posy,vec);
+						solido->setCantCortes(cortes);
 						lsolid.push_back(solido);
 						pelota.cargarSolido(solido);
 						vcm.limpiarVista();
@@ -552,17 +556,8 @@ void controlMouse(int button, int state, int x, int y){
 void controlMovimientoMouse(int x, int y){
 	
 	if (y>=2 && y<=395 && x>=1 && x<=798){//dentro del vp1
-		//tita=x/(797/2*PI);
 		fi=y/(394*2/PI);
-		
 		tita=(x-1)*((float) PI /398.5)+PI/2;
-		//fi=(y-2)*((float)PI/786);
-		//if (tita>2*PI || tita<0) tita=0;
-		//if (fi>Velocidad::toRadians(89)) fi=Velocidad::toRadians(89);
-		//if (fi<0) fi=0;
-		//std::cout<<"FI: "<<fi<<std::endl;
-		//std::cout<<"TITA: "<<tita<<std::endl;
-		//std::cout<<"Posicion Glut: "<<x<<" , "<<y<<std::endl;
 		glutPostRedisplay();
 	}
 }

@@ -24,9 +24,6 @@ Solido::Solido(float posx, float posy,std::vector<Punto*> bPuntos)
 	this->puntos=bPuntos;
 	this->diametro=calcularDiametro();
 	this->calcularNormales();
-	
-	//std::cout<<"Posicion:"<<posicion.x<<","<<posicion.y<<std::endl;
-	//std::cout<<"Diametro:"<<this->diametro<<std::endl;
 }
 /**********************************************************************/
 Solido::~Solido()
@@ -167,23 +164,24 @@ void Solido:: vistaSombreada(const Punto& r1, const Punto& r2,
 							 const Punto& n1, const Punto& n2,
 							 const Punto& n3, const Punto& n4){
 	glEnable(GL_LIGHTING);
+	
 	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 		glBegin(GL_TRIANGLES);
 
 			glNormal3f(n1.x, n1.y, n1.z);
-			glVertex3f(r1.x, r1.y, r1.z);
+			glTexCoord2d(0.0, 0.0); glVertex3f(r1.x, r1.y, r1.z);
 			glNormal3f(n2.x, n2.y, n2.z);
-			glVertex3f(r2.x, r2.y, r2.z);
+			glTexCoord2d(0.0, 1.0); glVertex3f(r2.x, r2.y, r2.z);
 			glNormal3f(n3.x, n3.y, n3.z);
-			glVertex3f(r3.x, r3.y, r3.z);
+			glTexCoord2d(1.0, 0.5); glVertex3f(r3.x, r3.y, r3.z);
 
 			
 			glNormal3f(n2.x, n2.y, n2.z);
-			glVertex3f(r2.x, r2.y, r2.z);
+			glTexCoord2d(0.0, 0.0); glVertex3f(r2.x, r2.y, r2.z);
 			glNormal3f(n3.x, n3.y, n3.z);
-			glVertex3f(r3.x, r3.y, r3.z);
+			glTexCoord2d(0.0, 1.0); glVertex3f(r3.x, r3.y, r3.z);
 			glNormal3f(n4.x, n4.y, n4.z);
-			glVertex3f(r4.x, r4.y, r4.z);
+			glTexCoord2d(1.0, 0.5); glVertex3f(r4.x, r4.y, r4.z);
 	
 	
 	

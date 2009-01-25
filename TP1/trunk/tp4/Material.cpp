@@ -47,20 +47,17 @@ Material::~Material()
 
 void Material::sigMaterial(){
 	this->nroMaterial++;
-}
-
-void Material::primero(){
-	this->nroMaterial=0;
-}
-
-void Material::material(){
 	int mat = this->nroMaterial % cantMat;
-	glEnable(GL_COLOR_MATERIAL);	//Se activa lo materiales de color
-	glColorMaterial(GL_BACK,GL_AMBIENT_AND_DIFFUSE);  //tipo ambiente y difusión (tambien incluyen specular)
 
-	//std:: cout<<mat<<std:: endl;
 	glMaterialfv(GL_FRONT, GL_AMBIENT, ambiente[mat]);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, difuso[mat]);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, especular[mat]);
 	glMaterialf(GL_FRONT, GL_SHININESS, brillo[mat]);
+}
+
+void Material::activar(){
+	nroMaterial=-1;
+	glEnable(GL_COLOR_MATERIAL);	//Se activan los materiales de color
+	glColorMaterial(GL_BACK,GL_AMBIENT_AND_DIFFUSE);  //tipo ambiente y difusión (tambien incluyen specular)
+	sigMaterial();
 }

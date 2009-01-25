@@ -8,7 +8,7 @@
 // Ej: 8, 16, 32, 64, 128, 256, 512, etc
 
 char * texturefiles[] = {
-	/*"Envroll.bmp",*/"paredes.bmp",/*"logo.bmp",*/
+	/*"Envroll.bmp",*//*"paredes.bmp",*/"logo.bmp",
 	"dibujo.bmp",
 };
 
