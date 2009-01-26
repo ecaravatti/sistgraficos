@@ -21,6 +21,7 @@ private:
 	Curva generatriz;
 	bool cGeneratriz; //para indicar cuando debe ser calculada la curva generatriz
 	int pasos;
+	static VistaCorteModelo* instance;
 
 public:
 // Atributos publicos	
@@ -28,13 +29,10 @@ public:
 	//colorPtoControl: color de los puntos de control
 	static const Color colorCurva, colorPtoControl;
 
-/// Constructor
-	/*
-	 * _ancho: ancho del viewport
-	 * _alto: alto del viewport
-	 */
-	VistaCorteModelo();
-
+	static VistaCorteModelo* getInstance(){
+		if (instance==NULL) instance=new VistaCorteModelo();
+		return instance;
+	}
 // Destructor
 	virtual ~VistaCorteModelo();
 
@@ -75,6 +73,12 @@ public:
 private:
 	//Copia la lista de puntos en un buffer de puntos
 	void copiarPuntos();
+	/// Constructor
+	/*
+	 * _ancho: ancho del viewport
+	 * _alto: alto del viewport
+	 */
+	VistaCorteModelo();
 };
 
 #endif // !defined(AFX_VISTACORTEMODELO_H__A8FC1254_C46C_40A9_9D0D_C93C820EA9BE__INCLUDED_)

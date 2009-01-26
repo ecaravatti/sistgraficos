@@ -9,6 +9,9 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#define SOMBREADO	0
+#define ALAMBRE		1
+
 #include "Declaraciones.h"
 #include "Iluminacion.h"
 #include <vector>
@@ -22,10 +25,18 @@ private:
 	Punto posicion;	
 	float diametro;
 	static bool vista;
+	/*******************/
+	void crearListas();
+	void dibujarModelo();
+	bool lcreadas;
+	GLuint DLSombreado;
+	GLuint DLAlambre;
+	int nroTex;
+	int nroMat;
+	/*******************/
 
 public:
-	Solido();
-	Solido(float posx, float posy,std::vector<Punto*> bPuntos);
+	Solido(float posx, float posy,std::vector<Punto*> bPuntos,int nroMat,int nroTex);
 	virtual ~Solido();
 	static void cambiarVista(){
 		vista=!vista;
@@ -35,14 +46,15 @@ public:
 	void setCantCortes(int nueva);
 	void setPosicion(float posx,float posy,float posz);
 	/// Para dibujar los solidos
-	void dibujar_solido(int wancho, int walto);
-	void dibujar_solido(Punto* bPuntos, int nPuntos,
-				int wancho, int walto);
+	void dibujar_solido(int modo);
+	void dibujar();
 	Punto getPosicion() const;
 	float getDiametro() const ;
 	
 private:
 	 
+	Solido();
+
 	/// Rota el punto p_in theta radianes sobre el eje Y dando como resultado p_out
 	void rotarPunto(const double angulo, const Punto& p_in, Punto& p_out);
 

@@ -10,17 +10,21 @@
 #endif // _MSC_VER > 1000
 
 #include <GL\glut.h>
-
+#include <stddef.h>
 class Iluminacion  
 {
 private:
 	int nroLuz;
 	GLfloat posicion_luz[8][4];
 	static GLenum eluces[8];
+	static Iluminacion* instance;
 
 public:
 
-	Iluminacion();
+	static Iluminacion* getInstance(){
+		if (instance==NULL) instance=new Iluminacion();
+		return instance;
+	}
 
 	virtual ~Iluminacion();
 
@@ -34,7 +38,8 @@ public:
 
 ///getters y setters
 	int getCantLuces() const;
-	
+private:
+	Iluminacion();
 };
 
 #endif // !defined(AFX_ILUMINACION_H__7B5CA91B_8126_465E_A104_85BD85F6D2C3__INCLUDED_)

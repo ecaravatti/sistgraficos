@@ -4,17 +4,18 @@
 
 #include "Iluminacion.h"
 #include "Declaraciones.h"
+#include <GL\glut.h> 
 
 GLenum Iluminacion:: eluces[8] = {GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3,
 						  GL_LIGHT4, GL_LIGHT5, GL_LIGHT6, GL_LIGHT7};
 
-//#include <iostream>
-#include <GL\glut.h> 
 //////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+Iluminacion* Iluminacion::instance=NULL;
+
 Iluminacion::Iluminacion():nroLuz(4)
 {
 
@@ -62,15 +63,15 @@ void Iluminacion:: luces() const{
 	GLfloat difuselight[] =		{1.0f ,1.0f,1.0f,1.0f};
 	GLfloat specularlight[] =	{1.0f,1.0f,1.0f,1.0f};
 
-	/*glDisable(GL_LIGHTING);
+	glDisable(GL_LIGHTING);
 	glBegin(GL_POINTS);
 		for (int i=0; i<4;i++)
 			glVertex3f(posicion_luz[i][0], posicion_luz[i][1], posicion_luz[i][2]);
-	glEnd();*/
+	glEnd();
 	glEnable(GL_LIGHTING);	    //se activa la iluminacion
 
 	//for (int i = 0; i < nroLuz; i++){
-	for (int i = 0; i < 4; i++){
+	for ( i = 0; i < 4; i++){
 		glEnable(eluces[i]);
 		glLightfv(eluces[i],GL_AMBIENT,ambientlight);
 		glLightfv(eluces[i],GL_DIFFUSE,difuselight);

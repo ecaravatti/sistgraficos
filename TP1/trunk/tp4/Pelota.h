@@ -34,11 +34,14 @@ private:
 	float fuerzaRozamiento;
 	std::list<Pared*> listaParedes;
 	std::list<Solido*> listaSolidos;
+	static Pelota* instance;
 	
 	
 public:
-	Pelota();
-	Pelota(float px, float py, float v, int ang);
+	static Pelota* getInstance(){
+		if (instance==NULL) instance=new Pelota();
+		return instance;
+	}
 	virtual ~Pelota();
 	Velocidad velocidad;
 	int getAngulo();
@@ -67,6 +70,8 @@ public:
 	void dibujar_pelota();
 
 private:
+	Pelota();
+	Pelota(float px, float py, float v, int ang);
 	void setVelocidad(float velocidad);
 	void setVectorVelocidad(Velocidad v);
 	void calcularPosicionX(float t);

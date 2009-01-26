@@ -10,28 +10,33 @@
 #endif // _MSC_VER > 1000
 
 #include <GL\glut.h>
-
+#include <stddef.h>
 #define cantMat 6
 
 class Material  
 {
 private:
 	int nroMaterial;
+	static Material* instance;
 
 public:
 	static GLfloat ambiente[cantMat][4];
 	static GLfloat difuso[cantMat][4];
 	static GLfloat especular[cantMat][4];
 	static GLfloat brillo[cantMat];
-	//void primero();
-	Material();
+	static Material* getInstance(){
+		if (instance==NULL) instance=new Material();
+		return instance;
+	}
 	virtual ~Material();
 
 	///Elige el siguiente material
-	void sigMaterial();
+	//void sigMaterial();
+	int getSigMat();
+	void setMat(int nroMat);
 	void activar();
-	///Configura el material elegido
-	//void material();
+private:
+	Material();
 };
 
 #endif // !defined(AFX_MATERIAL_H__D393042B_175B_4EF3_AA62_A767E7B91306__INCLUDED_)

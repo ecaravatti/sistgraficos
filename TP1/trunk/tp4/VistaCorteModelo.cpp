@@ -9,6 +9,7 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+VistaCorteModelo* VistaCorteModelo::instance=NULL;
 const Color VistaCorteModelo::colorCurva = {0,0,255}; //color de la curva bpline
 const Color VistaCorteModelo::colorPtoControl = {255,0,0};
 

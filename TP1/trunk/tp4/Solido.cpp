@@ -3,6 +3,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Solido.h"
+#include "textura.h"
+#include "Material.h"
 #include <cmath>
 #include <GL\glut.h> 
 //
@@ -12,18 +14,24 @@
 #endif
 
 bool Solido::vista=true;
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 
-Solido::Solido(float posx, float posy,std::vector<Punto*> bPuntos)
+Solido::Solido(float posx, float posy,std::vector<Punto*> bPuntos,int nroMat,int nroTex)
 {	
 	this->posicion.x=posx;
 	this->posicion.y=posy;
 	this->puntos=bPuntos;
 	this->diametro=calcularDiametro();
 	this->calcularNormales();
+	this->nroMat=nroMat;
+	this->nroTex=nroTex;
+	DLSombreado=0;
+	DLAlambre=0;
+	lcreadas=false;
 }
 /**********************************************************************/
 Solido::~Solido()
@@ -44,8 +52,56 @@ void Solido::setPosicion(float posx,float posy,float posz){
 	this->posicion.z=posz;
 }
 /**********************************************************************/
+void Solido::crearListas(){
+	DLAlambre=glGenLists(1);
+	DLSombreado=glGenLists(1);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+
+	glNewList(DLAlambre,GL_COMPILE);
+
+		dibujar_solido(ALAMBRE);
+
+	glEndList();
+
+	glNewList(DLSombreado,GL_COMPILE);
+
+		Material::getInstance()->activar();
+		Material::getInstance()->setMat(this->nroMat);
+
+		Textura::getInstance()->activar();
+		Textura::getInstance()->setTex(this->nroTex);
+
+		glEnable(GL_TEXTURE_GEN_S);
+		glEnable(GL_TEXTURE_GEN_T);
+
+		dibujar_solido(SOMBREADO);
+
+		Textura::getInstance()->desactivar();
+		glDisable(GL_TEXTURE_GEN_S);
+		glDisable(GL_TEXTURE_GEN_T);
+
+	glEndList();
+	glPopMatrix();
+	lcreadas=true;
+}
+/**********************************************************************/
+void Solido::dibujar(){
+	if (!lcreadas)
+		crearListas();	
+
+	glPushMatrix();
+		if (Solido::vista==true)
+				glCallList(DLSombreado);
+		else
+				glCallList(DLAlambre);
+	
+	glPopMatrix();
+}
+/**********************************************************************/
 //Metodo q dibuja al solido
-void Solido::dibujar_solido(int wancho, int walto){
+void Solido::dibujar_solido(int modo){
 
 	double ang, c; 
 	Punto p1, p2, r1,r2,r3,r4, n1, n2, n3, n4;
@@ -84,7 +140,7 @@ void Solido::dibujar_solido(int wancho, int walto){
 				rotarPunto(ang, *(normales[i+1]), n4);
 
 				//vista sombreada o alambre segun seleccion
-				if (Solido::vista==true)
+				if (modo==SOMBREADO)
 					vistaSombreada(r1, r2, r3, r4, n1, n2, n3, n4);
 				else
 					vistaAlambres(r1,r2,r3,r4);

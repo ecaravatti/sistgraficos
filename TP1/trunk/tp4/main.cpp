@@ -9,11 +9,9 @@
 #include <list>
 #include <vector>
 #include "VistaCorteModelo.h"
-#include "LSolidos.h"
 #include "Iluminacion.h"
 #include "Solido.h"
 #include "Material.h"
-#include "Texture.h"
 #include "textura.h"
 #include "Pelota.h"
 
@@ -36,11 +34,7 @@ static bool modo_click=true;
 static bool click_timeout=true;
 
 std::list<Solido*> lsolid;
-VistaCorteModelo vcm;
-Iluminacion iluminacion;
-//Texture texturas;
-Material material;
-Pelota pelota;
+VistaCorteModelo* vcm=VistaCorteModelo::getInstance();
 static const int cortes = 20;
 int pasos = 4;
 
@@ -86,7 +80,7 @@ void keyboard(unsigned char key, int x, int y){
 	switch (key)
 	{
 	case 0x1b:
-				vcm.destruir();
+				vcm->destruir();
 				exit (1);
 				break;
 
@@ -96,13 +90,9 @@ void keyboard(unsigned char key, int x, int y){
 				Solido::cambiarVista();
 				break;
 
-	case 'm':
-	case 'M':
-				material.sigMaterial();
-				break;
 	case 'p':
 	case 'P':
-				vcm.limpiarVista();
+				vcm->limpiarVista();
 				break;
 	case 'c':
 	case 'C': //Cambia la interpretacion de los clicks en el viewport 2
@@ -206,10 +196,13 @@ void tablero(bool borde){
 			glVertex3d(-5.0,7.0,0.0);
 		glEnd();
 
-		//glDisable(GL_BLEND);
+		Textura::getInstance()->activar();
+		Textura::getInstance()->setTex(0);
 
-		glEnable( GL_TEXTURE_2D );
-		glBindTexture( GL_TEXTURE_2D, texture[0] );
+		//glEnable( GL_TEXTURE_2D );
+		//glBindTexture( GL_TEXTURE_2D, texture[0] );
+		//glEnable(GL_TEXTURE_GEN_S);
+		//glEnable(GL_TEXTURE_GEN_T);
 
 		glColor4f(1.0,1.0,1.0,1.0);
 			glBegin(GL_QUADS);	
@@ -238,26 +231,15 @@ void tablero(bool borde){
 /*****************************************************************************************/
 void drawWorld(){
 	std::list<Solido*>::iterator ite;
-
+	int i=0;
 	glPushMatrix();
 
 		glScalef(0.2,0.2,0.2);
-
-		glEnable( GL_TEXTURE_2D );
-		glEnable(GL_TEXTURE_GEN_S);
-		glEnable(GL_TEXTURE_GEN_T);
-		glBindTexture( GL_TEXTURE_2D, texture[0] );
-		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-
 		for (ite=lsolid.begin();ite!=lsolid.end();ite++){
-			material.sigMaterial();
-			(*ite)->dibujar_solido(wancho,walto);
+			(*ite)->dibujar();
 		}
-		glDisable(GL_TEXTURE_GEN_S);
-		glDisable(GL_TEXTURE_GEN_T);
-		glDisable(GL_TEXTURE_2D);
 
-		pelota.dibujar_pelota();
+		Pelota::getInstance()->dibujar_pelota();
 
 	glPopMatrix();
 
@@ -265,29 +247,19 @@ void drawWorld(){
 /*****************************************************************************************/
 void drawUnderworld(){
 	std::list<Solido*>::iterator ite;
-
+	int i=0;
 	glPushMatrix();
 
 		glScalef(1.0f, -1.0f, 1.0f);
 		glRotatef((GLfloat) 180, 1.0, 0.0, 0.0);
 		glScalef(0.2,0.2,0.2);
 
-		glEnable( GL_TEXTURE_2D );
-		glEnable(GL_TEXTURE_GEN_S);
-		glEnable(GL_TEXTURE_GEN_T);
-		glBindTexture( GL_TEXTURE_2D, texture[0] );
-		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-
 		for (ite=lsolid.begin();ite!=lsolid.end();ite++){
-			material.sigMaterial();
-			(*ite)->dibujar_solido(wancho,walto);
+			(*ite)->dibujar();
 		}
 
-		glDisable( GL_TEXTURE_2D );	
-		glDisable(GL_TEXTURE_GEN_S);
-		glDisable(GL_TEXTURE_GEN_T);
-
-		pelota.dibujar_pelota();
+		Pelota::getInstance()->dibujar_pelota();
+		
 
 	glPopMatrix();
 }
@@ -318,7 +290,7 @@ void init(void)
 	//glEnable(GL_LINE_SMOOTH);     // Smooth out lines
 	//glEnable(GL_POLYGON_SMOOTH);  // Smooth out polygon edges
 
-	glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping ( NEW )
+	//glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping ( NEW )
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
 	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Black Background
 	glClearDepth(1.0f);									// Depth Buffer Setup
@@ -354,8 +326,8 @@ void display(void)
 
 ///Viewport para el solido de revolucion
 	viewport(wancho/2, 0, wancho/2, walto*1/3);
-	vcm.setCantPasos(pasos);
-	vcm.dibujar();
+	vcm->setCantPasos(pasos);
+	vcm->dibujar();
 
 ///Viewport para el pinball
 	viewport(0, walto*1/3, wancho, walto*2/3);
@@ -386,19 +358,19 @@ void display(void)
 				 ,1.0
 				 );
 
-		iluminacion.luces();
-		material.activar();
+		Iluminacion::getInstance()->luces();
 
 		drawUnderworld();
 		
-		iluminacion.apagar_luces();
+		Iluminacion::getInstance()->apagar_luces();
 
 		tablero(true);
 
-		iluminacion.luces();
-		material.activar();
+		Iluminacion::getInstance()->luces();
 
 		drawWorld();
+
+		Iluminacion::getInstance()->apagar_luces();
 
 	glPopMatrix();
 
@@ -427,24 +399,23 @@ void display(void)
 		/*glEnd();					   */
 		/*******************************/
 
-		iluminacion.apagar_luces();
 
 		tablero(false);
 		
-		iluminacion.luces();
-		material.activar();
+		Iluminacion::getInstance()->luces();
 
 		drawWorld();
 		
+		Iluminacion::getInstance()->apagar_luces();
+
 			if(draw_vect_vel){
 				glPushMatrix();
 				glScalef(0.2,0.2,0.2);
-				iluminacion.apagar_luces();
 				glColor3ub(255,0,0);
 				fCurrSize = fSizes[0];
 				glLineWidth(fCurrSize+1.0f);
 				glBegin(GL_LINES);
-					glVertex3f(pelota.getPosX(),pelota.getPosY(), 0.3f);
+				glVertex3f(Pelota::getInstance()->getPosX(),Pelota::getInstance()->getPosY(), 0.3f);
 					glVertex3f(vel.getVelX(),vel.getVelY(),0.3f);
 				glEnd();
 				glLineWidth(fCurrSize);
@@ -478,9 +449,9 @@ void comandos()
 /*****************************************************************************************/
 void timerVectVel(int numero){
 	draw_vect_vel=false;
-	vel.setVelX(vel.getVelX()-pelota.getPosX());
-	vel.setVelY(vel.getVelY()-pelota.getPosY());
-	pelota.setVelocidadInicial(vel);
+	vel.setVelX(vel.getVelX()-Pelota::getInstance()->getPosX());
+	vel.setVelY(vel.getVelY()-Pelota::getInstance()->getPosY());
+	Pelota::getInstance()->setVelocidadInicial(vel);
 }
 /*****************************************************************************************/
 void controlMouse(int button, int state, int x, int y){
@@ -491,11 +462,10 @@ void controlMouse(int button, int state, int x, int y){
 		if ( x >= wancho/2 && x <= wancho && y >= walto*2/3 && y < walto) {
 		/// Para agregar punto en el viewport 3
 			normalizar(x,y,pto);
-			vcm.guardarPunto(pto);
+			vcm->guardarPunto(pto);
 			glutPostRedisplay();
 		}
-		else if ( x >= 0 && x <= wancho/2 && y >= walto/2 && y < walto 
-				  && iluminacion.getCantLuces() <= 7)
+		else if ( x >= 0 && x <= wancho/2 && y >= walto/2 && y < walto )
 			{
 			//para detectar doble click
 			if (click_timeout){
@@ -508,11 +478,11 @@ void controlMouse(int button, int state, int x, int y){
 			posx=(float)(y-423)*(float)(7.5f/151.0f);
 
 			if (modo_click==INSTANCE) {
-				int cantPuntos=vcm.getCurvaGeneratriz()->getCantPtosDisc();
+				int cantPuntos=vcm->getCurvaGeneratriz()->getCantPtosDisc();
 				if (cantPuntos>=2){
 					Punto* nuevo_punto;
 					Punto* vPuntos =new Punto[cantPuntos];
-					vPuntos=vcm.getCurvaGeneratriz()->getBufferPtosDisc();
+					vPuntos=vcm->getCurvaGeneratriz()->getBufferPtosDisc();
 					std::vector<Punto*> vec;
 					for (int i=0;i <cantPuntos; i++){
 						nuevo_punto=new Punto(vPuntos[i]);
@@ -522,11 +492,11 @@ void controlMouse(int button, int state, int x, int y){
 					float radio= Solido::calcularDiametro(vec)/2.0f;
 					
 					if (dentroPerimetro(posx,posy,radio) && !superponeSolidos(posx,posy,radio)){
-						Solido* solido=new Solido(posx,posy,vec);
+						Solido* solido=new Solido(posx,posy,vec,Material::getInstance()->getSigMat(),Textura::getInstance()->getSigTex());
 						solido->setCantCortes(cortes);
 						lsolid.push_back(solido);
-						pelota.cargarSolido(solido);
-						vcm.limpiarVista();
+						Pelota::getInstance()->cargarSolido(solido);
+						vcm->limpiarVista();
 					}
 					else std::cout<<"Ubicacion no valida"<<std::endl;
 				}
@@ -544,7 +514,7 @@ void controlMouse(int button, int state, int x, int y){
 	}
 	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN){
 		if ( x >= wancho/2 && x <= wancho && y >= walto/2 && y < walto){ 
-			vcm.limpiarVista();	
+			vcm->limpiarVista();	
 			glutPostRedisplay();
 		}
 
@@ -564,7 +534,7 @@ void controlMovimientoMouse(int x, int y){
 
 /*****************************************************************************************/
 void onIdleFunc(int valor){
-	pelota.mover();
+	Pelota::getInstance()->mover();
 	glutPostRedisplay();
 	glutTimerFunc(50,onIdleFunc, 1);
 }
@@ -590,7 +560,8 @@ int main(int argc, char** argv)
    init ();
 
    // Carga las Texturas
-   LoadTextures();
+   //LoadTextures();
+   Textura::getInstance()->cargarTexturas();
 
    glutMouseFunc(controlMouse);
    glutMotionFunc(controlMovimientoMouse);
