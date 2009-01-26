@@ -29,9 +29,6 @@ public:
 		return instance;
 	}
 	virtual ~Material();
-
-	///Elige el siguiente material
-	//void sigMaterial();
 	int getSigMat();
 	void setMat(int nroMat);
 	void activar();

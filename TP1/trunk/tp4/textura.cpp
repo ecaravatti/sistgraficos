@@ -66,10 +66,7 @@ void Textura::cargarTexturas()
 }
 void Textura::activar(){
 	if (!texturasCargadas()) cargarTexturas();
-	//nroTextura=0;
 	glEnable( GL_TEXTURE_2D );
-	//glBindTexture( GL_TEXTURE_2D, texture[0] );
-	//sigTextura();
 }
 void Textura::desactivar(){
 	glDisable( GL_TEXTURE_2D );
@@ -84,14 +81,7 @@ void Textura::setTex(int nroTex){
 
 	glBindTexture( GL_TEXTURE_2D, texture[nroTex] );
 }
-/*
-void Textura::sigTextura(){
-	if (!texturasCargadas()) cargarTexturas();
-	this->nroTextura++;
-	if (nroTextura>NTextures)
-		nroTextura=0;
-	glBindTexture( GL_TEXTURE_2D, texture[nroTextura] );
-}*/
+
 int Textura::getSigTex(){
 	if (!texturasCargadas()) cargarTexturas();
 	this->nroTextura++;

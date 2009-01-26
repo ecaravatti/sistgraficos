@@ -50,14 +50,6 @@ void Iluminacion:: incrementarNroLuz(){
 }
 
 void Iluminacion:: luces() const{
-	/*int div;
-	
-	if (nroLuz == 0) div = 1;
-	else div = nroLuz;
-	*/
-	/*GLfloat ambientlight[] =	{3.0f/div ,3.0f/div,3.0f/div,3.0f};
-	GLfloat difuselight[] =		{3.0f/div ,3.0f/div ,1.0f/div,3.0f};
-	GLfloat specularlight[] =	{3.0f/div,3.0f/div,1.0f/div,3.0f};*/
 	
 	GLfloat ambientlight[] =	{0.5f ,0.5f,0.5f,1.0f};
 	GLfloat difuselight[] =		{1.0f ,1.0f,1.0f,1.0f};
