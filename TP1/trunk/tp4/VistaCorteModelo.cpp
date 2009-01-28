@@ -13,22 +13,24 @@ VistaCorteModelo* VistaCorteModelo::instance=NULL;
 const Color VistaCorteModelo::colorCurva = {0,0,255}; //color de la curva bpline
 const Color VistaCorteModelo::colorPtoControl = {255,0,0};
 
+/*****************************************************************************************/
+
 VistaCorteModelo::VistaCorteModelo():
 											lPuntos(),
 											bPuntos(NULL),
 											generatriz(),
 											cGeneratriz(false),
 											pasos(0)
-{
-}
+{}
 
-VistaCorteModelo::~VistaCorteModelo()
-{
+/*****************************************************************************************/
+
+VistaCorteModelo::~VistaCorteModelo(){
 	delete [] this->bPuntos;
 }
 
-/*--------------------------------------------------------------------*/
-// Metodos publicos
+/*****************************************************************************************/
+
 void VistaCorteModelo:: dibujar(){
 
 	this->copiarPuntos();
@@ -43,9 +45,13 @@ void VistaCorteModelo:: dibujar(){
 	this->mostrarPuntoControl();
 }
 
+/*****************************************************************************************/
+
 void VistaCorteModelo::destruir(){
 	delete [] bPuntos;
 }
+
+/*****************************************************************************************/
 
 void VistaCorteModelo:: guardarPunto(const Punto &pto){
 	Punto pAnt;
@@ -62,6 +68,8 @@ void VistaCorteModelo:: guardarPunto(const Punto &pto){
 	}
 }
 
+/*****************************************************************************************/
+
 void VistaCorteModelo:: mostrarPuntoControl(){
 	std::list<Punto>::iterator it;
 	glPointSize(3.0);
@@ -73,28 +81,34 @@ void VistaCorteModelo:: mostrarPuntoControl(){
 	glEnd();
 }
 
+/*****************************************************************************************/
+
 void VistaCorteModelo:: limpiarVista(){
 	this->lPuntos.clear();
 	this->cGeneratriz = true;
 }
 
-/// getters y setters
+/*****************************************************************************************/
+
 Curva* VistaCorteModelo:: getCurvaGeneratriz(){
 	return &this->generatriz;
 }
+
+/*****************************************************************************************/
 
 void VistaCorteModelo:: setCantPasos(int nueva){
 	this->pasos = nueva;
 	this->generatriz.setPasos(this->pasos);
 }
 
+/*****************************************************************************************/
+
 int VistaCorteModelo::getCantPasos(){
 	return this->pasos;
 }
 
+/*****************************************************************************************/
 
-/*--------------------------------------------------------------------*/
-// Metodos privados
 void VistaCorteModelo:: copiarPuntos(){
 	std::list<Punto>::iterator it;
 	int i = 0;
@@ -109,3 +123,5 @@ void VistaCorteModelo:: copiarPuntos(){
 		i++;
 	}
 }
+
+/*****************************************************************************************/

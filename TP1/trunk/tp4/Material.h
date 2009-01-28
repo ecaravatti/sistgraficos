@@ -15,24 +15,32 @@
 
 class Material  
 {
+
 private:
 	int nroMaterial;
 	static Material* instance;
-
-public:
 	static GLfloat ambiente[cantMat][4];
 	static GLfloat difuso[cantMat][4];
 	static GLfloat especular[cantMat][4];
 	static GLfloat brillo[cantMat];
+public:
+
+	//Devuelve la unica instancia (Singleton)
 	static Material* getInstance(){
 		if (instance==NULL) instance=new Material();
 		return instance;
 	}
+	//Destructor
 	virtual ~Material();
+	//Devuelve el siguiente material
 	int getSigMat();
+	//Setea un material para renderizado
 	void setMat(int nroMat);
+	//Activa materiales
 	void activar();
+
 private:
+	//Constructor privado
 	Material();
 };
 

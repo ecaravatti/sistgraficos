@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Material.h"
-//#include <iostream>
+
 Material* Material::instance=NULL;
 GLfloat Material::ambiente[cantMat][4] = {{0.57, 0.4, 0.00, 1.0},
 			{0.0, 0.0, 0.0, 1.0}, {0.0, 0.0, 0.0, 1.0}, 
@@ -21,17 +21,13 @@ GLfloat Material::brillo[cantMat] = {16.0, 16.0, 93.0, 8.0, 9.0, 12.0 };
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-
+/*****************************************************************************************/
 Material::Material():nroMaterial(0)
-{
-
-}
-
+{}
+/*****************************************************************************************/
 Material::~Material()
-{
-
-}
-
+{}
+/*****************************************************************************************/
 void Material::setMat(int nroMat){
 	if (nroMat>cantMat) nroMat=0;
 	
@@ -40,14 +36,16 @@ void Material::setMat(int nroMat){
 	glMaterialfv(GL_FRONT, GL_SPECULAR, especular[nroMat]);
 	glMaterialf(GL_FRONT, GL_SHININESS, brillo[nroMat]);
 }
-
+/*****************************************************************************************/
 void Material::activar(){
 	glEnable(GL_COLOR_MATERIAL);	//Se activan los materiales de color
 	glColorMaterial(GL_BACK,GL_AMBIENT_AND_DIFFUSE);  //tipo ambiente y difusión (tambien incluyen specular)
 }
+/*****************************************************************************************/
 int Material::getSigMat(){
 	this->nroMaterial++;
 	if (nroMaterial>cantMat)
 		nroMaterial=0;
 	return nroMaterial;
 }
+/*****************************************************************************************/

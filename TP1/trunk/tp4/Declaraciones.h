@@ -41,10 +41,14 @@ struct Punto{
 
 };
 
+/*****************************************************************************************/
+
 struct Color{
-	int r, g, b;
+	int r, g, b, alpha;
 };
 
-void viewport(int posx, int posy, int w, int h);
+/*****************************************************************************************/
+
+//void viewport(int posx, int posy, int w, int h);
 
 #endif // !defined(AFX_DECLARACIONES_H__1E16576E_D7E9_4C3E_83AE_1732893E2BB0__INCLUDED_)

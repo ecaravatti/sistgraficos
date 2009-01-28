@@ -22,19 +22,19 @@ Curva::Curva(Punto* _bPtos, int _cantPtos, int _d):
 												d(_d)
 {	
 }
-
+/*****************************************************************************************/
 Curva::Curva():
 					bPtosControl(NULL),
 					bPtosDiscret(NULL),
 					cPtos(0),
 					d(0)
 {}
-					
+/*****************************************************************************************/					
 Curva::~Curva()
 {
 	delete [] this->bPtosDiscret;
 }
-
+/*****************************************************************************************/
 void Curva:: discretizarCurva(){
 	Punto pto;
 	int k = 0;
@@ -49,7 +49,7 @@ void Curva:: discretizarCurva(){
     }
     
 }
-
+/*****************************************************************************************/
 void Curva:: dibujarBSpline() const{
 	
 	glBegin(GL_LINE_STRIP);
@@ -58,37 +58,34 @@ void Curva:: dibujarBSpline() const{
 			glVertex3f(this->bPtosDiscret[k].x, this->bPtosDiscret[k].y,this->bPtosDiscret[k].z);
 	glEnd();
 }
-
+/*****************************************************************************************/
 /// getters y setters
 void Curva:: setCantPtos(int nuevaCant){
 	this->cPtos = nuevaCant;
 }
-
+/*****************************************************************************************/
 void Curva:: setPuntos(Punto* nuevo){
 	this->bPtosControl = nuevo;
 }
-
+/*****************************************************************************************/
 int Curva:: getCantPtosDisc() const{
 	return (this->cPtos-1)*this->d;
 }
-
+/*****************************************************************************************/
 Punto* Curva:: getBufferPtosDisc() const{
 	return this->bPtosDiscret;
 }
-
+/*****************************************************************************************/
 void Curva:: setPasos(int nueva){
 	this->d = nueva;
-
 }
-/*--------------------------------------------------------------------*/
-// Metodos Privados
+/*****************************************************************************************/
 void Curva:: iniBufferPtosDiscret(int cPtos, int d){
 	if (this->bPtosDiscret != NULL) delete [] this->bPtosDiscret;
 	this->bPtosDiscret = new Punto[(cPtos-1)*d];
 }
-
+/*****************************************************************************************/
 void Curva:: calcularPunto(int i, float u, Punto& p) {
-	
 	int indice;
 	float x = 0, y = 0, z = 0;
 	p.x = 0; p.y = 0; p.z = 0;
@@ -110,7 +107,7 @@ void Curva:: calcularPunto(int i, float u, Punto& p) {
       p.y += base(j,u)*this->bPtosControl[indice].y;
     }
 }
-
+/*****************************************************************************************/
 float Curva:: base(int i, float u) {
     switch (i) {
     case -2:
@@ -124,4 +121,4 @@ float Curva:: base(int i, float u) {
     }
     return 0; // Solo se llega acá si se especifica una i inválida.
 }
-
+/*****************************************************************************************/

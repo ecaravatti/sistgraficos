@@ -16,7 +16,7 @@ GLenum Iluminacion:: eluces[8] = {GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3,
 //////////////////////////////////////////////////////////////////////
 Iluminacion* Iluminacion::instance=NULL;
 
-Iluminacion::Iluminacion():nroLuz(4)
+Iluminacion::Iluminacion()
 {
 
 	posicion_luz[0][0] = 0.0f;
@@ -40,30 +40,27 @@ Iluminacion::Iluminacion():nroLuz(4)
 	posicion_luz[3][3] = 1.0f;
 
 }
-
+/*****************************************************************************************/
 Iluminacion::~Iluminacion(){
 
 }
-
-void Iluminacion:: incrementarNroLuz(){
-	this->nroLuz++;
-}
-
-void Iluminacion:: luces() const{
+/*****************************************************************************************/
+void Iluminacion::encender_luces() const{
 	
 	GLfloat ambientlight[] =	{0.5f ,0.5f,0.5f,1.0f};
 	GLfloat difuselight[] =		{1.0f ,1.0f,1.0f,1.0f};
 	GLfloat specularlight[] =	{1.0f,1.0f,1.0f,1.0f};
-
+	
+	/*
 	glDisable(GL_LIGHTING);
 	glBegin(GL_POINTS);
 		for (int i=0; i<4;i++)
 			glVertex3f(posicion_luz[i][0], posicion_luz[i][1], posicion_luz[i][2]);
 	glEnd();
+	*/
 	glEnable(GL_LIGHTING);	    //se activa la iluminacion
 
-	//for (int i = 0; i < nroLuz; i++){
-	for ( i = 0; i < 4; i++){
+	for ( int i = 0; i < 4; i++){
 		glEnable(eluces[i]);
 		glLightfv(eluces[i],GL_AMBIENT,ambientlight);
 		glLightfv(eluces[i],GL_DIFFUSE,difuselight);
@@ -73,13 +70,9 @@ void Iluminacion:: luces() const{
 	}
 }
 
-/// getters y setters
-int Iluminacion:: getCantLuces() const{
-	
-	return this->nroLuz;
-}
-
-///---------------------------------------------------------------------
+/*****************************************************************************************/
 void Iluminacion::apagar_luces(){
 	glDisable(GL_LIGHTING);
 }
+
+/*****************************************************************************************/

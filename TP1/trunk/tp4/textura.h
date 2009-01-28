@@ -7,26 +7,43 @@
 
 class Textura{
 private:
-		GLuint g_Texture[200];
-		GLuint* texture;
+		//GLuint g_Textura[200];
+		GLuint* textura;
 		int nroTextura;
 		static Textura* instance;
 		bool carga;
 public: 
 		~Textura();
+		//Devuelve la unica instancia (Singleton)
 		static Textura* getInstance(){
 			if (instance==NULL) instance=new Textura();
 			return instance;
 		}
+
+		//Carga todas las texturas para su posterior utilizacion
 		void cargarTexturas();
+
+		//Activa las texturas
 		void activar();
+
+		//Desactiva texturas
 		void desactivar();
+
+		//Setea una nueva textura
 		void setTex(int nroTex);
+
+		//Devuelve la proxima textura para creacion de solidos
 		int	 getSigTex();
 private:
+		// Constructor
 		Textura();
+
+		//Carga una unica textura
 		int cargarTextura(int i);
-		int crearTextura(UINT texture[], LPSTR strFileName, int i);
+
+		//Crea la textura y la mapea a memoria
+		int crearTextura(UINT texture[], LPSTR nombreStr, int i);
+
 		bool texturasCargadas();
 };
 

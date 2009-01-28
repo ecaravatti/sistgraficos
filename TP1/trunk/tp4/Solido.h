@@ -25,34 +25,45 @@ private:
 	Punto posicion;	
 	float diametro;
 	static bool vista;
-	/*******************/
-	void crearListas();
-	void dibujarModelo();
 	bool lcreadas;
 	GLuint DLSombreado;
 	GLuint DLAlambre;
 	int nroTex;
 	int nroMat;
-	/*******************/
 
 public:
+	//Constructor
 	Solido(float posx, float posy,std::vector<Punto*> bPuntos,int nroMat,int nroTex);
+	
+	//Destructor
 	virtual ~Solido();
+	
+	//Cambia de vista alambre/sombreada
 	static void cambiarVista(){
 		vista=!vista;
 	}
+
+	//Version static para chequeos de posicionamiento previos a la creacion
 	static float Solido::calcularDiametro(std::vector<Punto*> &vector);
-///getters y setters
+
+	//Setea cantidad de cortes
 	void setCantCortes(int nueva);
+
+	//Setea la posicion del solido
 	void setPosicion(float posx,float posy,float posz);
-	/// Para dibujar los solidos
-	void dibujar_solido(int modo);
+
+	//Llama a la correspondiente display list
 	void dibujar();
+
+	//retorna la posicion del solido
 	Punto getPosicion() const;
+
+	//Retorna el diametro del cilindro que contiene al solido
 	float getDiametro() const ;
 	
 private:
-	 
+	
+	//Evita instanciaciones accidentales
 	Solido();
 
 	/// Rota el punto p_in theta radianes sobre el eje Y dando como resultado p_out
@@ -74,9 +85,17 @@ private:
 						const Punto& n1, const Punto& n2,
 						const Punto& n3, const Punto& n4);
 
-	void calcularNormales(Punto* bPuntos, int nPuntos);
+	//Calcula las normales de la superficie del solido
 	void calcularNormales();
+	
+	//Calcula el diametro del solido
 	float calcularDiametro();
+
+	//Crea las display lists
+	void crearListas();
+
+	//Dibuja el solido segun modo (alambre/sombreado)
+	void dibujar_solido(int modo);
 };
 
 #endif // !defined(AFX_SOLIDO_H__CFDBD745_D827_41AE_AD2E_983274844BF8__INCLUDED_)

@@ -11,34 +11,33 @@
 
 #include <GL\glut.h>
 #include <stddef.h>
+
 class Iluminacion  
 {
 private:
-	int nroLuz;
+	//int nroLuz;
 	GLfloat posicion_luz[8][4];
 	static GLenum eluces[8];
 	static Iluminacion* instance;
 
 public:
 
+	//Devuelve la unica instancia (Singleton)
 	static Iluminacion* getInstance(){
 		if (instance==NULL) instance=new Iluminacion();
 		return instance;
 	}
-
+	//Destructor
 	virtual ~Iluminacion();
 
-	/// Incrementa la cantidad de luces
-	void incrementarNroLuz();
+	/// Habilita y configura la iluminacion
+	void encender_luces() const;
 
-	/// Habilita y configura las luces
-	void luces() const;
-
+	//Apaga el sistema de iluminacion
 	void apagar_luces();
 
-///getters y setters
-	int getCantLuces() const;
 private:
+	//Constructor Privado
 	Iluminacion();
 };
 

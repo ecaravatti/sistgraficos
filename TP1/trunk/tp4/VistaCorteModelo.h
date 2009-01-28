@@ -29,6 +29,7 @@ public:
 	//colorPtoControl: color de los puntos de control
 	static const Color colorCurva, colorPtoControl;
 
+	//Devuelve la unica instancia (Singleton)
 	static VistaCorteModelo* getInstance(){
 		if (instance==NULL) instance=new VistaCorteModelo();
 		return instance;
@@ -39,45 +40,32 @@ public:
 // Metodos publicos
 	void destruir();
 
-	/*
-	 * Dibuja la vista cuando se agrega un punto
-	 */
+	//Dibuja la vista cuando se agrega un punto
 	void dibujar();
 
-	/*
-	 * pto: punto a ser guardado
-	 * Guarda punto en la lista de puntos
-	 */
+	//Guarda punto en la lista de puntos
 	void guardarPunto(const Punto& pto);
 
-	/*
-	 * Muestra los puntos de control
-	 */
+	//Muestra los puntos de control
 	void mostrarPuntoControl();
 
-	/*
-	 * Elimina todos los datos de la vista
-	 */
+	//Elimina todos los datos de la vista
 	void limpiarVista();
 
-/// getters y setter
-	/*
-	 * Devuelve puntero a curva
-	 */
+    //Devuelve puntero a curva
 	Curva* getCurvaGeneratriz();
-
+	
+	//Para setear la cantidad de pasos
 	void setCantPasos(int nueva);
 
+	//Devuelve cantidad de pasos actual
 	int getCantPasos();
 
 private:
 	//Copia la lista de puntos en un buffer de puntos
 	void copiarPuntos();
-	/// Constructor
-	/*
-	 * _ancho: ancho del viewport
-	 * _alto: alto del viewport
-	 */
+
+	//Constructor Privado
 	VistaCorteModelo();
 };
 

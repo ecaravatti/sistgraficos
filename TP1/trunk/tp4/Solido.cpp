@@ -19,6 +19,7 @@ bool Solido::vista=true;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+/*****************************************************************************************/
 
 Solido::Solido(float posx, float posy,std::vector<Punto*> bPuntos,int nroMat,int nroTex)
 {	
@@ -33,7 +34,9 @@ Solido::Solido(float posx, float posy,std::vector<Punto*> bPuntos,int nroMat,int
 	DLAlambre=0;
 	lcreadas=false;
 }
-/**********************************************************************/
+
+/*****************************************************************************************/
+
 Solido::~Solido()
 {
 	std::vector<Punto*>::iterator it;
@@ -45,13 +48,17 @@ Solido::~Solido()
 	normales.clear();
 
 }
-/**********************************************************************/
+
+/*****************************************************************************************/
+
 void Solido::setPosicion(float posx,float posy,float posz){
 	this->posicion.x=posx;
 	this->posicion.y=posy;
 	this->posicion.z=posz;
 }
-/**********************************************************************/
+
+/*****************************************************************************************/
+
 void Solido::crearListas(){
 	DLAlambre=glGenLists(1);
 	DLSombreado=glGenLists(1);
@@ -76,6 +83,9 @@ void Solido::crearListas(){
 		glEnable(GL_TEXTURE_GEN_S);
 		glEnable(GL_TEXTURE_GEN_T);
 
+		glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+		glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+
 		dibujar_solido(SOMBREADO);
 
 		Textura::getInstance()->desactivar();
@@ -86,7 +96,9 @@ void Solido::crearListas(){
 	glPopMatrix();
 	lcreadas=true;
 }
-/**********************************************************************/
+
+/*****************************************************************************************/
+
 void Solido::dibujar(){
 	if (!lcreadas)
 		crearListas();	
@@ -99,7 +111,9 @@ void Solido::dibujar(){
 	
 	glPopMatrix();
 }
-/**********************************************************************/
+
+/*****************************************************************************************/
+
 //Metodo q dibuja al solido
 void Solido::dibujar_solido(int modo){
 
@@ -151,13 +165,13 @@ void Solido::dibujar_solido(int modo){
 
 }
 
-/**********************************************************************/
+/*****************************************************************************************/
 
 void Solido:: setCantCortes(int nueva){
 	this->cantCortes = nueva;
 }
 
-/**********************************************************************/
+/*****************************************************************************************/
 
 /// Metodos privados
 void Solido:: rotarPunto(const double angulo, const Punto& p_in, Punto& p_out){
@@ -168,7 +182,7 @@ void Solido:: rotarPunto(const double angulo, const Punto& p_in, Punto& p_out){
 	p_out.z = (p_in.x*sin(angulo) + p_in.z*cos(angulo));
 }
 
-/**********************************************************************/
+/*****************************************************************************************/
 
 void Solido:: normalizar(Punto& normal){
 	double norm;
@@ -179,7 +193,7 @@ void Solido:: normalizar(Punto& normal){
 	normal.z = normal.z / norm;
 }
 
-/**********************************************************************/
+/*****************************************************************************************/
 
 //Calcula el producto vectorial de dos vectores
 void Solido:: calcularNormal(const Punto &v1, const Punto &v2, const Punto &v3, Punto& normal){
@@ -198,7 +212,7 @@ void Solido:: calcularNormal(const Punto &v1, const Punto &v2, const Punto &v3, 
 
 }
 
-/**********************************************************************/
+/*****************************************************************************************/
 
 void Solido::vistaAlambres(const Punto& r1, const Punto& r2, const Punto& r3,
 				   const Punto& r4){
@@ -213,7 +227,7 @@ void Solido::vistaAlambres(const Punto& r1, const Punto& r2, const Punto& r3,
 	glEnable(GL_LIGHTING);
 }
 
-/**********************************************************************/
+/*****************************************************************************************/
 
 void Solido:: vistaSombreada(const Punto& r1, const Punto& r2,
 							 const Punto& r3, const Punto& r4,
@@ -244,7 +258,7 @@ void Solido:: vistaSombreada(const Punto& r1, const Punto& r2,
 	glEnd();
 }
 
-/**********************************************************************/
+/*****************************************************************************************/
 
 //Calcula las normales de la superficie del solido
 void Solido::calcularNormales(){
@@ -271,7 +285,7 @@ void Solido::calcularNormales(){
 	}
 }
 
-/**********************************************************************/
+/*****************************************************************************************/
 
 //Calcula el Diametro del Solido
 float Solido::calcularDiametro(){
@@ -286,7 +300,7 @@ float Solido::calcularDiametro(){
 	return (distmax*0.96);
 
 }
-/**********************************************************************/
+/*****************************************************************************************/
 //sobrecarga static
 float Solido::calcularDiametro(std::vector<Punto*> &vector){
 	Punto *punto;
@@ -301,13 +315,14 @@ float Solido::calcularDiametro(std::vector<Punto*> &vector){
 	return (distmax*0.96);
 }
 
-/**********************************************************************/
+/*****************************************************************************************/
 Punto Solido::getPosicion() const{
 	return posicion;
 }
 
-/**********************************************************************/
+/*****************************************************************************************/
 
 float Solido::getDiametro() const{
 	return diametro;
 }
+/*****************************************************************************************/
