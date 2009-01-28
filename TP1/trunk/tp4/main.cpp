@@ -394,13 +394,13 @@ void controlMouse(int button, int state, int x, int y){
 	float posx, posy;
 
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
-		if ( x >= wancho/2 && x <= wancho && y >= walto*2/3 && y < walto) {
+		if ( x >= wancho/2 && x <= wancho && y >= walto*2/3 && y < walto) { //Viewport 3
 		/// Para agregar punto en el viewport 3
 			normalizar(x,y,pto);
 			vcm->guardarPunto(pto);
 			glutPostRedisplay();
 		}
-		else if ( x >= 0 && x <= wancho/2 && y >= walto/2 && y < walto )
+		else if ( x >= 0 && x <= wancho/2 && y >= walto*2/3 && y < walto ) //Viewport 2
 			{
 			//para detectar doble click
 			if (click_timeout){
@@ -409,9 +409,8 @@ void controlMouse(int button, int state, int x, int y){
 				return;
 			}
 
-			posy=(float)(x-67)*(float)(10.0f/265.0f);
-			posx=(float)(y-423)*(float)(7.5f/151.0f);
-
+			posy=(float)(x-wancho/12.0f) * (float) (10.0f/(4*wancho/12) );
+			posx=(float) (y-17.0f*walto/24.0f) * (float) (7.5/(1.0f*walto/4.0f) );
 			if (modo_click==INSTANCE) {
 				int cantPuntos=vcm->getCurvaGeneratriz()->getCantPtosDisc();
 				if (cantPuntos>=2){
@@ -446,7 +445,7 @@ void controlMouse(int button, int state, int x, int y){
 		}
 	}
 	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN){
-		if ( x >= wancho/2 && x <= wancho && y >= walto/2 && y < walto){ 
+		if ( x >= wancho/2 && x <= wancho && y >= walto*2/3 && y < walto){  //Viewport 3
 			vcm->limpiarVista();	
 			glutPostRedisplay();
 		}
@@ -457,9 +456,9 @@ void controlMouse(int button, int state, int x, int y){
 //Maneja modo orbital del mouse en viewport ppal
 
 void controlMovimientoMouse(int x, int y){
-	if (y>=2 && y<=395 && x>=1 && x<=798){//dentro del vp1
-		fi=y/(394*2/PI);
-		tita=(x-1)*((float) PI /398.5)+PI/2;
+	if (y>=0 && y<=walto*2/3 && x>=0 && x<=wancho){//dentro del vp1
+		fi=y/(walto*2/3*2/PI);
+		tita=x*PI*2/wancho+PI/2;
 		glutPostRedisplay();
 	}
 }
